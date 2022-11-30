@@ -32,10 +32,10 @@ public class PlayerController : MonoBehaviour
         if (movementDirection != Vector3.zero) 
         {
             movementAnimationSpeed = movementDirection != Vector3.zero ? 1.0f : 0.0f;
+            
+            Vector3 velocity = movementDirection * movementSpeed;
 
-            float magnitude = Math.Clamp(movementDirection.magnitude, 0.0f, 1.0f);
-
-            Vector3 velocity = movementDirection * magnitude * movementSpeed;
+            Debug.Log(velocity.magnitude);
 
             Controller.Move(velocity * Time.deltaTime);
 
