@@ -35,8 +35,6 @@ public class PlayerController : MonoBehaviour
             
             Vector3 velocity = movementDirection * movementSpeed;
 
-            Debug.Log(velocity.magnitude);
-
             Controller.Move(velocity * Time.deltaTime);
 
             movementDirection.Normalize();
