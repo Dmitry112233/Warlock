@@ -18,10 +18,28 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         {
             Local = this;
 
+            Camera.main.gameObject.SetActive(false);
+
             Debug.Log("Spawned local player");
         }
         else 
         {
+            Camera localCamera = GetComponentInChildren<Camera>();
+
+            if(localCamera != null) 
+            {
+                Debug.Log("SWITCHED OFF CAMERA 2 ");
+                localCamera.gameObject.SetActive(false);
+            }
+
+            AudioListener audioListener = GetComponentInChildren<AudioListener>();
+
+            if (audioListener != null)
+            {
+                Debug.Log("SWITCHED OFF AUDIO 2 ");
+                audioListener.gameObject.SetActive(false);
+            }
+            
             Debug.Log("Spawned remote player");
         }
     }
