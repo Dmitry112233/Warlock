@@ -127,7 +127,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5370970629003890025}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 5.54, y: 180, z: 0}
 --- !u!20 &963194227
 Camera:
@@ -245,7 +245,7 @@ Transform:
   m_Children:
   - {fileID: 349656273}
   m_Father: {fileID: 5370970629003890025}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 49.97, y: 0, z: 0}
 --- !u!114 &1662263480
 MonoBehaviour:
@@ -2067,9 +2067,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5549345315936862503}
   - {fileID: 1662263481}
   - {fileID: 963194228}
+  - {fileID: 7202558521979165597}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2179,7 +2179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   InterpolationSpace: 0
-  InterpolationTarget: {fileID: 5549345315936862503}
+  InterpolationTarget: {fileID: 7202558521979165597}
   InterpolateErrorCorrection: 1
   InterpolatedErrorCorrectionSettings:
     MinRate: 3.3
@@ -2214,6 +2214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
+  animationBlendSpeed: 0.1
 --- !u!114 &-1444219190172477757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2457,7 +2458,7 @@ Transform:
   - {fileID: 493662682597764605}
   - {fileID: 9202173608746067721}
   - {fileID: 360541740127994961}
-  m_Father: {fileID: 5370970629003890025}
+  m_Father: {fileID: 7202558521979165597}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 50, z: 0}
 --- !u!1 &5558472426724123771
@@ -2650,6 +2651,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4929048914704585940}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5907391565310120308
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7202558521979165597}
+  m_Layer: 0
+  m_Name: InterpolationTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7202558521979165597
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5907391565310120308}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5549345315936862503}
+  m_Father: {fileID: 5370970629003890025}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6114308399988697325
 GameObject:

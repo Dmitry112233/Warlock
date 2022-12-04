@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using Cinemachine;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
@@ -25,22 +24,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         else 
         {
             Camera localCamera = GetComponentInChildren<Camera>();
+            CinemachineVirtualCamera cinemachineCamera = GetComponentInChildren<CinemachineVirtualCamera>();
 
             if(localCamera != null) 
             {
-                Debug.Log("SWITCHED OFF CAMERA 2 ");
-                localCamera.gameObject.SetActive(false);
-            }
+                Debug.Log("Destroy another player camera");
 
-            AudioListener audioListener = GetComponentInChildren<AudioListener>();
-
-            if (audioListener != null)
-            {
-                Debug.Log("SWITCHED OFF AUDIO 2 ");
-                audioListener.gameObject.SetActive(false);
+                Destroy(localCamera.gameObject);
+                Destroy(cinemachineCamera.gameObject);
             }
-            
-            Debug.Log("Spawned remote player");
         }
     }
 

@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class CharacterMovementHandler : NetworkBehaviour
 {
-    NetworkCharacterControllerPrototypeCustom networkCharacterControllerPrototypeCustom;
+    private NetworkCharacterControllerPrototypeCustom networkCharacterControllerPrototypeCustom;
+
+    private Animator animator;
+
+    public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
 
     private void Awake()
     {
@@ -29,9 +33,25 @@ public class CharacterMovementHandler : NetworkBehaviour
         if(GetInput(out NetworkInputData networkInputData)) 
         {
             Vector3 movementDirection = new Vector3(networkInputData.mevementInput.x, 0, networkInputData.mevementInput.y);
-            movementDirection.Normalize();
 
-            networkCharacterControllerPrototypeCustom.Move(movementDirection * 10);
+            if (movementDirection != Vector3.zero)
+            {
+                movementDirection.Normalize();
+                networkCharacterControllerPrototypeCustom.Move(movementDirection * 10);
+                networkCharacterControllerPrototypeCustom.MovementAnimationSpeed = 1.0f;
+            }
+            else 
+            {
+                networkCharacterControllerPrototypeCustom.MovementAnimationSpeed = 0.0f;
+            }
+            //Animator.SetFloat(GameData.Animator.Speed, Mathf.Lerp(Animator.GetFloat(GameData.Animator.Speed), movementAnimationSpeed, animationBlendSpeed));
         }
+    }
+
+    public override void Render()
+    {
+        Animator.SetFloat(GameData.Animator.Speed,
+            Mathf.Lerp(Animator.GetFloat(GameData.Animator.Speed), networkCharacterControllerPrototypeCustom.MovementAnimationSpeed,
+            networkCharacterControllerPrototypeCustom.AnimationBlendSpeed));
     }
 }
