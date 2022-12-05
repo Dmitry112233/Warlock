@@ -2193,14 +2193,13 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
-  gravity: -20
-  jumpImpulse: 8
-  acceleration: 10
-  braking: 10
-  maxSpeed: 2
+  maxSpeed: 4
   rotationSpeed: 10
-  _IsGrounded: 0
+  animationBlendSpeed: 0.05
+  movementAnimationSpeed: 1
   _Velocity: {x: 0, y: 0, z: 0}
+  _AnimationBlendSpeed: 0
+  _MovementAnimationSpeed: 0
 --- !u!114 &5470692003672487676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2214,7 +2213,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  animationBlendSpeed: 0.1
 --- !u!114 &-1444219190172477757
 MonoBehaviour:
   m_ObjectHideFlags: 0

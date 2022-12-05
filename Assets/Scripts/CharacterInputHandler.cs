@@ -11,21 +11,10 @@ public class CharacterInputHandler : MonoBehaviour
         InputManager.Instance.NotifyMovement += Read;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-        //movementInputVector.x = dynamicJoystick.Horizontal;
-        //movementInputVector.y = dynamicJoystick.Vertical;
-
-        /*movementInputVector.x = Input.GetAxis("Horizontal");
-        movementInputVector.y = Input.GetAxis("Vertical");*/
-    }
-
     private void Read(float horizontal, float vertical)
     {
         movementInputVector.x = horizontal;
-        movementInputVector.y = vertical;
+        movementInputVector.z = vertical;
     }
 
     public NetworkInputData GetNetworkInput() 

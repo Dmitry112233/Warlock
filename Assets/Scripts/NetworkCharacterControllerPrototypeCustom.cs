@@ -1,24 +1,19 @@
-using System;
 using Fusion;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 [OrderBefore(typeof(NetworkTransform))]
 [DisallowMultipleComponent]
-// ReSharper disable once CheckNamespace
 public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
 {
     [Header("Character Controller Settings")]
-    public float gravity = -20.0f;
-    public float jumpImpulse = 8.0f;
-    public float acceleration = 10.0f;
-    public float braking = 10.0f;
-    public float maxSpeed = 2.0f;
+    public float maxSpeed = 4.0f;
     public float rotationSpeed = 15.0f;
+    public float animationBlendSpeed = 0.05f;
 
-    [Networked]
-    [HideInInspector]
-    public bool IsGrounded { get; set; }
+    private Animator animator;
+
+    public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
 
     [Networked]
     [HideInInspector]
@@ -26,11 +21,11 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
 
     [Networked]
     [HideInInspector]
-    public float AnimationBlendSpeed { get; set; }
+    public float AnimationBlendSpeed { get; private set; }
 
     [Networked]
     [HideInInspector]
-    public float MovementAnimationSpeed { get; set; }
+    public float MovementAnimationSpeed { get; private set; }
 
     /// <summary>
     /// Sets the default teleport interpolation velocity to be the CC's current velocity.
@@ -56,8 +51,7 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
     {
         base.Spawned();
         CacheController();
-
-        AnimationBlendSpeed = 0.05f;
+        AnimationBlendSpeed = animationBlendSpeed;
     }
 
     private void CacheController()
@@ -82,62 +76,31 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
         Controller.enabled = true;
     }
 
-    /// <summary>
-    /// Basic implementation of a jump impulse (immediately integrates a vertical component to Velocity).
-    /// <param name="ignoreGrounded">Jump even if not in a grounded state.</param>
-    /// <param name="overrideImpulse">Optional field to override the jump impulse. If null, <see cref="jumpImpulse"/> is used.</param>
-    /// </summary>
-    public virtual void Jump(bool ignoreGrounded = false, float? overrideImpulse = null)
-    {
-        if (IsGrounded || ignoreGrounded)
-        {
-            var newVel = Velocity;
-            newVel.y += overrideImpulse ?? jumpImpulse;
-            Velocity = newVel;
-        }
-    }
-
-    /// <summary>
-    /// Basic implementation of a character controller's movement function based on an intended direction.
-    /// <param name="direction">Intended movement direction, subject to movement query, acceleration and max speed values.</param>
-    /// </summary>
     public virtual void Move(Vector3 direction)
     {
         var deltaTime = Runner.DeltaTime;
         var previousPos = transform.position;
-        var moveVelocity = Velocity;
-
         direction = direction.normalized;
 
-        if (IsGrounded && moveVelocity.y < 0)
+        if (direction != default)
         {
-            moveVelocity.y = 0f;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime);
+            MovementAnimationSpeed = 1.0f;
         }
 
-        moveVelocity.y += gravity * Runner.DeltaTime;
-
-        var horizontalVel = default(Vector3);
-        horizontalVel.x = moveVelocity.x;
-        horizontalVel.z = moveVelocity.z;
-
-        if (direction == default)
-        {
-            horizontalVel = Vector3.Lerp(horizontalVel, default, braking * deltaTime);
-        }
-        else
-        {
-            horizontalVel = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime, maxSpeed);
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Runner.DeltaTime);
-        }
-
-        moveVelocity.x = horizontalVel.x;
-        moveVelocity.z = horizontalVel.z;
-
-        Controller.Move(moveVelocity * deltaTime);
-
+        Controller.Move(direction * maxSpeed * deltaTime);
         Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
-        IsGrounded = Controller.isGrounded;
+    }
 
+    public void ResetMovementAnimationSpeed()
+    {
+        MovementAnimationSpeed = 0.0f;
+    }
 
+    public void PlayMoveAnimation()
+    {
+        Animator.SetFloat(GameData.Animator.Speed,
+            Mathf.Lerp(Animator.GetFloat(GameData.Animator.Speed), MovementAnimationSpeed,
+            AnimationBlendSpeed));
     }
 }
