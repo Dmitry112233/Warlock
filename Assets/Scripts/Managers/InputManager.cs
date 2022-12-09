@@ -7,7 +7,9 @@ public class InputManager : Singleton<InputManager>
     private DynamicJoystick dynamicJoystick;
 
     public delegate void HorizontalHandler(float horizontal, float vertical);
+    public delegate void FireHandler();
     public event HorizontalHandler NotifyMovement;
+    public event FireHandler NotifyFire;
 
     public float Horizontal { get; private set; }
     public float Vertical { get; private set; }
@@ -27,7 +29,9 @@ public class InputManager : Singleton<InputManager>
         Horizontal = dynamicJoystick.Horizontal;
         Vertical = dynamicJoystick.Vertical;
 
-
         NotifyMovement?.Invoke(Horizontal, Vertical);
+
+        if (Input.GetKeyDown(KeyCode.F))
+            NotifyFire?.Invoke();
     }
 }
