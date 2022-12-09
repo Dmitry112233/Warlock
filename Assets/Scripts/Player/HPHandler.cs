@@ -6,7 +6,12 @@ using UnityEngine.SceneManagement;
 public class HPHandler : NetworkBehaviour
 {
     public NetworkCharacterControllerPrototypeCustom networkCharacterControllerPrototypeCustom;
+    private CharacterInputHandler characterInputHandler;
     public HitboxRoot hitboxRoot;
+
+    private Animator animator;
+
+    public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
 
     [Networked(OnChanged = nameof(OnHPChanged))]
     byte HP { get; set; }
@@ -21,6 +26,7 @@ public class HPHandler : NetworkBehaviour
     private void Awake()
     {
         networkCharacterControllerPrototypeCustom = GetComponent<NetworkCharacterControllerPrototypeCustom>();
+        characterInputHandler = GetComponent<CharacterInputHandler>();
     }
 
     void Start()
@@ -72,7 +78,17 @@ public class HPHandler : NetworkBehaviour
         Debug.Log($"{Time.time} OnDeath");
         networkCharacterControllerPrototypeCustom.Controller.enabled = false; ;
         hitboxRoot.HitboxRootActive = false;
+        characterInputHandler.enabled = false;
+        Animator.SetBool("IsDead", true);
+        StartCoroutine(ResetIsDead());
+
         //StartCoroutine(Leave());
+    }
+
+    IEnumerator ResetIsDead()
+    {
+        yield return new WaitForSeconds(1.5f);
+        Animator.SetBool("IsDead", false);
     }
 
     IEnumerator Leave()
