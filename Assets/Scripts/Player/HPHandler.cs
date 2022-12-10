@@ -9,9 +9,9 @@ public class HPHandler : NetworkBehaviour
     private CharacterInputHandler characterInputHandler;
     public HitboxRoot hitboxRoot;
 
-    private Animator animator;
+    private NetworkMecanimAnimator animator;
 
-    public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
+    public NetworkMecanimAnimator Animator { get { return animator = animator ?? GetComponent<NetworkMecanimAnimator>(); } }
 
     [Networked(OnChanged = nameof(OnHPChanged))]
     byte HP { get; set; }
@@ -79,16 +79,9 @@ public class HPHandler : NetworkBehaviour
         networkCharacterControllerPrototypeCustom.Controller.enabled = false; ;
         hitboxRoot.HitboxRootActive = false;
         characterInputHandler.enabled = false;
-        Animator.SetBool("IsDead", true);
-        StartCoroutine(ResetIsDead());
+        Animator.SetTrigger("Dead");
 
         //StartCoroutine(Leave());
-    }
-
-    IEnumerator ResetIsDead()
-    {
-        yield return new WaitForSeconds(1.5f);
-        Animator.SetBool("IsDead", false);
     }
 
     IEnumerator Leave()

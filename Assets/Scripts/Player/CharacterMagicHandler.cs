@@ -1,4 +1,5 @@
 using Fusion;
+using System.Collections;
 using UnityEngine;
 
 public class CharacterMagicHandler : NetworkBehaviour
@@ -11,9 +12,9 @@ public class CharacterMagicHandler : NetworkBehaviour
 
     NetworkObject networkObject;
 
-    private Animator animator;
+    private NetworkMecanimAnimator animator;
 
-    public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
+    public NetworkMecanimAnimator Animator { get { return animator = animator ?? GetComponent<NetworkMecanimAnimator>(); } }
 
     private bool isFire = false;
 
@@ -46,24 +47,28 @@ public class CharacterMagicHandler : NetworkBehaviour
     {
         if (isFire == true)
         {
-            if (!Animator.GetBool("IsAttack")) 
-            {
-                Debug.Log("IsFire == true");
-                if (fireBallDelay.ExpiredOrNotRunning(Runner))
-                {
-                    Debug.Log("Inside is Attack");
-                    Animator.SetBool("IsAttack", true);
-                    fireBallDelay = TickTimer.CreateFromSeconds(Runner, 2f);
-                }
-            }
-
             isFire = false;
+
+            if (fireBallDelay.ExpiredOrNotRunning(Runner))
+            {
+                Debug.Log("Inside is Attack");
+
+                Animator.SetTrigger("Attack");
+
+                StartCoroutine(FireCora());
+                fireBallDelay = TickTimer.CreateFromSeconds(Runner, 2f);
+            }
         }
+    }
+
+    IEnumerator FireCora()
+    {
+        yield return new WaitForSeconds(0.5f);
+        FireBallShot();
     }
 
     public void FireBallAnimationEvent()
     {
-        FireBallShot();
-        Animator.SetBool("IsAttack", false);
+        //FireBallShot();
     }
 }
