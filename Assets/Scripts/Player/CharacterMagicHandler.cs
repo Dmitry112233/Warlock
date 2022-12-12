@@ -12,9 +12,9 @@ public class CharacterMagicHandler : NetworkBehaviour
 
     NetworkObject networkObject;
 
-    private NetworkMecanimAnimator animator;
+    private Animator animator;
 
-    public NetworkMecanimAnimator Animator { get { return animator = animator ?? GetComponent<NetworkMecanimAnimator>(); } }
+    public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
 
     private bool isFire = false;
 
@@ -26,7 +26,7 @@ public class CharacterMagicHandler : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (GetInput(out NetworkInputData networkInputData))
+        if (GetInput(out NetworkInputData networkInputData) /*&& Runner.IsForward*/)
         {
             if (networkInputData.isFireBallButtonPresed)
             {
@@ -37,10 +37,12 @@ public class CharacterMagicHandler : NetworkBehaviour
 
     public void FireBallShot()
     {
+        var predictionKey = new NetworkObjectPredictionKey { Byte0 = (byte)Runner.Simulation.Tick };
+
         Runner.Spawn(fireBallPrefab, initProjectilePosition.position, Quaternion.LookRotation(transform.forward), Object.InputAuthority, (runner, spawnedFireBall) =>
             {
                 spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, networkObject, transform);
-            });
+            }, predictionKey);
     }
 
     public override void Render()
@@ -53,7 +55,7 @@ public class CharacterMagicHandler : NetworkBehaviour
             {
                 Debug.Log("Inside is Attack");
 
-                Animator.SetTrigger("Attack");
+                Animator.SetBool("Attack", true);
 
                 StartCoroutine(FireCora());
                 fireBallDelay = TickTimer.CreateFromSeconds(Runner, 2f);
@@ -69,6 +71,6 @@ public class CharacterMagicHandler : NetworkBehaviour
 
     public void FireBallAnimationEvent()
     {
-        //FireBallShot();
+        Animator.SetBool("Attack", false);
     }
 }

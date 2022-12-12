@@ -1,5 +1,6 @@
 using Fusion;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,9 +10,9 @@ public class HPHandler : NetworkBehaviour
     private CharacterInputHandler characterInputHandler;
     public HitboxRoot hitboxRoot;
 
-    private NetworkMecanimAnimator animator;
+    private Animator animator;
 
-    public NetworkMecanimAnimator Animator { get { return animator = animator ?? GetComponent<NetworkMecanimAnimator>(); } }
+    public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
 
     [Networked(OnChanged = nameof(OnHPChanged))]
     byte HP { get; set; }
@@ -47,7 +48,7 @@ public class HPHandler : NetworkBehaviour
 
         Debug.Log($"{Time.time} {transform.name} took damage got {HP} left");
 
-        if(HP <= 0) 
+        if (HP <= 0) 
         {
             Debug.Log($"{Time.time} {transform.name} died");
             IsDead = true;

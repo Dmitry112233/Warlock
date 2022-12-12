@@ -48,4 +48,12 @@ public class CharacterInputHandler : MonoBehaviour
 
         return networkInputData;
     }
+    private void OnDestroy()
+    {
+        if(InputManager.Instance != null) 
+        {
+            InputManager.Instance.NotifyMovement -= Read;
+            InputManager.Instance.NotifyFire -= Fire;
+        }
+    }
 }
