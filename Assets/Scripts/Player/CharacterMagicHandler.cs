@@ -10,6 +10,8 @@ public class CharacterMagicHandler : NetworkBehaviour
 
     TickTimer fireBallDelay = TickTimer.None;
 
+    private NetworkCharacterControllerPrototypeCustom networkCharacterControllerPrototypeCustom;
+
     NetworkObject networkObject;
 
     private Animator animator;
@@ -17,32 +19,36 @@ public class CharacterMagicHandler : NetworkBehaviour
     public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
 
     private bool isFire = false;
+    private Vector3 fireVector;
 
     private void Awake()
     {
+        fireVector = Vector3.zero;
         isFire = false;
         networkObject = GetComponent<NetworkObject>();
+        networkCharacterControllerPrototypeCustom = GetComponent<NetworkCharacterControllerPrototypeCustom>();
     }
 
     public override void FixedUpdateNetwork()
     {
-        if (GetInput(out NetworkInputData networkInputData) /*&& Runner.IsForward*/)
+        if (GetInput(out NetworkInputData networkInputData))
         {
             if (networkInputData.isFireBallButtonPresed)
             {
                 isFire = true;
+                fireVector = networkInputData.fireInput;
             }
         }
     }
 
     public void FireBallShot()
     {
-        var predictionKey = new NetworkObjectPredictionKey { Byte0 = (byte)Runner.Simulation.Tick };
+        fireVector.Normalize();
 
-        Runner.Spawn(fireBallPrefab, initProjectilePosition.position, Quaternion.LookRotation(transform.forward), Object.InputAuthority, (runner, spawnedFireBall) =>
+        Runner.Spawn(fireBallPrefab, transform.position + fireVector * 2, Quaternion.LookRotation(fireVector), Object.InputAuthority, (runner, spawnedFireBall) =>
             {
-                spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, networkObject, transform);
-            }, predictionKey);
+                spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, networkObject);
+            });
     }
 
     public override void Render()
@@ -53,6 +59,7 @@ public class CharacterMagicHandler : NetworkBehaviour
 
             if (fireBallDelay.ExpiredOrNotRunning(Runner))
             {
+                networkCharacterControllerPrototypeCustom.RotateOnFire(fireVector);
                 Debug.Log("Inside is Attack");
 
                 Animator.SetBool("Attack", true);

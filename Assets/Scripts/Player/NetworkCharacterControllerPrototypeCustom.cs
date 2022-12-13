@@ -9,7 +9,13 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
     [Header("Character Controller Settings")]
     public float maxSpeed = 4.0f;
     public float rotationSpeed = 15.0f;
+    public float rotationOnFireSpeed = 2000f;
     public float animationBlendSpeed = 0.05f;
+    public float pushInterpolationSpeed = 3.0f;
+
+    [HideInInspector]
+    public Vector3 PushDestinationPoint { get; set; }
+    public TickTimer pushTimer = TickTimer.None;
 
     private Animator animator;
 
@@ -45,6 +51,7 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
     {
         base.Awake();
         CacheController();
+        PushDestinationPoint = Vector3.zero;
     }
 
     public override void Spawned()
@@ -102,5 +109,29 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
         Animator.SetFloat(GameData.Animator.Speed,
             Mathf.Lerp(Animator.GetFloat(GameData.Animator.Speed), MovementAnimationSpeed,
             AnimationBlendSpeed));
+    }
+
+    public void RotateOnFire(Vector3 direction) 
+    {
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 2000 * Runner.DeltaTime);
+    }
+
+    public void Push() 
+    {
+        if (!pushTimer.Expired(Runner))
+        {
+            transform.position = Vector3.Lerp(transform.position, PushDestinationPoint, pushInterpolationSpeed * Runner.DeltaTime);
+        }
+        else 
+        {
+            PushDestinationPoint = Vector3.zero;
+        }
+    }
+
+    public void SetPushDestinationAndTime(Vector3 pushDestinationPoint, float time) 
+    {
+        PushDestinationPoint += pushDestinationPoint;
+        PushDestinationPoint = transform.position + PushDestinationPoint;
+        pushTimer = TickTimer.CreateFromSeconds(Runner, time);
     }
 }
