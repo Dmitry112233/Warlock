@@ -6,7 +6,7 @@ using System;
 public class FireBallHandler : NetworkBehaviour
 {
     [Header("Prefab")]
-    public List<GameObject> explosionsPrefabs;
+    public List<GameObject> explosionsParticles;
 
     [Header("Collision detection")]
     public Transform checkForImpactPoint;
@@ -26,6 +26,8 @@ public class FireBallHandler : NetworkBehaviour
 
     public event Action<Vector3> pushEvent;
 
+    public float OnDrawSpere = 0.5f;
+
     public void Fire(PlayerRef firedByPlayerRef, NetworkObject firedByNetworkObject) 
     {
         this.firedByPlayerRef = firedByPlayerRef;
@@ -35,37 +37,29 @@ public class FireBallHandler : NetworkBehaviour
         maxLiveDurationTickTimer = TickTimer.CreateFromSeconds(Runner, 10);
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(checkForImpactPoint.position, OnDrawSpere);
+    }
+
     public override void FixedUpdateNetwork() 
     {
         transform.position += transform.forward * Runner.DeltaTime * rocketSpeed;
 
         if (Object.HasStateAuthority) 
         {
+            int hitCounts = Runner.LagCompensation.OverlapSphere(checkForImpactPoint.position, 0.5f, firedByPlayerRef, hits, collisionLayers, HitOptions.IncludePhysX);
+
             if (maxLiveDurationTickTimer.Expired(Runner)) 
             {
                 Runner.Despawn(networkObject);
                 return;
             }
 
-            int hitCounts = Runner.LagCompensation.OverlapSphere(checkForImpactPoint.position, 0.5f, firedByPlayerRef, hits, collisionLayers, HitOptions.IncludePhysX);
-
-            bool isValidHit = false;
-
-            if (hitCounts > 0)
-                isValidHit = true;
-
-            for(int i = 0; i < hitCounts; i++) 
+            if (hitCounts > 0) 
             {
-                if(hits[i].Hitbox != null) 
-                {
-                    if (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() == firedByNetworkObject)
-                        isValidHit = false;
-                }
-            }
-
-            if (isValidHit) 
-            {
-                hitCounts = Runner.LagCompensation.OverlapSphere(checkForImpactPoint.position, 1.5f, firedByPlayerRef, hits, collisionLayers, HitOptions.None);
+                hitCounts = Runner.LagCompensation.OverlapSphere(checkForImpactPoint.position, 2f, firedByPlayerRef, hits, collisionLayers, HitOptions.None);
 
                 for (int i = 0; i < hitCounts; i++)
                 {
@@ -74,9 +68,10 @@ public class FireBallHandler : NetworkBehaviour
                     NetworkCharacterControllerPrototypeCustom characterController = hits[i].Hitbox.transform.root.GetComponent<NetworkCharacterControllerPrototypeCustom>();
 
                     Vector3 pushVector = playerTransform.position - transform.position;
+                    pushVector.Normalize();
                     pushVector.y = 0;
 
-                    if (hPHandler != null) 
+                    if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != firedByNetworkObject)) 
                     {
                         hPHandler.OnTakeDamage(10);
                         characterController.SetPushDestinationAndTime(pushVector * pushBooster, 1.5f);
@@ -89,9 +84,6 @@ public class FireBallHandler : NetworkBehaviour
     }
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
-        foreach (GameObject particle in explosionsPrefabs) 
-        {
-            Instantiate(particle, checkForImpactPoint.position, Quaternion.identity);
-        }
+
     }
 }

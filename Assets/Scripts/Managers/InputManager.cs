@@ -41,8 +41,6 @@ public class InputManager : Singleton<InputManager>
         HorizontalAimLine = fireJoystick.Horizontal;
         VerticalAimLine = fireJoystick.Vertical;
 
-        Debug.Log("AIM " + HorizontalAimLine + "_" + VerticalAimLine);
-
         NotifyAim?.Invoke(HorizontalAimLine, VerticalAimLine);
 
         if (fireJoystick.isFire == true)

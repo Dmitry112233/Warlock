@@ -24,6 +24,8 @@ public class HPHandler : NetworkBehaviour
 
     const byte startingHP = 100;
 
+    public List<GameObject> explosionsParticles;
+
     private void Awake()
     {
         networkCharacterControllerPrototypeCustom = GetComponent<NetworkCharacterControllerPrototypeCustom>();
@@ -39,7 +41,7 @@ public class HPHandler : NetworkBehaviour
     }
 
     //Only called on the server
-    public void OnTakeDamage(byte damage) 
+    public void OnTakeDamage(byte damage)
     {
         if (IsDead)
             return;
@@ -48,16 +50,33 @@ public class HPHandler : NetworkBehaviour
 
         Debug.Log($"{Time.time} {transform.name} took damage got {HP} left");
 
-        if (HP <= 0) 
+        if (HP <= 0)
         {
             Debug.Log($"{Time.time} {transform.name} died");
             IsDead = true;
         }
     }
 
-    static void OnHPChanged(Changed<HPHandler> changed) 
+    static void OnHPChanged(Changed<HPHandler> changed)
     {
         Debug.Log($"{Time.time} OnHPChanged value {changed.Behaviour.HP}");
+
+        byte hpCurrent = changed.Behaviour.HP;
+
+        changed.LoadOld();
+
+        byte hpOld = changed.Behaviour.HP;
+
+        if (hpCurrent < hpOld)
+            changed.Behaviour.PlayFireBallParticles();
+    }
+
+    private void PlayFireBallParticles()
+    {
+        foreach (GameObject particle in explosionsParticles)
+        {
+            Instantiate(particle, transform.position, Quaternion.identity);
+        }
     }
 
     static void OnStateChanged(Changed<HPHandler> changed)
@@ -74,7 +93,7 @@ public class HPHandler : NetworkBehaviour
             changed.Behaviour.OnDeath();
     }
 
-    private void OnDeath() 
+    private void OnDeath()
     {
         Debug.Log($"{Time.time} OnDeath");
         networkCharacterControllerPrototypeCustom.Controller.enabled = false; ;

@@ -52,7 +52,7 @@ public class CharacterMagicHandler : NetworkBehaviour
     {
         fireVector.Normalize();
 
-        Runner.Spawn(fireBallPrefab, transform.position + fireVector * 2, Quaternion.LookRotation(fireVector), Object.InputAuthority, (runner, spawnedFireBall) =>
+        Runner.Spawn(fireBallPrefab, transform.position + fireVector, Quaternion.LookRotation(fireVector), Object.InputAuthority, (runner, spawnedFireBall) =>
             {
                 spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, networkObject);
             });
