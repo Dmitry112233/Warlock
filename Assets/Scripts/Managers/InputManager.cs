@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,13 +11,14 @@ public class InputManager : Singleton<InputManager>
     public delegate void HorizontalHandler(float horizontal, float vertical);
     public delegate void FireHandler(float horizontal, float vertical);
     public event HorizontalHandler NotifyMovement;
+    public event HorizontalHandler NotifyAim;
     public event FireHandler NotifyFire;
 
     public float Horizontal { get; private set; }
     public float Vertical { get; private set; }
 
-    public float HorizontalFire { get; private set; }
-    public float VerticalFire { get; private set; }
+    public float HorizontalAimLine { get; private set; }
+    public float VerticalAimLine { get; private set; }
 
     private void Start()
     {
@@ -36,17 +38,18 @@ public class InputManager : Singleton<InputManager>
 
         NotifyMovement?.Invoke(Horizontal, Vertical);
 
-        Debug.Log("Horizontal up " + fireJoystick.HorizontalOnUp + "Vertical up " + fireJoystick.VerticalOnUp);
-        
-        HorizontalFire = fireJoystick.HorizontalOnUp;
-        VerticalFire = fireJoystick.VerticalOnUp;
-        
-        if(HorizontalFire != 0 || VerticalFire != 0) 
+        HorizontalAimLine = fireJoystick.Horizontal;
+        VerticalAimLine = fireJoystick.Vertical;
+
+        Debug.Log("AIM " + HorizontalAimLine + "_" + VerticalAimLine);
+
+        NotifyAim?.Invoke(HorizontalAimLine, VerticalAimLine);
+
+        if (fireJoystick.isFire == true)
         {
-            NotifyFire?.Invoke(HorizontalFire, VerticalFire);
+            NotifyFire?.Invoke(fireJoystick.HorizontalOnUp, fireJoystick.VrticallOnUp);
+            fireJoystick.isFire = false;
         }
-
-
 
         /*if (Input.GetKeyDown(KeyCode.F))
             NotifyFire?.Invoke(HorizontalFire, VerticalFire);*/

@@ -7,12 +7,9 @@ public class CharacterMovementHandler : NetworkBehaviour
 
     public float pushInterpolation = 30f;
 
-    private LineTest lineTest;
-
     private void Awake()
     {
         networkCharacterControllerPrototypeCustom = GetComponent<NetworkCharacterControllerPrototypeCustom>();
-        lineTest = GetComponent<LineTest>();
     }
 
     public override void FixedUpdateNetwork()
@@ -25,8 +22,6 @@ public class CharacterMovementHandler : NetworkBehaviour
             
             if (movementDirection != Vector3.zero)
             {
-
-                lineTest.DrawLine(new Vector3[] { transform.position, transform.position + movementDirection * 2 });
                 movementDirection.Normalize();
                 networkCharacterControllerPrototypeCustom.Move(movementDirection);
             }

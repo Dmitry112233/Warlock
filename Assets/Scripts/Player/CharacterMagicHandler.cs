@@ -18,8 +18,10 @@ public class CharacterMagicHandler : NetworkBehaviour
 
     public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
 
-    private bool isFire = false;
+    public bool isFire = false;
     private Vector3 fireVector;
+
+    private LineTest lineTest;
 
     private void Awake()
     {
@@ -27,12 +29,17 @@ public class CharacterMagicHandler : NetworkBehaviour
         isFire = false;
         networkObject = GetComponent<NetworkObject>();
         networkCharacterControllerPrototypeCustom = GetComponent<NetworkCharacterControllerPrototypeCustom>();
+        lineTest = GetComponent<LineTest>();
     }
 
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData networkInputData))
         {
+            var aimVector = new Vector3(networkInputData.aimInput.x, 0, networkInputData.aimInput.z);
+
+            lineTest.DrawLine(new Vector3[] { transform.position, transform.position + aimVector * 2 });
+
             if (networkInputData.isFireBallButtonPresed)
             {
                 isFire = true;
@@ -55,8 +62,6 @@ public class CharacterMagicHandler : NetworkBehaviour
     {
         if (isFire == true)
         {
-            isFire = false;
-
             if (fireBallDelay.ExpiredOrNotRunning(Runner))
             {
                 networkCharacterControllerPrototypeCustom.RotateOnFire(fireVector);
@@ -79,5 +84,6 @@ public class CharacterMagicHandler : NetworkBehaviour
     public void FireBallAnimationEvent()
     {
         Animator.SetBool("Attack", false);
+        isFire = false;
     }
 }

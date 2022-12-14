@@ -3,6 +3,7 @@ using UnityEngine;
 public class CharacterInputHandler : MonoBehaviour
 {
     Vector3 movementInputVector = Vector3.zero;
+    Vector3 aimInputVector = Vector3.zero;
     Vector3 fireInputVector = Vector3.zero;
     bool isFireBallButtonPresed = false;
     CharacterMovementHandler characterMovementHandler;
@@ -17,6 +18,7 @@ public class CharacterInputHandler : MonoBehaviour
     void Start()
     {
         InputManager.Instance.NotifyMovement += Read;
+        InputManager.Instance.NotifyAim += ReadAim;
         InputManager.Instance.NotifyFire += Fire;
     }
 
@@ -27,6 +29,15 @@ public class CharacterInputHandler : MonoBehaviour
 
         movementInputVector.x = horizontal;
         movementInputVector.z = vertical;
+    }
+
+    private void ReadAim(float horizontal, float vertical)
+    {
+        if (!characterMovementHandler.Object.HasInputAuthority || hPHandler.IsDead)
+            return;
+
+        aimInputVector.x = horizontal;
+        aimInputVector.z = vertical;
     }
 
     private void Fire(float horizontal, float vertical)
@@ -43,6 +54,7 @@ public class CharacterInputHandler : MonoBehaviour
     {
         NetworkInputData networkInputData = new NetworkInputData();
         networkInputData.mevementInput = movementInputVector;
+        networkInputData.aimInput = aimInputVector;
         networkInputData.fireInput = fireInputVector;
         networkInputData.isFireBallButtonPresed = isFireBallButtonPresed;
 

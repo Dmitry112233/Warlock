@@ -33,6 +33,8 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
     [HideInInspector]
     public float MovementAnimationSpeed { get; private set; }
 
+    CharacterMagicHandler characterMagicHandler;
+
     /// <summary>
     /// Sets the default teleport interpolation velocity to be the CC's current velocity.
     /// For more details on how this field is used, see <see cref="NetworkTransform.TeleportToPosition"/>.
@@ -52,6 +54,8 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
         base.Awake();
         CacheController();
         PushDestinationPoint = Vector3.zero;
+
+        characterMagicHandler = GetComponent<CharacterMagicHandler>();
     }
 
     public override void Spawned()
@@ -89,7 +93,7 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
         var previousPos = transform.position;
         direction = direction.normalized;
 
-        if (direction != default)
+        if (direction != default && characterMagicHandler.isFire != true)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime);
             MovementAnimationSpeed = 1.0f;
