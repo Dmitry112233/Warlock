@@ -6,6 +6,8 @@ public class MagicHandler : NetworkBehaviour
 {
     [Header("Magic settings")]
     public float fireBallCooldown = 2.0f;
+    public float fireBallTimeBeforAppearence = 0.5f;
+    public float aimVectorBooster = 2f;
 
     [Header("Prefabs")]
     public FireBallHandler fireBallPrefab;
@@ -39,10 +41,11 @@ public class MagicHandler : NetworkBehaviour
         if (GetInput(out NetworkInputData networkInputData))
         {
             var aimVector = new Vector3(networkInputData.aimInput.x, 0, networkInputData.aimInput.z);
+            aimVector.Normalize();
 
             if (Object.HasInputAuthority) 
             {
-                AimLineRender.SetUpLine(new Vector3[] { transform.position, transform.position + aimVector * 2 });
+                AimLineRender.SetUpLine(new Vector3[] { transform.position, transform.position + aimVector * aimVectorBooster });
             }
 
             if (networkInputData.isFireBallButtonPresed)
@@ -83,7 +86,7 @@ public class MagicHandler : NetworkBehaviour
 
     IEnumerator FireCora()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(fireBallTimeBeforAppearence);
         FireBallShot();
     }
 
