@@ -14,23 +14,12 @@ public class CharacterMovementHandler : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        Vector3 movementDirection = Vector3.zero;
-
         if (GetInput(out NetworkInputData networkInputData))
         {
-            movementDirection = new Vector3(networkInputData.mevementInput.x, 0, networkInputData.mevementInput.z);
-            
-            if (movementDirection != Vector3.zero)
-            {
-                movementDirection.Normalize();
-                networkCharacterControllerPrototypeCustom.Move(movementDirection);
-            }
-            else
-            {
-                networkCharacterControllerPrototypeCustom.ResetMovementAnimationSpeed();
-            }
+            var movementDirection = new Vector3(networkInputData.mevementInput.x, 0, networkInputData.mevementInput.z);
+            movementDirection.Normalize();
+            networkCharacterControllerPrototypeCustom.Move(movementDirection);
         }
-
         if (networkCharacterControllerPrototypeCustom.PushDestinationPoint != Vector3.zero) 
         {
             networkCharacterControllerPrototypeCustom.Push();

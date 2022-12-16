@@ -38,7 +38,10 @@ public class CharacterMagicHandler : NetworkBehaviour
         {
             var aimVector = new Vector3(networkInputData.aimInput.x, 0, networkInputData.aimInput.z);
 
-            lineTest.DrawLine(new Vector3[] { transform.position, transform.position + aimVector * 2 });
+            if (Object.HasInputAuthority) 
+            {
+                lineTest.DrawLine(new Vector3[] { transform.position, transform.position + aimVector * 2 });
+            }
 
             if (networkInputData.isFireBallButtonPresed)
             {

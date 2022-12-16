@@ -2073,7 +2073,7 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 1.5, y: 0, z: 1.5}
+  - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
@@ -2217,7 +2217,6 @@ GameObject:
   - component: {fileID: 5370970629003890025}
   - component: {fileID: 2047353873335097107}
   - component: {fileID: 5549345315575184886}
-  - component: {fileID: 5549345315575184887}
   - component: {fileID: 543450653139475193}
   - component: {fileID: 543450653139475192}
   - component: {fileID: -2339144953787621274}
@@ -2294,21 +2293,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.07, z: 0}
---- !u!114 &5549345315575184887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4738444281627613139}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28c1a3a77c9afac45b0ad1af55d97cce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementSpeed: 5
-  rotationSpeed: 1000
-  animationBlendSpeed: 0.05
 --- !u!114 &543450653139475193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2386,8 +2370,6 @@ MonoBehaviour:
   animationBlendSpeed: 0.05
   pushInterpolationSpeed: 3
   _Velocity: {x: 0, y: 0, z: 0}
-  _AnimationBlendSpeed: 0
-  _MovementAnimationSpeed: 0
 --- !u!114 &5470692003672487676
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,6 +15,8 @@ public class CharacterInputHandler : MonoBehaviour
         hPHandler = GetComponent<HPHandler>();
     }
 
+
+
     void Start()
     {
         InputManager.Instance.NotifyMovement += Read;
