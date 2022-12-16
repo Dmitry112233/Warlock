@@ -24,8 +24,6 @@ public class FireBallHandler : NetworkBehaviour
 
     NetworkObject networkObject;
 
-    public event Action<Vector3> pushEvent;
-
     public float OnDrawSpere = 0.5f;
 
     public void Fire(PlayerRef firedByPlayerRef, NetworkObject firedByNetworkObject) 
