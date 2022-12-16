@@ -1,18 +1,14 @@
 using UnityEngine;
 
-public class LineRenderController : MonoBehaviour
+public class AimLineRender : MonoBehaviour
 {
-    private LineRenderer lr;
-    private Vector3[] points;
+    public LineRenderer lineRenderer;
 
-    private void Awake()
-    {
-        lr = GetComponent<LineRenderer>();
-    }
+    private Vector3[] points;
 
     public void SetUpLine(Vector3[] points) 
     {
-        lr.positionCount = points.Length;
+        lineRenderer.positionCount = points.Length;
         this.points = points;
     }
 
@@ -22,13 +18,13 @@ public class LineRenderController : MonoBehaviour
         {
             for (int i = 0; i < points.Length; i++)
             {
-                lr.SetPosition(i, points[i]);
+                lineRenderer.SetPosition(i, points[i]);
             }
         }
         else 
         {
             points = null;
-            lr.positionCount = 0;
+            lineRenderer.positionCount = 0;
         }
     }
 }

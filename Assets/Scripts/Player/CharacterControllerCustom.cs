@@ -2,7 +2,7 @@ using Fusion;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
+public class CharacterControllerCustom : NetworkTransform
 {
     [Header("Character Controller Settings")]
     public float maxSpeed = 4.0f;
@@ -11,14 +11,22 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
     public float animationBlendSpeed = 0.05f;
     public float pushInterpolationSpeed = 3.0f;
 
-    [HideInInspector]
-    public Vector3 PushDestinationPoint { get; set; }
+    [Networked]
+    public Vector3 Velocity { get; set; }
 
+    public Vector3 PushDestinationPoint { get; set; }
     public TickTimer pushTimer = TickTimer.None;
 
-    private Animator animator;
+    private MagicHandler magicHandler;
+    private MagicHandler MagicHandler { get { return magicHandler = magicHandler ?? GetComponent<MagicHandler>(); } }
 
+    private CharacterController controller;
+    public CharacterController Controller { get { return controller = controller ?? GetComponent<CharacterController>(); } }
+
+    private Animator animator;
     public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
+    private float movementAnimationSpeed;
+
 
     /// <summary>
     /// Sets the default teleport interpolation velocity to be the CC's current velocity.
@@ -31,21 +39,9 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
     /// </summary>
     protected override Vector3 DefaultTeleportInterpolationAngularVelocity => new Vector3(0f, 0f, rotationSpeed);
 
-    [Networked]
-    [HideInInspector]
-    public Vector3 Velocity { get; set; }
-
-    public float MovementAnimationSpeed { get; private set; }
-
-    CharacterMagicHandler characterMagicHandler;
-
-    public CharacterController Controller { get; private set; }
-
     protected override void Awake()
     {
         PushDestinationPoint = Vector3.zero;
-        characterMagicHandler = GetComponent<CharacterMagicHandler>();
-        Controller = GetComponent<CharacterController>();
     }
 
     protected override void CopyFromBufferToEngine()
@@ -58,7 +54,6 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
 
         // Re-enable CC
         Controller.enabled = true;
-        Controller = GetComponent<CharacterController>();
     }
 
     public void Move(Vector3 direction)
@@ -69,10 +64,10 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
             var previousPos = transform.position;
             direction = direction.normalized;
 
-            if (direction != default && characterMagicHandler.isFire != true)
+            if (direction != default && MagicHandler.IsFire != true)
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime);
-                MovementAnimationSpeed = 1.0f;
+                movementAnimationSpeed = 1.0f;
             }
 
             Controller.Move(direction * maxSpeed * deltaTime);
@@ -80,14 +75,14 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
         }
         else 
         {
-            MovementAnimationSpeed = 0.0f;
+            movementAnimationSpeed = 0.0f;
         }
     }
 
     public void PlayMoveAnimation()
     {
         Animator.SetFloat(GameData.Animator.Speed,
-            Mathf.Lerp(Animator.GetFloat(GameData.Animator.Speed), MovementAnimationSpeed,
+            Mathf.Lerp(Animator.GetFloat(GameData.Animator.Speed), movementAnimationSpeed,
             animationBlendSpeed));
     }
 

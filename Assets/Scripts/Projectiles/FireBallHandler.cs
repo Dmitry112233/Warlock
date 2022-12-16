@@ -63,9 +63,9 @@ public class FireBallHandler : NetworkBehaviour
 
                 for (int i = 0; i < hitCounts; i++)
                 {
-                    HPHandler hPHandler = hits[i].Hitbox.transform.root.GetComponent<HPHandler>();
+                    HpHandler hPHandler = hits[i].Hitbox.transform.root.GetComponent<HpHandler>();
                     Transform playerTransform = hits[i].Hitbox.transform.root.GetComponent<Transform>();
-                    NetworkCharacterControllerPrototypeCustom characterController = hits[i].Hitbox.transform.root.GetComponent<NetworkCharacterControllerPrototypeCustom>();
+                    CharacterControllerCustom characterController = hits[i].Hitbox.transform.root.GetComponent<CharacterControllerCustom>();
 
                     Vector3 pushVector = playerTransform.position - transform.position;
                     pushVector.Normalize();

@@ -2008,7 +2008,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8174964584038245838}
   - component: {fileID: 5064283484198293760}
-  - component: {fileID: 2720036148240239970}
   m_Layer: 0
   m_Name: LineReder
   m_TagString: Untagged
@@ -2130,18 +2129,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!114 &2720036148240239970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4468632401673600227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99671207ff9097e4abdbc9225763f6a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4526680453169601872
 GameObject:
   m_ObjectHideFlags: 0
@@ -2226,7 +2213,7 @@ GameObject:
   - component: {fileID: 2649861102581350505}
   - component: {fileID: 7931147562824465155}
   - component: {fileID: 7163017783851964740}
-  - component: {fileID: 5951133130138260089}
+  - component: {fileID: 8795231270427080161}
   m_Layer: 0
   m_Name: WarlockPrefab
   m_TagString: Untagged
@@ -2383,7 +2370,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  pushInterpolation: 30
 --- !u!114 &-1444219190172477757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2411,7 +2397,6 @@ MonoBehaviour:
   _interpolationDataSource: 0
   fireBallPrefab: {fileID: 4304298449107023081, guid: a7ae7e4cb3e44134ca8506910a20434d, type: 3}
   initProjectilePosition: {fileID: 1577627665681276635}
-  isFire: 0
 --- !u!114 &2649861102581350505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2443,9 +2428,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  networkCharacterControllerPrototypeCustom: {fileID: 0}
-  hitboxRoot: {fileID: 2649861102581350505}
-  _IsDead: 0
   explosionsParticles:
   - {fileID: 6372690730201300933, guid: f97ac8e030f7ad747b9445795a5ea849, type: 3}
   - {fileID: 7487472719841995831, guid: 3c5d1b40030cac74696444dd07406390, type: 3}
@@ -2453,6 +2435,8 @@ MonoBehaviour:
   - {fileID: 8078922257978301839, guid: 5b38a16cd1fcf12488b49512ccb6a5f6, type: 3}
   - {fileID: 573547098334549359, guid: b7f86a6bec370cf4097567311ca098d6, type: 3}
   - {fileID: 2481807847447787653, guid: 8750ee51a472adb4e9320e8c8aae856d, type: 3}
+  hitboxRoot: {fileID: 2649861102581350505}
+  _IsDead: 0
 --- !u!114 &7163017783851964740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2483,7 +2467,7 @@ MonoBehaviour:
     _hash: -814817977
   StateHashes: 000000008a18fce4b9abd9d30d286c404e865f432afa8626a8b5caa3
   TriggerHashes: 000000001ae6174d
---- !u!114 &5951133130138260089
+--- !u!114 &8795231270427080161
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2492,10 +2476,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4738444281627613139}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4255088b61f5aee4ab08d177e7554471, type: 3}
+  m_Script: {fileID: 11500000, guid: 99671207ff9097e4abdbc9225763f6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  line: {fileID: 2720036148240239970}
+  lineRenderer: {fileID: 5064283484198293760}
 --- !u!1 &4757556806027637896
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,21 +1,17 @@
 using UnityEngine;
 
-public class CharacterInputHandler : MonoBehaviour
+public class InputHandler : MonoBehaviour
 {
-    Vector3 movementInputVector = Vector3.zero;
-    Vector3 aimInputVector = Vector3.zero;
-    Vector3 fireInputVector = Vector3.zero;
-    bool isFireBallButtonPresed = false;
-    CharacterMovementHandler characterMovementHandler;
-    HPHandler hPHandler;
+    private Vector3 movementInputVector = Vector3.zero;
+    private Vector3 aimInputVector = Vector3.zero;
+    private Vector3 fireInputVector = Vector3.zero;
+    private bool isFireBallButtonPresed = false;
 
-    private void Awake()
-    {
-        characterMovementHandler = GetComponent<CharacterMovementHandler>();
-        hPHandler = GetComponent<HPHandler>();
-    }
+    private MovementHandler movementHandler;
+    public MovementHandler MovementHandler { get { return movementHandler = movementHandler ?? GetComponent<MovementHandler>(); } }
 
-
+    private HpHandler hPHandler;
+    public HpHandler HPHandler { get { return hPHandler = hPHandler ?? GetComponent<HpHandler>(); } }
 
     void Start()
     {
@@ -26,7 +22,7 @@ public class CharacterInputHandler : MonoBehaviour
 
     private void Read(float horizontal, float vertical)
     {
-        if (!characterMovementHandler.Object.HasInputAuthority || hPHandler.IsDead)
+        if (!MovementHandler.Object.HasInputAuthority || HPHandler.IsDead)
             return;
 
         movementInputVector.x = horizontal;
@@ -35,7 +31,7 @@ public class CharacterInputHandler : MonoBehaviour
 
     private void ReadAim(float horizontal, float vertical)
     {
-        if (!characterMovementHandler.Object.HasInputAuthority || hPHandler.IsDead)
+        if (!MovementHandler.Object.HasInputAuthority || HPHandler.IsDead)
             return;
 
         aimInputVector.x = horizontal;
@@ -44,7 +40,7 @@ public class CharacterInputHandler : MonoBehaviour
 
     private void Fire(float horizontal, float vertical)
     {
-        if (!characterMovementHandler.Object.HasInputAuthority)
+        if (!MovementHandler.Object.HasInputAuthority)
             return;
 
         isFireBallButtonPresed = true;

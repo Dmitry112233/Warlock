@@ -2,34 +2,33 @@ using Fusion;
 using System.Collections;
 using UnityEngine;
 
-public class CharacterMagicHandler : NetworkBehaviour
+public class MagicHandler : NetworkBehaviour
 {
     [Header("Prefabs")]
     public FireBallHandler fireBallPrefab;
     public Transform initProjectilePosition;
 
-    TickTimer fireBallDelay = TickTimer.None;
+    private Vector3 fireVector;
+    private TickTimer fireBallDelay = TickTimer.None;
 
-    private NetworkCharacterControllerPrototypeCustom networkCharacterControllerPrototypeCustom;
+    public bool IsFire { get; private set; }
 
-    NetworkObject networkObject;
+    private CharacterControllerCustom characterControllerCustom; 
+    public CharacterControllerCustom CharacterControllerCustom { get { return characterControllerCustom = characterControllerCustom ?? GetComponent<CharacterControllerCustom>(); } }
+
+    private NetworkObject networkObject;
+    public NetworkObject NetworkObject { get { return networkObject = networkObject ?? GetComponent<NetworkObject>(); } }
+
+    private AimLineRender aimLineRender;
+    public AimLineRender AimLineRender { get { return aimLineRender = aimLineRender ?? GetComponent<AimLineRender>(); } }
 
     private Animator animator;
-
     public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
-
-    public bool isFire = false;
-    private Vector3 fireVector;
-
-    private LineTest lineTest;
 
     private void Awake()
     {
         fireVector = Vector3.zero;
-        isFire = false;
-        networkObject = GetComponent<NetworkObject>();
-        networkCharacterControllerPrototypeCustom = GetComponent<NetworkCharacterControllerPrototypeCustom>();
-        lineTest = GetComponent<LineTest>();
+        IsFire = false;
     }
 
     public override void FixedUpdateNetwork()
@@ -40,12 +39,12 @@ public class CharacterMagicHandler : NetworkBehaviour
 
             if (Object.HasInputAuthority) 
             {
-                lineTest.DrawLine(new Vector3[] { transform.position, transform.position + aimVector * 2 });
+                AimLineRender.SetUpLine(new Vector3[] { transform.position, transform.position + aimVector * 2 });
             }
 
             if (networkInputData.isFireBallButtonPresed)
             {
-                isFire = true;
+                IsFire = true;
                 fireVector = networkInputData.fireInput;
             }
         }
@@ -57,17 +56,17 @@ public class CharacterMagicHandler : NetworkBehaviour
 
         Runner.Spawn(fireBallPrefab, transform.position + fireVector, Quaternion.LookRotation(fireVector), Object.InputAuthority, (runner, spawnedFireBall) =>
             {
-                spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, networkObject);
+                spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, NetworkObject);
             });
     }
 
     public override void Render()
     {
-        if (isFire == true)
+        if (IsFire == true)
         {
             if (fireBallDelay.ExpiredOrNotRunning(Runner))
             {
-                networkCharacterControllerPrototypeCustom.RotateOnFire(fireVector);
+                CharacterControllerCustom.RotateOnFire(fireVector);
                 Debug.Log("Inside is Attack");
 
                 Animator.SetBool("Attack", true);
@@ -87,6 +86,6 @@ public class CharacterMagicHandler : NetworkBehaviour
     public void FireBallAnimationEvent()
     {
         Animator.SetBool("Attack", false);
-        isFire = false;
+        IsFire = false;
     }
 }

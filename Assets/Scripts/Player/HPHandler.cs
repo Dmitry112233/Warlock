@@ -4,15 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class HPHandler : NetworkBehaviour
+public class HpHandler : NetworkBehaviour
 {
-    public NetworkCharacterControllerPrototypeCustom networkCharacterControllerPrototypeCustom;
-    private CharacterInputHandler characterInputHandler;
+    public List<GameObject> explosionsParticles;
     public HitboxRoot hitboxRoot;
 
-    private Animator animator;
-
-    public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
+    private bool isInitialized = false;
+    private const byte startingHP = 100;
 
     [Networked(OnChanged = nameof(OnHPChanged))]
     byte HP { get; set; }
@@ -20,23 +18,19 @@ public class HPHandler : NetworkBehaviour
     [Networked(OnChanged = nameof(OnStateChanged))]
     public bool IsDead { get; set; }
 
-    bool isInitialized = false;
+    private CharacterControllerCustom characterControllerCustom;
+    public CharacterControllerCustom CharacterControllerCustom { get { return characterControllerCustom = characterControllerCustom ?? GetComponent<CharacterControllerCustom>(); } }
 
-    const byte startingHP = 100;
+    private InputHandler characterInputHandler;
+    public InputHandler InputHandler { get { return characterInputHandler = characterInputHandler ?? GetComponent<InputHandler>(); } }
 
-    public List<GameObject> explosionsParticles;
-
-    private void Awake()
-    {
-        networkCharacterControllerPrototypeCustom = GetComponent<NetworkCharacterControllerPrototypeCustom>();
-        characterInputHandler = GetComponent<CharacterInputHandler>();
-    }
+    private Animator animator;
+    public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
 
     void Start()
     {
         HP = startingHP;
         IsDead = false;
-
         isInitialized = true;
     }
 
@@ -57,7 +51,7 @@ public class HPHandler : NetworkBehaviour
         }
     }
 
-    static void OnHPChanged(Changed<HPHandler> changed)
+    static void OnHPChanged(Changed<HpHandler> changed)
     {
         Debug.Log($"{Time.time} OnHPChanged value {changed.Behaviour.HP}");
 
@@ -79,15 +73,11 @@ public class HPHandler : NetworkBehaviour
         }
     }
 
-    static void OnStateChanged(Changed<HPHandler> changed)
+    static void OnStateChanged(Changed<HpHandler> changed)
     {
         Debug.Log($"{Time.time} OnStateChanged isDead {changed.Behaviour.IsDead}");
 
         bool isDeadCurrent = changed.Behaviour.IsDead;
-
-        changed.LoadOld();
-
-        bool isDeadOld = changed.Behaviour.IsDead;
 
         if (isDeadCurrent)
             changed.Behaviour.OnDeath();
@@ -96,11 +86,10 @@ public class HPHandler : NetworkBehaviour
     private void OnDeath()
     {
         Debug.Log($"{Time.time} OnDeath");
-        networkCharacterControllerPrototypeCustom.Controller.enabled = false; ;
+        CharacterControllerCustom.Controller.enabled = false; ;
         hitboxRoot.HitboxRootActive = false;
-        characterInputHandler.enabled = false;
+        InputHandler.enabled = false;
         Animator.SetTrigger("Dead");
-
         //StartCoroutine(Leave());
     }
 

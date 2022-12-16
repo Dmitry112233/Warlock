@@ -6,11 +6,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
     public static NetworkPlayer Local { get; set; }
 
-    void Start()
-    {
-        
-    }
-
     public override void Spawned()
     {
         if (Object.HasInputAuthority) 
