@@ -6,11 +6,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
     public static NetworkPlayer Local { get; set; }
 
-    void Start()
-    {
-        
-    }
-
     public override void Spawned()
     {
         if (Object.HasInputAuthority) 
@@ -25,8 +20,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         {
             Camera localCamera = GetComponentInChildren<Camera>();
             CinemachineVirtualCamera cinemachineCamera = GetComponentInChildren<CinemachineVirtualCamera>();
+            
 
-            if(localCamera != null) 
+            if (localCamera != null) 
             {
                 Debug.Log("Destroy another player camera");
 

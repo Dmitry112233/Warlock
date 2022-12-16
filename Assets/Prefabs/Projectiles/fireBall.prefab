@@ -4926,6 +4926,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
+  liveTime: 10
+  detectedColisionSphereRadius: 0.5
+  explosionSphereRadius: 2
+  rocketSpeed: 10
+  pushBooster: 4
+  pushDuration: 1.5
+  damage: 10
+  OnDrawSpere: 0.5
   explosionsParticles:
   - {fileID: 6372690730201300933, guid: f97ac8e030f7ad747b9445795a5ea849, type: 3}
   - {fileID: 7487472719841995831, guid: 3c5d1b40030cac74696444dd07406390, type: 3}
@@ -4937,9 +4945,6 @@ MonoBehaviour:
   collisionLayers:
     serializedVersion: 2
     m_Bits: 64
-  rocketSpeed: 1
-  pushBooster: 4
-  OnDrawSpere: 0.5
 --- !u!1 &1122375808417882
 GameObject:
   m_ObjectHideFlags: 0

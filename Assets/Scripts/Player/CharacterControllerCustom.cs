@@ -2,9 +2,7 @@ using Fusion;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-[OrderBefore(typeof(NetworkTransform))]
-[DisallowMultipleComponent]
-public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
+public class CharacterControllerCustom : NetworkTransform
 {
     [Header("Character Controller Settings")]
     public float maxSpeed = 4.0f;
@@ -13,66 +11,37 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
     public float animationBlendSpeed = 0.05f;
     public float pushInterpolationSpeed = 3.0f;
 
-    [HideInInspector]
+    [Networked]
+    public Vector3 Velocity { get; set; }
+
     public Vector3 PushDestinationPoint { get; set; }
     public TickTimer pushTimer = TickTimer.None;
 
+    private MagicHandler magicHandler;
+    private MagicHandler MagicHandler { get { return magicHandler = magicHandler ?? GetComponent<MagicHandler>(); } }
+
+    private CharacterController controller;
+    public CharacterController Controller { get { return controller = controller ?? GetComponent<CharacterController>(); } }
+
     private Animator animator;
-
     public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
+    private float movementAnimationSpeed;
 
-    [Networked]
-    [HideInInspector]
-    public Vector3 Velocity { get; set; }
-
-    [Networked]
-    [HideInInspector]
-    public float AnimationBlendSpeed { get; private set; }
-
-    [Networked]
-    [HideInInspector]
-    public float MovementAnimationSpeed { get; private set; }
-
-    CharacterMagicHandler characterMagicHandler;
 
     /// <summary>
     /// Sets the default teleport interpolation velocity to be the CC's current velocity.
     /// For more details on how this field is used, see <see cref="NetworkTransform.TeleportToPosition"/>.
     /// </summary>
     protected override Vector3 DefaultTeleportInterpolationVelocity => Velocity;
-
     /// <summary>
     /// Sets the default teleport interpolation angular velocity to be the CC's rotation speed on the Z axis.
     /// For more details on how this field is used, see <see cref="NetworkTransform.TeleportToRotation"/>.
     /// </summary>
     protected override Vector3 DefaultTeleportInterpolationAngularVelocity => new Vector3(0f, 0f, rotationSpeed);
 
-    public CharacterController Controller { get; private set; }
-
     protected override void Awake()
     {
-        base.Awake();
-        CacheController();
         PushDestinationPoint = Vector3.zero;
-
-        characterMagicHandler = GetComponent<CharacterMagicHandler>();
-    }
-
-    public override void Spawned()
-    {
-        base.Spawned();
-        CacheController();
-        AnimationBlendSpeed = animationBlendSpeed;
-    }
-
-    private void CacheController()
-    {
-        if (Controller == null)
-        {
-            Controller = GetComponent<CharacterController>();
-
-            Assert.Check(Controller != null, $"An object with {nameof(NetworkCharacterControllerPrototype)} must also have a {nameof(CharacterController)} component.");
-        }
     }
 
     protected override void CopyFromBufferToEngine()
@@ -87,37 +56,39 @@ public class NetworkCharacterControllerPrototypeCustom : NetworkTransform
         Controller.enabled = true;
     }
 
-    public virtual void Move(Vector3 direction)
+    public void Move(Vector3 direction)
     {
-        var deltaTime = Runner.DeltaTime;
-        var previousPos = transform.position;
-        direction = direction.normalized;
-
-        if (direction != default && characterMagicHandler.isFire != true)
+        if(direction != Vector3.zero) 
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime);
-            MovementAnimationSpeed = 1.0f;
+            var deltaTime = Runner.DeltaTime;
+            var previousPos = transform.position;
+            direction = direction.normalized;
+
+            if (direction != default && MagicHandler.IsFire != true)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime);
+                movementAnimationSpeed = 1.0f;
+            }
+
+            Controller.Move(direction * maxSpeed * deltaTime);
+            Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
         }
-
-        Controller.Move(direction * maxSpeed * deltaTime);
-        Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
-    }
-
-    public void ResetMovementAnimationSpeed()
-    {
-        MovementAnimationSpeed = 0.0f;
+        else 
+        {
+            movementAnimationSpeed = 0.0f;
+        }
     }
 
     public void PlayMoveAnimation()
     {
         Animator.SetFloat(GameData.Animator.Speed,
-            Mathf.Lerp(Animator.GetFloat(GameData.Animator.Speed), MovementAnimationSpeed,
-            AnimationBlendSpeed));
+            Mathf.Lerp(Animator.GetFloat(GameData.Animator.Speed), movementAnimationSpeed,
+            animationBlendSpeed));
     }
 
     public void RotateOnFire(Vector3 direction) 
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 2000 * Runner.DeltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationOnFireSpeed * Runner.DeltaTime);
     }
 
     public void Push() 

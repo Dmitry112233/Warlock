@@ -7,13 +7,7 @@ using UnityEngine;
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     public NetworkPlayer playerPrefab;
-
-    CharacterInputHandler characterInputHandler;
-
-    void Start()
-    {
-
-    }
+    private InputHandler characterInputHandler;
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) 
     {
@@ -33,7 +27,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         if(characterInputHandler == null && NetworkPlayer.Local != null) 
         {
-            characterInputHandler = NetworkPlayer.Local.GetComponent<CharacterInputHandler>();
+            characterInputHandler = NetworkPlayer.Local.GetComponent<InputHandler>();
         }
 
         if(characterInputHandler != null) 
