@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : Singleton<InputManager>
@@ -22,17 +19,12 @@ public class InputManager : Singleton<InputManager>
 
     private void Start()
     {
-        dynamicJoystick = GameObject.FindGameObjectWithTag("Dynamic Joystick").GetComponent<DynamicJoystick>();
-        fireJoystick = GameObject.FindGameObjectWithTag("Fire Joystick").GetComponent<FixedJoystickCustom>();
+        dynamicJoystick = GameObject.FindGameObjectWithTag(GameData.JoystickTags.DynamicJoystick).GetComponent<DynamicJoystick>();
+        fireJoystick = GameObject.FindGameObjectWithTag(GameData.JoystickTags.FireJoystick).GetComponent<FixedJoystickCustom>();
     }
 
     void Update()
     {
-        //Keyboard
-        //Horizontal = Input.GetAxis("Horizontal");
-        //Vertical = Input.GetAxis("Vertical");
-
-        //Mobile Controll
         Horizontal = dynamicJoystick.Horizontal;
         Vertical = dynamicJoystick.Vertical;
 
@@ -48,8 +40,5 @@ public class InputManager : Singleton<InputManager>
             NotifyFire?.Invoke(fireJoystick.HorizontalOnUp, fireJoystick.VrticallOnUp);
             fireJoystick.isFire = false;
         }
-
-        /*if (Input.GetKeyDown(KeyCode.F))
-            NotifyFire?.Invoke(HorizontalFire, VerticalFire);*/
     }
 }

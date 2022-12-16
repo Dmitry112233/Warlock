@@ -1,10 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
-using System;
 
 public class FireBallHandler : NetworkBehaviour
 {
+    [Header("Fire ball settings")]
+    public float liveTime = 10.0f;
+    public float detectedColisionSphereRadius = 0.5f;
+    public float explosionSphereRadius = 2f;
+    public float rocketSpeed = 20f;
+    public float pushBooster = 2.0f;
+    public float pushDuration = 1.5f;
+    public byte damage = 10;
+    public float OnDrawSpere = 0.5f;
+
     [Header("Prefab")]
     public List<GameObject> explosionsParticles;
 
@@ -12,33 +21,20 @@ public class FireBallHandler : NetworkBehaviour
     public Transform checkForImpactPoint;
     public LayerMask collisionLayers;
 
-    TickTimer maxLiveDurationTickTimer = TickTimer.None;
+    private TickTimer maxLiveDurationTickTimer = TickTimer.None;
+    private List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
 
-    public int rocketSpeed = 20;
-    public float pushBooster = 2f;
+    private NetworkObject firedByNetworkObject;
+    private PlayerRef firedByPlayerRef;
 
-    List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
-
-    NetworkObject firedByNetworkObject;
-    PlayerRef firedByPlayerRef;
-
-    NetworkObject networkObject;
-
-    public float OnDrawSpere = 0.5f;
+    private NetworkObject networkObject;
+    public NetworkObject NetworkObject { get { return networkObject = networkObject ?? GetComponent<NetworkObject>(); } }
 
     public void Fire(PlayerRef firedByPlayerRef, NetworkObject firedByNetworkObject) 
     {
         this.firedByPlayerRef = firedByPlayerRef;
         this.firedByNetworkObject = firedByNetworkObject;
-        networkObject = GetComponent<NetworkObject>();
-
-        maxLiveDurationTickTimer = TickTimer.CreateFromSeconds(Runner, 10);
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(checkForImpactPoint.position, OnDrawSpere);
+        maxLiveDurationTickTimer = TickTimer.CreateFromSeconds(Runner, liveTime);
     }
 
     public override void FixedUpdateNetwork() 
@@ -47,17 +43,17 @@ public class FireBallHandler : NetworkBehaviour
 
         if (Object.HasStateAuthority) 
         {
-            int hitCounts = Runner.LagCompensation.OverlapSphere(checkForImpactPoint.position, 0.5f, firedByPlayerRef, hits, collisionLayers, HitOptions.IncludePhysX);
+            int hitCounts = Runner.LagCompensation.OverlapSphere(checkForImpactPoint.position, detectedColisionSphereRadius, firedByPlayerRef, hits, collisionLayers, HitOptions.IncludePhysX);
 
             if (maxLiveDurationTickTimer.Expired(Runner)) 
             {
-                Runner.Despawn(networkObject);
+                Runner.Despawn(NetworkObject);
                 return;
             }
 
             if (hitCounts > 0) 
             {
-                hitCounts = Runner.LagCompensation.OverlapSphere(checkForImpactPoint.position, 2f, firedByPlayerRef, hits, collisionLayers, HitOptions.None);
+                hitCounts = Runner.LagCompensation.OverlapSphere(checkForImpactPoint.position, explosionSphereRadius, firedByPlayerRef, hits, collisionLayers, HitOptions.None);
 
                 for (int i = 0; i < hitCounts; i++)
                 {
@@ -71,17 +67,23 @@ public class FireBallHandler : NetworkBehaviour
 
                     if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != firedByNetworkObject)) 
                     {
-                        hPHandler.OnTakeDamage(10);
-                        characterController.SetPushDestinationAndTime(pushVector * pushBooster, 1.5f);
+                        hPHandler.OnTakeDamage(damage);
+                        characterController.SetPushDestinationAndTime(pushVector * pushBooster, pushDuration);
                     }
                 }
 
-                Runner.Despawn(networkObject);
+                Runner.Despawn(NetworkObject);
             }
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(checkForImpactPoint.position, OnDrawSpere);
+    }
+
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
-
     }
 }

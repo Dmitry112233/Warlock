@@ -1,11 +1,10 @@
 using Fusion;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class HpHandler : NetworkBehaviour
 {
+    [Header("Prefabs")]
     public List<GameObject> explosionsParticles;
     public HitboxRoot hitboxRoot;
 
@@ -86,17 +85,10 @@ public class HpHandler : NetworkBehaviour
     private void OnDeath()
     {
         Debug.Log($"{Time.time} OnDeath");
+
         CharacterControllerCustom.Controller.enabled = false; ;
         hitboxRoot.HitboxRootActive = false;
         InputHandler.enabled = false;
-        Animator.SetTrigger("Dead");
-        //StartCoroutine(Leave());
-    }
-
-    IEnumerator Leave()
-    {
-        yield return new WaitForSeconds(3);
-        Debug.Log($"{Time.time} OnLeave");
-        SceneManager.LoadScene(1);
+        Animator.SetTrigger(GameData.Animator.DeathTriger);
     }
 }

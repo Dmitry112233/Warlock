@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MagicHandler : NetworkBehaviour
 {
+    [Header("Magic settings")]
+    public float fireBallCooldown = 2.0f;
+
     [Header("Prefabs")]
     public FireBallHandler fireBallPrefab;
     public Transform initProjectilePosition;
@@ -67,12 +70,13 @@ public class MagicHandler : NetworkBehaviour
             if (fireBallDelay.ExpiredOrNotRunning(Runner))
             {
                 CharacterControllerCustom.RotateOnFire(fireVector);
+
                 Debug.Log("Inside is Attack");
 
-                Animator.SetBool("Attack", true);
+                Animator.SetBool(GameData.Animator.AttackBool, true);
 
                 StartCoroutine(FireCora());
-                fireBallDelay = TickTimer.CreateFromSeconds(Runner, 2f);
+                fireBallDelay = TickTimer.CreateFromSeconds(Runner, fireBallCooldown);
             }
         }
     }
@@ -85,7 +89,7 @@ public class MagicHandler : NetworkBehaviour
 
     public void FireBallAnimationEvent()
     {
-        Animator.SetBool("Attack", false);
+        Animator.SetBool(GameData.Animator.AttackBool, false);
         IsFire = false;
     }
 }
