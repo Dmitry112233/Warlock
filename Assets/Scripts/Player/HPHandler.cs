@@ -1,12 +1,16 @@
 using Fusion;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HpHandler : NetworkBehaviour
 {
     [Header("Prefabs")]
     public List<GameObject> explosionsParticles;
+
+    [Header("HP Settings")]
     public HitboxRoot hitboxRoot;
+    public Slider healthSlider;
 
     private bool isInitialized = false;
     private const byte startingHP = 100;
@@ -31,6 +35,7 @@ public class HpHandler : NetworkBehaviour
         HP = startingHP;
         IsDead = false;
         isInitialized = true;
+        healthSlider.value = HP / startingHP;
     }
 
     //Only called on the server
@@ -60,8 +65,11 @@ public class HpHandler : NetworkBehaviour
 
         byte hpOld = changed.Behaviour.HP;
 
-        if (hpCurrent < hpOld)
+        if (hpCurrent < hpOld) 
+        {
             changed.Behaviour.PlayFireBallParticles();
+            changed.Behaviour.healthSlider.value = (hpCurrent / (float) startingHP);
+        }
     }
 
     private void PlayFireBallParticles()
