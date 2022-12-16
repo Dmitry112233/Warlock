@@ -11,7 +11,7 @@ public class InputHandler : MonoBehaviour
     public MovementHandler MovementHandler { get { return movementHandler = movementHandler ?? GetComponent<MovementHandler>(); } }
 
     private HpHandler hPHandler;
-    public HpHandler HPHandler { get { return hPHandler = hPHandler ?? GetComponent<HpHandler>(); } }
+    public HpHandler HpHandler { get { return hPHandler = hPHandler ?? GetComponent<HpHandler>(); } }
 
     void Start()
     {
@@ -22,7 +22,7 @@ public class InputHandler : MonoBehaviour
 
     private void Read(float horizontal, float vertical)
     {
-        if (!MovementHandler.Object.HasInputAuthority || HPHandler.IsDead)
+        if (!MovementHandler.Object.HasInputAuthority || HpHandler.IsDead)
             return;
 
         movementInputVector.x = horizontal;
@@ -31,7 +31,7 @@ public class InputHandler : MonoBehaviour
 
     private void ReadAim(float horizontal, float vertical)
     {
-        if (!MovementHandler.Object.HasInputAuthority || HPHandler.IsDead)
+        if (!MovementHandler.Object.HasInputAuthority || HpHandler.IsDead)
             return;
 
         aimInputVector.x = horizontal;
