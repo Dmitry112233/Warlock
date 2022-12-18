@@ -57,7 +57,8 @@ public class NetworkRunnerHandler : MonoBehaviour
             SessionName = sessionName,
             CustomLobbyName = "OurLobbyID",
             Initialized = initialized,
-            SceneManager = sceneManager
+            SceneManager = sceneManager,
+            PlayerCount = 2
         });
     }
 

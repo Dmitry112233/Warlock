@@ -9,6 +9,13 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     public NetworkPlayer playerPrefab;
     private InputHandler characterInputHandler;
 
+    private SessionListUIHandler sessionListUIHandler;
+
+    private void Awake()
+    {
+        sessionListUIHandler = FindObjectOfType<SessionListUIHandler>(false);
+    }
+
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) 
     {
         if (runner.IsServer) 
@@ -56,7 +63,29 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadStart(NetworkRunner runner) { }
 
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) 
+    {
+        if (sessionListUIHandler == null)
+            return;
+
+        if(sessionList.Count == 0) 
+        {
+            Debug.Log("Joined lobby no session found");
+
+            sessionListUIHandler.OnNoSessionFound();
+        }
+        else 
+        {
+            sessionListUIHandler.ClearList();
+
+            foreach (SessionInfo sessionInfo in sessionList) 
+            {
+                sessionListUIHandler.AddToList(sessionInfo);
+
+                Debug.Log($"Found session {sessionInfo.Name} playersCount {sessionInfo.PlayerCount}");
+            }
+        }
+    }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { Debug.Log("OnShutdown"); }
 
