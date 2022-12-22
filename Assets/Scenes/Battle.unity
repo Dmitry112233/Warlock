@@ -970,5 +970,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkRunnerHandler
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1346391132, guid: c03a9f51dca5a8e4aab0dae1bff39465, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c03a9f51dca5a8e4aab0dae1bff39465, type: 3}

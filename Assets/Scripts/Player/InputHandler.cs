@@ -21,6 +21,7 @@ public class InputHandler : MonoBehaviour
         InputManager.Instance.NotifyMovement += Read;
         InputManager.Instance.NotifyAim += ReadAim;
         InputManager.Instance.NotifyFire += Fire;
+        InputManager.Instance.NotifyLeave += Leave;
     }
 
     private void Read(float horizontal, float vertical)
@@ -57,6 +58,11 @@ public class InputHandler : MonoBehaviour
         }
     }
 
+    private void Leave() 
+    {
+        HpHandler.LeaveGameByEscape();
+    }
+
     public NetworkInputData GetNetworkInput()
     {
         NetworkInputData networkInputData = new NetworkInputData();
@@ -77,5 +83,12 @@ public class InputHandler : MonoBehaviour
             InputManager.Instance.NotifyMovement -= Read;
             InputManager.Instance.NotifyFire -= Fire;
         }
+    }
+
+    public void UnsubscribeInputManager() 
+    {
+        InputManager.Instance.NotifyMovement -= Read;
+        InputManager.Instance.NotifyFire -= Fire;
+        InputManager.Instance.NotifyAim -= ReadAim;
     }
 }

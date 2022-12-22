@@ -10,7 +10,7 @@ public class NetworkRunnerHandler : MonoBehaviour
 {
     public NetworkRunner networkRunnerPrefab;
 
-    NetworkRunner networkRunner;
+    public NetworkRunner networkRunner;
 
     private void Awake()
     {
@@ -19,6 +19,7 @@ public class NetworkRunnerHandler : MonoBehaviour
         if(networkRunnerInScene != null) 
         {
             networkRunner = networkRunnerInScene;
+            Debug.Log("_________________Network runner is assigned and not null");
         }
     }
 
@@ -31,6 +32,7 @@ public class NetworkRunnerHandler : MonoBehaviour
 
             if(SceneManager.GetActiveScene().name != "MainMenu") 
             {
+                Debug.Log("_____________SCENE IS NOT MAIN MENU");
                 var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, "TestSession", NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
             }
 
@@ -38,13 +40,16 @@ public class NetworkRunnerHandler : MonoBehaviour
         }
     }
 
-    protected virtual Task InitializeNetworkRunner(NetworkRunner runner, GameMode gameMode, string sessionName, NetAddress address, SceneRef scene, Action<NetworkRunner> initialized) 
+    public virtual Task InitializeNetworkRunner(NetworkRunner runner, GameMode gameMode, string sessionName, NetAddress address, SceneRef scene, Action<NetworkRunner> initialized) 
     {
+
+        //var sceneManager = GetComponent<NetworkSceneManagerBase>();
         var sceneManager = runner.GetComponents(typeof(MonoBehaviour)).OfType<INetworkSceneManager>().FirstOrDefault();
 
-        if(sceneManager == null) 
+        if (sceneManager == null) 
         {
             sceneManager = runner.gameObject.AddComponent<NetworkSceneManagerDefault>();
+            Debug.Log("SETED DEFAULT");
         }
 
         runner.ProvideInput = true;
@@ -60,6 +65,7 @@ public class NetworkRunnerHandler : MonoBehaviour
             SceneManager = sceneManager,
             PlayerCount = 2
         });
+
     }
 
     public void OnJoinLobby() 

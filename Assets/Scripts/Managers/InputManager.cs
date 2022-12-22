@@ -7,9 +7,12 @@ public class InputManager : Singleton<InputManager>
 
     public delegate void HorizontalHandler(float horizontal, float vertical);
     public delegate void FireHandler(float horizontal, float vertical);
+    public delegate void LeaveHandler();
     public event HorizontalHandler NotifyMovement;
     public event HorizontalHandler NotifyAim;
     public event FireHandler NotifyFire;
+
+    public event LeaveHandler NotifyLeave;
 
     public float Horizontal { get; private set; }
     public float Vertical { get; private set; }
@@ -40,5 +43,8 @@ public class InputManager : Singleton<InputManager>
             NotifyFire?.Invoke(fireJoystick.HorizontalOnUp, fireJoystick.VrticallOnUp);
             fireJoystick.isFire = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            NotifyLeave?.Invoke();
     }
 }

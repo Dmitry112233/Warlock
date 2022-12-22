@@ -11,7 +11,7 @@ public class SessionListUIHandler : MonoBehaviour
 
     private void Awake()
     {
-        ClearList();
+        //ClearList();
     }
 
     public void ClearList() 

@@ -10,12 +10,6 @@ public class MainMenuUIHandler : MonoBehaviour
     [Header("New game session")]
     public TMP_InputField sessionNameInputField;
 
-    private void Start()
-    {
-        NetworkRunnerHandler networkRunnerHandler = FindObjectOfType<NetworkRunnerHandler>();
-        networkRunnerHandler.OnJoinLobby();
-    }
-
     private void HideAllPanels() 
    {
         sessionsPanel.SetActive(false);
@@ -35,5 +29,11 @@ public class MainMenuUIHandler : MonoBehaviour
         networkRunnerHandler.CreateGame(sessionNameInputField.text, "Battle");
 
         HideAllPanels();
+    }
+
+    public void OnJoinLobbyClicked()
+    {
+        NetworkRunnerHandler networkRunnerHandler = FindObjectOfType<NetworkRunnerHandler>();
+        networkRunnerHandler.OnJoinLobby();
     }
 }

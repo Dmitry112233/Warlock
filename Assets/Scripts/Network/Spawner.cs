@@ -3,6 +3,7 @@ using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -55,11 +56,14 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 
-    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) 
+    {
+        Debug.Log("________________________________PLAYER LEFT TO MAIN MENU");
+    }
 
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
 
-    public void OnSceneLoadDone(NetworkRunner runner) { }
+    public void OnSceneLoadDone(NetworkRunner runner) { Debug.Log("________________________________SCENE LOOOAD DOOOOONE"); }
 
     public void OnSceneLoadStart(NetworkRunner runner) { }
 
@@ -87,7 +91,10 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { Debug.Log("OnShutdown"); }
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) 
+    {
+        Debug.Log("OnShutdown"); 
+    }
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
 
