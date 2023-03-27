@@ -26,7 +26,7 @@ public class InputHandler : MonoBehaviour
 
     private void Read(float horizontal, float vertical)
     {
-        if (MovementHandler != null && HpHandler != null)
+        if (MovementHandler.Object != null && HpHandler != null)
         {
             if (!MovementHandler.Object.HasInputAuthority || HpHandler.IsDead)
                 return;
@@ -37,7 +37,7 @@ public class InputHandler : MonoBehaviour
 
     private void ReadAim(float horizontal, float vertical)
     {
-        if (MovementHandler != null && HpHandler != null)
+        if (MovementHandler.Object != null && HpHandler != null)
         {
             if (!MovementHandler.Object.HasInputAuthority || HpHandler.IsDead)
                 return;
@@ -48,7 +48,7 @@ public class InputHandler : MonoBehaviour
 
     private void Fire(float horizontal, float vertical)
     {
-        if (MovementHandler != null)
+        if (MovementHandler.Object != null)
         {
             if (!MovementHandler.Object.HasInputAuthority)
                 return;

@@ -2,7 +2,6 @@ using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HpHandler : NetworkBehaviour
@@ -57,6 +56,7 @@ public class HpHandler : NetworkBehaviour
         {
             Debug.Log($"{Time.time} {transform.name} died");
             IsDead = true;
+            StartCoroutine(LeaveGame());
         }
     }
 
@@ -99,12 +99,11 @@ public class HpHandler : NetworkBehaviour
     {
         Debug.Log($"{Time.time} OnDeath");
 
-        CharacterControllerCustom.Controller.enabled = false; ;
-        hitboxRoot.HitboxRootActive = false;
         InputHandler.UnsubscribeInputManager();
         InputHandler.enabled = false;
+        CharacterControllerCustom.Controller.enabled = false; ;
+        hitboxRoot.HitboxRootActive = false;
         Animator.SetTrigger(GameData.Animator.DeathTriger);
-        StartCoroutine(LeaveGame());
     }
 
     public void LeaveGameByEscape()
@@ -116,11 +115,11 @@ public class HpHandler : NetworkBehaviour
 
     public IEnumerator LeaveGame()
     {
-        yield return new WaitForSeconds(1f);
-        if (Object.HasInputAuthority) 
+        yield return new WaitForSeconds(3f);
+
+        if (Object.HasStateAuthority) 
         {
-            Destroy(FindObjectOfType<InputManager>());
-            Runner.Despawn(NetworkObject);
+            Runner.Shutdown();
         }
 
         /*var networkRunnerHandler = FindObjectOfType<NetworkRunnerHandler>();
@@ -129,11 +128,11 @@ public class HpHandler : NetworkBehaviour
         //SceneManager.LoadScene(1);
         //var networkRunnerHandler = FindObjectOfType<NetworkRunnerHandler>();
         //Runner.SetActiveScene(1);
-        Debug.Log("PLAYER LEAVE TO MAIN MENU");
+        //Debug.Log("PLAYER LEAVE TO MAIN MENU");
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
-        Runner.SetActiveScene(1);
+       // Runner.SetActiveScene(1);
     }
 }

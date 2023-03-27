@@ -16,7 +16,7 @@ public class NetworkRunnerHandler : MonoBehaviour
     {
         NetworkRunner networkRunnerInScene = FindObjectOfType<NetworkRunner>();
 
-        if(networkRunnerInScene != null) 
+        if(networkRunnerInScene != null && !networkRunnerInScene.IsShutdown) 
         {
             networkRunner = networkRunnerInScene;
             Debug.Log("_________________Network runner is assigned and not null");
@@ -25,12 +25,19 @@ public class NetworkRunnerHandler : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("STTTTTTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAART");
+
         if(networkRunner == null) 
         {
+            Debug.Log("NETWORK RUNNER IS NUUUL");
+
             networkRunner = Instantiate(networkRunnerPrefab);
             networkRunner.name = "Network runner";
 
-            if(SceneManager.GetActiveScene().name != "MainMenu") 
+            Debug.Log("INSTATIATED NETWORK RUNNER");
+
+            //THIS BLOCK PROBABLY SHOULD BE DELETED
+            if (SceneManager.GetActiveScene().name != "MainMenu") 
             {
                 Debug.Log("_____________SCENE IS NOT MAIN MENU");
                 var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, "TestSession", NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);

@@ -93,7 +93,8 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) 
     {
-        Debug.Log("OnShutdown"); 
+        SceneManager.LoadScene(1);
+        Debug.Log("OnShutdown LALALLA"); 
     }
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
