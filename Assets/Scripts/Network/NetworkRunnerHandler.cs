@@ -10,25 +10,51 @@ public class NetworkRunnerHandler : MonoBehaviour
 {
     public NetworkRunner networkRunnerPrefab;
 
-    NetworkRunner networkRunner;
+    public NetworkRunner networkRunner;
+
+    private void Awake()
+    {
+        NetworkRunner networkRunnerInScene = FindObjectOfType<NetworkRunner>();
+
+        if(networkRunnerInScene != null && !networkRunnerInScene.IsShutdown) 
+        {
+            networkRunner = networkRunnerInScene;
+            Debug.Log("_________________Network runner is assigned and not null");
+        }
+    }
 
     void Start()
     {
-        networkRunner = Instantiate(networkRunnerPrefab);
-        networkRunner.name = "Network runner";
+        Debug.Log("STTTTTTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAART");
 
-        var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
+        if(networkRunner == null) 
+        {
+            Debug.Log("NETWORK RUNNER IS NUUUL");
 
-        Debug.Log($"Server NetworkRunner started");
+            networkRunner = Instantiate(networkRunnerPrefab);
+            networkRunner.name = "Network runner";
+
+            Debug.Log("INSTATIATED NETWORK RUNNER");
+
+            //THIS BLOCK PROBABLY SHOULD BE DELETED
+            if (SceneManager.GetActiveScene().name != "MainMenu") 
+            {
+                Debug.Log("_____________SCENE IS NOT MAIN MENU");
+                var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, "TestSession", NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
+            }
+
+            Debug.Log($"Server NetworkRunner started");
+        }
     }
 
-    protected virtual Task InitializeNetworkRunner(NetworkRunner runner, GameMode gameMode, NetAddress address, SceneRef scene, Action<NetworkRunner> initialized) 
+    public virtual Task InitializeNetworkRunner(NetworkRunner runner, GameMode gameMode, string sessionName, NetAddress address, SceneRef scene, Action<NetworkRunner> initialized) 
     {
         var sceneManager = runner.GetComponents(typeof(MonoBehaviour)).OfType<INetworkSceneManager>().FirstOrDefault();
 
-        if(sceneManager == null) 
+        if (sceneManager == null) 
         {
             sceneManager = runner.gameObject.AddComponent<NetworkSceneManagerDefault>();
+            Debug.Log("SETED DEFAULT");
         }
 
         runner.ProvideInput = true;
@@ -38,9 +64,49 @@ public class NetworkRunnerHandler : MonoBehaviour
             GameMode = gameMode,
             Address = address,
             Scene = scene,
-            SessionName = "TestRoom",
+            SessionName = sessionName,
+            CustomLobbyName = "OurLobbyID",
             Initialized = initialized,
-            SceneManager = sceneManager
+            SceneManager = sceneManager,
+            PlayerCount = 2
         });
+
+    }
+
+    public void OnJoinLobby() 
+    {
+        var clientTask = JoinLobby();
+    }
+
+    private async Task JoinLobby()
+    {
+        Debug.Log("JoinLobby started");
+
+        string lobbyID = "OurLobbyID";
+
+        var result = await networkRunner.JoinSessionLobby(SessionLobby.Custom, lobbyID);
+
+        if (!result.Ok) 
+        {
+            Debug.Log($"Unable to join lobby {lobbyID}");
+        }
+        else 
+        {
+            Debug.Log("JoinLobby ok");
+        }
+    }
+
+    public void CreateGame(string sessionName, string sceneName) 
+    {
+        Debug.Log($"Create session {sessionName} scene {sceneName} buil Index {SceneUtility.GetBuildIndexByScenePath($"scenes/{sceneName}")}");
+
+        var clientTask = InitializeNetworkRunner(networkRunner, GameMode.Host, sessionName, NetAddress.Any(), SceneUtility.GetBuildIndexByScenePath($"scenes/{sceneName}"), null);
+    }
+
+    public void JoinGame(SessionInfo sessionInfo)
+    {
+        Debug.Log($"Join session {sessionInfo.Name}");
+
+        var clientTask = InitializeNetworkRunner(networkRunner, GameMode.Client, sessionInfo.Name, NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
     }
 }

@@ -21,11 +21,12 @@ public class InputHandler : MonoBehaviour
         InputManager.Instance.NotifyMovement += Read;
         InputManager.Instance.NotifyAim += ReadAim;
         InputManager.Instance.NotifyFire += Fire;
+        InputManager.Instance.NotifyLeave += Leave;
     }
 
     private void Read(float horizontal, float vertical)
     {
-        if (MovementHandler != null && HpHandler != null)
+        if (MovementHandler.Object != null && HpHandler != null)
         {
             if (!MovementHandler.Object.HasInputAuthority || HpHandler.IsDead)
                 return;
@@ -36,7 +37,7 @@ public class InputHandler : MonoBehaviour
 
     private void ReadAim(float horizontal, float vertical)
     {
-        if (MovementHandler != null && HpHandler != null)
+        if (MovementHandler.Object != null && HpHandler != null)
         {
             if (!MovementHandler.Object.HasInputAuthority || HpHandler.IsDead)
                 return;
@@ -47,7 +48,7 @@ public class InputHandler : MonoBehaviour
 
     private void Fire(float horizontal, float vertical)
     {
-        if (MovementHandler != null)
+        if (MovementHandler.Object != null)
         {
             if (!MovementHandler.Object.HasInputAuthority)
                 return;
@@ -55,6 +56,11 @@ public class InputHandler : MonoBehaviour
             fireInputVector.x = horizontal;
             fireInputVector.z = vertical;
         }
+    }
+
+    private void Leave() 
+    {
+        HpHandler.LeaveGameByEscape();
     }
 
     public NetworkInputData GetNetworkInput()
@@ -77,5 +83,12 @@ public class InputHandler : MonoBehaviour
             InputManager.Instance.NotifyMovement -= Read;
             InputManager.Instance.NotifyFire -= Fire;
         }
+    }
+
+    public void UnsubscribeInputManager() 
+    {
+        InputManager.Instance.NotifyMovement -= Read;
+        InputManager.Instance.NotifyFire -= Fire;
+        InputManager.Instance.NotifyAim -= ReadAim;
     }
 }

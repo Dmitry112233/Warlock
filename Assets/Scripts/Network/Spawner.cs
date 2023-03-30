@@ -3,11 +3,19 @@ using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     public NetworkPlayer playerPrefab;
     private InputHandler characterInputHandler;
+
+    private SessionListUIHandler sessionListUIHandler;
+
+    private void Awake()
+    {
+        sessionListUIHandler = FindObjectOfType<SessionListUIHandler>(false);
+    }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) 
     {
@@ -48,17 +56,47 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 
-    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) 
+    {
+        SceneManager.LoadScene(1);
+        Debug.Log("________________________________PLAYER LEFT TO MAIN MENU");
+    }
 
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
 
-    public void OnSceneLoadDone(NetworkRunner runner) { }
+    public void OnSceneLoadDone(NetworkRunner runner) { Debug.Log("________________________________SCENE LOOOAD DOOOOONE"); }
 
     public void OnSceneLoadStart(NetworkRunner runner) { }
 
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) 
+    {
+        if (sessionListUIHandler == null)
+            return;
 
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { Debug.Log("OnShutdown"); }
+        if(sessionList.Count == 0) 
+        {
+            Debug.Log("Joined lobby no session found");
+
+            sessionListUIHandler.OnNoSessionFound();
+        }
+        else 
+        {
+            sessionListUIHandler.ClearList();
+
+            foreach (SessionInfo sessionInfo in sessionList) 
+            {
+                sessionListUIHandler.AddToList(sessionInfo);
+
+                Debug.Log($"Found session {sessionInfo.Name} playersCount {sessionInfo.PlayerCount}");
+            }
+        }
+    }
+
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) 
+    {
+        SceneManager.LoadScene(1);
+        Debug.Log("__________________ON SHUTDOWN");
+    }
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
 

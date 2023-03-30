@@ -1,13 +1,10 @@
 using Fusion;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HpHandler : NetworkBehaviour
 {
-    [Header("Prefabs")]
-    public List<GameObject> explosionsParticles;
-
     [Header("HP Settings")]
     public HitboxRoot hitboxRoot;
     public Slider healthSlider;
@@ -29,6 +26,9 @@ public class HpHandler : NetworkBehaviour
 
     private Animator animator;
     public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
+
+    private NetworkObject networkObject;
+    public NetworkObject NetworkObject { get { return networkObject = networkObject ?? GetComponent<NetworkObject>(); } }
 
     void Start()
     {
@@ -52,6 +52,7 @@ public class HpHandler : NetworkBehaviour
         {
             Debug.Log($"{Time.time} {transform.name} died");
             IsDead = true;
+            StartCoroutine(LeaveGame());
         }
     }
 
@@ -65,18 +66,9 @@ public class HpHandler : NetworkBehaviour
 
         byte hpOld = changed.Behaviour.HP;
 
-        if (hpCurrent < hpOld) 
+        if (hpCurrent < hpOld)
         {
-            changed.Behaviour.PlayFireBallParticles();
-            changed.Behaviour.healthSlider.value = (hpCurrent / (float) startingHP);
-        }
-    }
-
-    private void PlayFireBallParticles()
-    {
-        foreach (GameObject particle in explosionsParticles)
-        {
-            Instantiate(particle, transform.position, Quaternion.identity);
+            changed.Behaviour.healthSlider.value = (hpCurrent / (float)startingHP);
         }
     }
 
@@ -94,9 +86,29 @@ public class HpHandler : NetworkBehaviour
     {
         Debug.Log($"{Time.time} OnDeath");
 
-        CharacterControllerCustom.Controller.enabled = false; ;
-        hitboxRoot.HitboxRootActive = false;
+        InputHandler.UnsubscribeInputManager();
         InputHandler.enabled = false;
+        CharacterControllerCustom.Controller.enabled = false;
+        hitboxRoot.HitboxRootActive = false;
         Animator.SetTrigger(GameData.Animator.DeathTriger);
+    }
+
+    public void LeaveGameByEscape()
+    {
+        if (Object.HasStateAuthority)
+        {
+            Runner.Shutdown();
+        }
+        Debug.Log("PLAYER LEAVE TO MAIN MENU");
+    }
+
+    public IEnumerator LeaveGame()
+    {
+        yield return new WaitForSeconds(3f);
+
+        if (Object.HasStateAuthority) 
+        {
+            Runner.Shutdown();
+        }
     }
 }
