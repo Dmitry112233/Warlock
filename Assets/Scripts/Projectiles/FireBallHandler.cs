@@ -58,6 +58,7 @@ public class FireBallHandler : NetworkBehaviour
                 for (int i = 0; i < hitCounts; i++)
                 {
                     HpHandler hPHandler = hits[i].Hitbox.transform.root.GetComponent<HpHandler>();
+                    RpcHandler rpcHandler = hits[i].Hitbox.transform.root.GetComponent<RpcHandler>();
                     Transform playerTransform = hits[i].Hitbox.transform.root.GetComponent<Transform>();
                     CharacterControllerCustom characterController = hits[i].Hitbox.transform.root.GetComponent<CharacterControllerCustom>();
 
@@ -68,6 +69,7 @@ public class FireBallHandler : NetworkBehaviour
                     if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != firedByNetworkObject)) 
                     {
                         hPHandler.OnTakeDamage(damage);
+                        rpcHandler.OnTakeFireBall();
                         characterController.SetPushDestinationAndTime(pushVector * pushBooster, pushDuration);
                     }
                 }

@@ -49,8 +49,6 @@ public class NetworkRunnerHandler : MonoBehaviour
 
     public virtual Task InitializeNetworkRunner(NetworkRunner runner, GameMode gameMode, string sessionName, NetAddress address, SceneRef scene, Action<NetworkRunner> initialized) 
     {
-
-        //var sceneManager = GetComponent<NetworkSceneManagerBase>();
         var sceneManager = runner.GetComponents(typeof(MonoBehaviour)).OfType<INetworkSceneManager>().FirstOrDefault();
 
         if (sceneManager == null) 

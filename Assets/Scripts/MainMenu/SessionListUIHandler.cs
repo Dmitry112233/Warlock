@@ -9,11 +9,6 @@ public class SessionListUIHandler : MonoBehaviour
     public GameObject sessionItemListPrefab;
     public VerticalLayoutGroup verticalLayoutGroup;
 
-    private void Awake()
-    {
-        //ClearList();
-    }
-
     public void ClearList() 
     {
         foreach(Transform child in verticalLayoutGroup.transform) 
