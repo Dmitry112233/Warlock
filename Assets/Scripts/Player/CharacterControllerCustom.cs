@@ -109,4 +109,9 @@ public class CharacterControllerCustom : NetworkTransform
         PushDestinationPoint = transform.position + PushDestinationPoint;
         pushTimer = TickTimer.CreateFromSeconds(Runner, time);
     }
+
+    public void SetSpeed(float speed) 
+    {
+        maxSpeed = speed;
+    }
 }

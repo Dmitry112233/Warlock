@@ -10,7 +10,7 @@ public class NetworkRunnerHandler : MonoBehaviour
 {
     public NetworkRunner networkRunnerPrefab;
 
-    public NetworkRunner networkRunner;
+    private NetworkRunner networkRunner;
 
     private void Awake()
     {

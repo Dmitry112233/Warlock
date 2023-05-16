@@ -13,7 +13,7 @@ public class HpHandler : NetworkBehaviour
     private const byte startingHP = 100;
 
     [Networked(OnChanged = nameof(OnHPChanged))]
-    byte HP { get; set; }
+    float HP { get; set; }
 
     [Networked(OnChanged = nameof(OnStateChanged))]
     public bool IsDead { get; set; }
@@ -39,7 +39,7 @@ public class HpHandler : NetworkBehaviour
     }
 
     //Only called on the server
-    public void OnTakeDamage(byte damage)
+    public void OnTakeDamage(float damage)
     {
         if (IsDead)
             return;
@@ -60,11 +60,11 @@ public class HpHandler : NetworkBehaviour
     {
         Debug.Log($"{Time.time} OnHPChanged value {changed.Behaviour.HP}");
 
-        byte hpCurrent = changed.Behaviour.HP;
+        float hpCurrent = changed.Behaviour.HP;
 
         changed.LoadOld();
 
-        byte hpOld = changed.Behaviour.HP;
+        float hpOld = changed.Behaviour.HP;
 
         if (hpCurrent < hpOld)
         {

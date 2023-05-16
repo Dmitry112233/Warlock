@@ -12,4 +12,9 @@ public static class GameData
         public const string DynamicJoystick = "Dynamic Joystick";
         public const string FireJoystick = "Fire Joystick";
     }
+
+    public static class Tags 
+    {
+        public const string Player = "Player";
+    }
 }

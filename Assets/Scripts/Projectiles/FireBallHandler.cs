@@ -11,7 +11,7 @@ public class FireBallHandler : NetworkBehaviour
     public float rocketSpeed = 20f;
     public float pushBooster = 2.0f;
     public float pushDuration = 1.5f;
-    public byte damage = 10;
+    public float damage = 10;
     public float OnDrawSpere = 0.5f;
 
     [Header("Prefab")]
