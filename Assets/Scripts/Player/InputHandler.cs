@@ -6,6 +6,7 @@ public class InputHandler : MonoBehaviour
     private Vector3 aimInputVector = Vector3.zero;
     private Vector3 fireInputVector = Vector3.zero;
     private bool isFireBallButtonPresed = false;
+    private bool isStompButtonPresed = false;
 
     private MovementHandler movementHandler;
     public MovementHandler MovementHandler { get { return movementHandler = movementHandler ?? GetComponent<MovementHandler>(); } set { } }
@@ -22,6 +23,7 @@ public class InputHandler : MonoBehaviour
         InputManager.Instance.NotifyAim += ReadAim;
         InputManager.Instance.NotifyFire += Fire;
         InputManager.Instance.NotifyLeave += Leave;
+        InputManager.Instance.NotifyStomp += Stomp;
     }
 
     private void Read(float horizontal, float vertical)
@@ -58,6 +60,16 @@ public class InputHandler : MonoBehaviour
         }
     }
 
+    private void Stomp()
+    {
+        if (MovementHandler.Object != null)
+        {
+            if (!MovementHandler.Object.HasInputAuthority)
+                return;
+            isStompButtonPresed = true;
+        }
+    }
+
     private void Leave() 
     {
         HpHandler.LeaveGameByEscape();
@@ -66,12 +78,14 @@ public class InputHandler : MonoBehaviour
     public NetworkInputData GetNetworkInput()
     {
         NetworkInputData networkInputData = new NetworkInputData();
-        networkInputData.mevementInput = movementInputVector;
+        networkInputData.movementInput = movementInputVector;
         networkInputData.aimInput = aimInputVector;
         networkInputData.fireInput = fireInputVector;
         networkInputData.isFireBallButtonPresed = isFireBallButtonPresed;
+        networkInputData.isStompButtonPresed = isStompButtonPresed;
 
         isFireBallButtonPresed = false;
+        isStompButtonPresed = false;
 
         return networkInputData;
     }
@@ -82,6 +96,8 @@ public class InputHandler : MonoBehaviour
         {
             InputManager.Instance.NotifyMovement -= Read;
             InputManager.Instance.NotifyFire -= Fire;
+            InputManager.Instance.NotifyAim -= ReadAim;
+            InputManager.Instance.NotifyStomp -= Stomp;
         }
     }
 

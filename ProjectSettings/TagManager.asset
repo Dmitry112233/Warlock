@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Dynamic Joystick
   - Fire Joystick
+  - StompButton
   layers:
   - Default
   - TransparentFX

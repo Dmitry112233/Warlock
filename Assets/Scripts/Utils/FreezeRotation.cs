@@ -1,17 +1,17 @@
+using Fusion;
 using UnityEngine;
 
-public class FreezeRotation : MonoBehaviour
+public class FreezeRotation : NetworkBehaviour
 {
-    void Start()
+    private Camera _camera;
+
+    private void Start()
     {
-        transform.rotation = Quaternion.identity;
+        _camera = Camera.main;
     }
 
-    void Update()
+    public override void FixedUpdateNetwork()
     {
-        if (transform.rotation != Quaternion.identity) 
-        {
-            transform.rotation = Quaternion.identity;
-        }
+        transform.rotation = Quaternion.LookRotation(transform.position - _camera.transform.position);
     }
 }

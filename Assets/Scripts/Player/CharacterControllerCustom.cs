@@ -1,5 +1,6 @@
 using Fusion;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 public class CharacterControllerCustom : NetworkTransform
@@ -67,6 +68,7 @@ public class CharacterControllerCustom : NetworkTransform
             if (direction != default && MagicHandler.IsFire != true)
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime);
+                
                 movementAnimationSpeed = 1.0f;
             }
 

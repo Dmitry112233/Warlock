@@ -5,12 +5,14 @@ public static class GameData
         public const string Speed = "Speed";
         public const string DeathTriger = "Dead";
         public const string AttackBool = "Attack";
+        public const string StompBool = "Stomp";
     }
 
     public static class JoystickTags
     {
         public const string DynamicJoystick = "Dynamic Joystick";
         public const string FireJoystick = "Fire Joystick";
+        public const string StompButton = "StompButton";
     }
 
     public static class Tags 
