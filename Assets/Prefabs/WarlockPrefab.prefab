@@ -2544,7 +2544,7 @@ MonoBehaviour:
   rotationSpeed: 4
   rotationOnFireSpeed: 100
   animationBlendSpeed: 0.05
-  pushInterpolationSpeed: 3
+  pushInterpolationSpeed: 4
   _Velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &5470692003672487676
 MonoBehaviour:
@@ -2579,9 +2579,9 @@ MonoBehaviour:
   aimVectorBooster: 2
   stompBooster: 3
   stompDuration: 3
-  stompDamage: 10
-  ownStompDamage: 7
-  detectedColisionStompSphereRadius: 5
+  stompDamage: 0.01
+  ownStompDamage: 0.01
+  detectedColisionStompSphereRadius: 1.5
   collisionLayers:
     serializedVersion: 2
     m_Bits: 64
@@ -2648,6 +2648,7 @@ MonoBehaviour:
   - {fileID: 8078922257978301839, guid: 5b38a16cd1fcf12488b49512ccb6a5f6, type: 3}
   - {fileID: 573547098334549359, guid: b7f86a6bec370cf4097567311ca098d6, type: 3}
   - {fileID: 2481807847447787653, guid: 8750ee51a472adb4e9320e8c8aae856d, type: 3}
+  stompPrefab: {fileID: 1576947433937734, guid: 3a1ab18e6861a8940aa332e72f024271, type: 3}
 --- !u!1 &4757556806027637896
 GameObject:
   m_ObjectHideFlags: 0

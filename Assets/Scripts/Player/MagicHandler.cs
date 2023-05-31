@@ -16,7 +16,7 @@ public class MagicHandler : NetworkBehaviour
     public float stompDuration = 3f;
     public float stompDamage = 10;
     public float ownStompDamage = 7;
-    public float detectedColisionStompSphereRadius = 5f;
+    public float detectedColisionStompSphereRadius = 1f;
     public LayerMask collisionLayers;
 
     [Header("Prefabs")]
@@ -32,6 +32,9 @@ public class MagicHandler : NetworkBehaviour
 
     private CharacterControllerCustom characterControllerCustom;
     public CharacterControllerCustom CharacterControllerCustom { get { return characterControllerCustom = characterControllerCustom ?? GetComponent<CharacterControllerCustom>(); } }
+
+    private RpcHandler rpcHandler;
+    public RpcHandler RpcHandler { get { return rpcHandler = rpcHandler ?? GetComponent<RpcHandler>(); } }
 
     private NetworkObject networkObject;
     public NetworkObject NetworkObject { get { return networkObject = networkObject ?? GetComponent<NetworkObject>(); } }
@@ -102,6 +105,8 @@ public class MagicHandler : NetworkBehaviour
         {
             int hitCounts = Runner.LagCompensation.OverlapSphere(transform.position, detectedColisionStompSphereRadius, Object.InputAuthority, hits, collisionLayers, HitOptions.IncludePhysX);
 
+            RpcHandler.OnStomp();
+
             if (hitCounts > 0)
             {
 
@@ -115,12 +120,18 @@ public class MagicHandler : NetworkBehaviour
 
                     Vector3 pushVector = playerTransform.position - transform.position;
                     pushVector.y = 0;
-                    pushVector.Normalize();
 
                     if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != NetworkObject))
                     {
                         hPHandler.OnTakeDamage(stompDamage);
-                        characterController.SetPushDestinationAndTime(pushVector * stompBooster, stompDuration);
+                        Debug.Log("PUSH VECTOR MAGNITUDE: " + pushVector.magnitude);
+
+
+                        //customize final stomp vector depends on distance
+                        var booster = CalculateBoosterDependsOnDistance(detectedColisionStompSphereRadius, pushVector);
+                        Debug.Log("BOOSTER: " + booster);
+                        
+                        characterController.SetPushDestinationAndTime(pushVector * booster, stompDuration);
                     }
                 }
 
@@ -184,5 +195,29 @@ public class MagicHandler : NetworkBehaviour
     {
         Animator.SetBool(GameData.Animator.StompBool, false);
         IsStomp = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, detectedColisionStompSphereRadius);
+    }
+
+    private float CalculateBoosterDependsOnDistance(float detectedColisionStompSphereRadius, Vector3 pushVector)
+    {
+        var step = detectedColisionStompSphereRadius / 3f;
+
+        if (pushVector.magnitude <= step + 0.2f)
+        {
+            return stompBooster * 4f;
+        }
+        else if (pushVector.magnitude > step + 0.2f && pushVector.magnitude <= step * 2 + 0.2f)
+        {
+            return stompBooster * 2f;
+        }
+        else
+        {
+            return stompBooster * 1f;
+        }
     }
 }
