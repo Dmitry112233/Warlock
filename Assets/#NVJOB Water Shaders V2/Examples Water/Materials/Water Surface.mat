@@ -195,7 +195,7 @@ Material:
     - _Mitigation: 22.4
     - _Mode: 0
     - _NormalDetailFlow: 1
-    - _NormalMap1Strength: 0.8
+    - _NormalMap1Strength: 2.22
     - _NormalMap2Flow: -0.2
     - _NormalMap2Strength: 0.5
     - _NormalMap2Tiling: 1.2
