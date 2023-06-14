@@ -18,6 +18,7 @@ public class MainMenuUIHandler : MonoBehaviour
 
     public void OnCreateNewSessionClicked() 
     {
+        Debug.Log("Create new session clicked");
         HideAllPanels();
         createSessionPanel.SetActive(true);
     }

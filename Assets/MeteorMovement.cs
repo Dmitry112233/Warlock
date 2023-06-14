@@ -33,7 +33,6 @@ public class MeteorMovement : MonoBehaviour
         }
         else 
         {
-            Debug.Log("RESET METEOR POSITION");
             flashLight.DoFlashLight(time, minFlashIntension, maxFLashIntension);
             transform.position = startPositions[Random.Range(0, startPositions.Count)];
             endPosition = endPositions[Random.Range(0, endPositions.Count)];
