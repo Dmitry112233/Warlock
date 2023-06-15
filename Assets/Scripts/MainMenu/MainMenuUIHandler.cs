@@ -10,6 +10,16 @@ public class MainMenuUIHandler : MonoBehaviour
     [Header("New game session")]
     public TMP_InputField sessionNameInputField;
 
+    private void Start()
+    {
+        NetworkRunnerHandler networkRunnerHandler = FindObjectOfType<NetworkRunnerHandler>();
+
+        if (networkRunnerHandler != null)
+        {
+            networkRunnerHandler.OnJoinLobby();
+        }
+    }
+
     private void HideAllPanels() 
    {
         sessionsPanel.SetActive(false);
