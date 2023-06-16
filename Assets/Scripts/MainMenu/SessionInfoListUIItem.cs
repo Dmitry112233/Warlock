@@ -1,6 +1,7 @@
 using Fusion;
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,11 +15,23 @@ public class SessionInfoListUIItem : MonoBehaviour
 
     public event Action<SessionInfo> OnJoinSession;
 
-    public void SetInformation(SessionInfo sessionInfo) 
+    public void SetInformation(SessionInfo sessionInfo)
     {
         this.sessionInfo = sessionInfo;
 
-        sessionNameText.text = sessionInfo.Name;
+        var sessionName = "";
+
+        if (sessionInfo.Name.Length > 9)
+        {
+            sessionName = sessionInfo.Name.Truncate(9);
+            Debug.Log("Session Info UPDATED");
+        }
+        else
+        {
+            sessionName = sessionInfo.Name;
+        }
+
+        sessionNameText.text = sessionName;
         playerCountText.text = $"{sessionInfo.PlayerCount.ToString()}/{sessionInfo.MaxPlayers.ToString()}";
 
         bool isJoinButtonActive = true;
@@ -29,7 +42,7 @@ public class SessionInfoListUIItem : MonoBehaviour
         joinButton.gameObject.SetActive(isJoinButtonActive);
     }
 
-    public void OnClick() 
+    public void OnClick()
     {
         OnJoinSession?.Invoke(sessionInfo);
     }
