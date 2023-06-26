@@ -28,6 +28,8 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         {
             Debug.Log("OnPlayerJoined"); 
         }
+
+        //Here call the method which check the count of players and respawn them with timer
     }
 
 

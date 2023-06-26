@@ -21,13 +21,11 @@ public class NetworkRunnerHandler : MonoBehaviour
             networkRunner = networkRunnerInScene;
             Debug.Log("_________________Network runner is assigned and not null");
         }
-    }
-
-    void Start()
-    {
+        
+        //This code below moved to awake to not updated lobby after end of the game before network runner init again.
         Debug.Log("STTTTTTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAART");
 
-        if(networkRunner == null) 
+        if (networkRunner == null)
         {
             Debug.Log("NETWORK RUNNER IS NUUUL");
 
@@ -37,7 +35,7 @@ public class NetworkRunnerHandler : MonoBehaviour
             Debug.Log("INSTATIATED NETWORK RUNNER");
 
             //THIS BLOCK PROBABLY SHOULD BE DELETED
-            if (SceneManager.GetActiveScene().name != "MainMenu") 
+            if (SceneManager.GetActiveScene().name != "MainMenu")
             {
                 Debug.Log("_____________SCENE IS NOT MAIN MENU");
                 var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, "TestSession", NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
@@ -45,6 +43,10 @@ public class NetworkRunnerHandler : MonoBehaviour
 
             Debug.Log($"Server NetworkRunner started");
         }
+    }
+
+    void Start()
+    {
     }
 
     public virtual Task InitializeNetworkRunner(NetworkRunner runner, GameMode gameMode, string sessionName, NetAddress address, SceneRef scene, Action<NetworkRunner> initialized) 
