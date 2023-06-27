@@ -98,6 +98,7 @@ public class InputHandler : MonoBehaviour
             InputManager.Instance.NotifyFire -= Fire;
             InputManager.Instance.NotifyAim -= ReadAim;
             InputManager.Instance.NotifyStomp -= Stomp;
+            InputManager.Instance.NotifyLeave -= Leave;
         }
     }
 
@@ -106,5 +107,16 @@ public class InputHandler : MonoBehaviour
         InputManager.Instance.NotifyMovement -= Read;
         InputManager.Instance.NotifyFire -= Fire;
         InputManager.Instance.NotifyAim -= ReadAim;
+        InputManager.Instance.NotifyLeave -= Leave;
+        InputManager.Instance.NotifyStomp -= Stomp;
+    }
+
+    public void Subscribe()
+    {
+        InputManager.Instance.NotifyMovement += Read;
+        InputManager.Instance.NotifyAim += ReadAim;
+        InputManager.Instance.NotifyFire += Fire;
+        InputManager.Instance.NotifyLeave += Leave;
+        InputManager.Instance.NotifyStomp += Stomp;
     }
 }

@@ -86,9 +86,12 @@ public class HpHandler : NetworkBehaviour
     {
         Debug.Log($"{Time.time} OnDeath");
 
+        CharacterControllerCustom.Freeze();
+        /*
         InputHandler.UnsubscribeInputManager();
         InputHandler.enabled = false;
         CharacterControllerCustom.Controller.enabled = false;
+        */
         hitboxRoot.HitboxRootActive = false;
         Animator.SetTrigger(GameData.Animator.DeathTriger);
     }

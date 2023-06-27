@@ -12,6 +12,10 @@ public class FreezeRotation : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        transform.rotation = Quaternion.LookRotation(transform.position - _camera.transform.position);
+        if (transform != null && _camera != null)
+        {
+            Debug.Log("FREEEEEEEEZE");
+            transform.rotation = Quaternion.LookRotation(transform.position - _camera.transform.position);
+        }
     }
 }

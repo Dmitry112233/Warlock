@@ -19,7 +19,7 @@ public class Timer : MonoBehaviour
 
     private IEnumerator UpdateTimer()
     {
-        while(remainingDuration >= 0) 
+        while (remainingDuration >= 0)
         {
             yield return new WaitForSeconds(1f);
             uiText.text = $"{remainingDuration / 60:00}:{remainingDuration % 60:00}";

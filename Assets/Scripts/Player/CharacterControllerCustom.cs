@@ -24,6 +24,12 @@ public class CharacterControllerCustom : NetworkTransform
     private CharacterController controller;
     public CharacterController Controller { get { return controller = controller ?? GetComponent<CharacterController>(); } }
 
+    private InputHandler characterInputHandler;
+    public InputHandler InputHandler { get { return characterInputHandler = characterInputHandler ?? GetComponent<InputHandler>(); } }
+
+    private MovementHandler movementHandler;    
+    public MovementHandler MovementHandler { get { return movementHandler = movementHandler ?? GetComponent<MovementHandler>(); } }
+
     private Animator animator;
     public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
     private float movementAnimationSpeed;
@@ -115,5 +121,23 @@ public class CharacterControllerCustom : NetworkTransform
     public void SetSpeed(float speed) 
     {
         maxSpeed = speed;
+    }
+
+    public void Freeze() 
+    {
+        InputHandler.UnsubscribeInputManager();
+        InputHandler.enabled = false;
+        Controller.enabled = false;
+        MagicHandler.enabled = false;
+        MovementHandler.enabled = false;
+    }
+
+    public void Unfreeze()
+    {
+        InputHandler.Subscribe();
+        InputHandler.enabled = true;
+        Controller.enabled = true;
+        MagicHandler.enabled = true;
+        MovementHandler.enabled = true;
     }
 }

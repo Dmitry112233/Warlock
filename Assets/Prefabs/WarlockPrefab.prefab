@@ -121,7 +121,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.46809343, y: -0.00086239434, z: 0.000456819, w: 0.88367844}
+  m_LocalRotation: {x: 0.46809343, y: -0.0008624373, z: 0.00045684175, w: 0.88367844}
   m_LocalPosition: {x: 0, y: 15, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -238,7 +238,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1662263479}
-  m_LocalRotation: {x: 0.46809343, y: -0.00086239434, z: 0.000456819, w: 0.88367844}
+  m_LocalRotation: {x: 0.46809343, y: -0.0008624373, z: 0.00045684175, w: 0.88367844}
   m_LocalPosition: {x: 0, y: 15, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -277,6 +277,13 @@ MonoBehaviour:
     LensShift: {x: 0, y: 0}
     GateFit: 2
     m_SensorSize: {x: 1, y: 1}
+    Iso: 200
+    ShutterSpeed: 0.005
+    Aperture: 16
+    BladeCount: 5
+    Curvature: {x: 2, y: 11}
+    BarrelClipping: 0.25
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2351,8 +2358,8 @@ GameObject:
   - component: {fileID: 61630028167718098}
   - component: {fileID: -1444219190172477757}
   - component: {fileID: 8795231270427080161}
-  - component: {fileID: 5541391837427243861}
   - component: {fileID: -1952841308679044025}
+  - component: {fileID: 7634536316788441536}
   m_Layer: 0
   m_Name: WarlockPrefab
   m_TagString: Player
@@ -2447,8 +2454,8 @@ MonoBehaviour:
   - {fileID: -2339144953787621274}
   - {fileID: 5470692003672487676}
   - {fileID: 61630028167718098}
-  - {fileID: 5541391837427243861}
   - {fileID: -1952841308679044025}
+  - {fileID: 7634536316788441536}
   - {fileID: 3235345097386347139}
   SimulationBehaviours: []
 --- !u!114 &543450653139475193
@@ -2612,22 +2619,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 5064283484198293760}
---- !u!114 &5541391837427243861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4738444281627613139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4670d876b929477498ce72b009fd7645, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  hitboxRoot: {fileID: 2649861102581350505}
-  healthSlider: {fileID: 8434600065888423702}
-  _IsDead: 0
 --- !u!114 &-1952841308679044025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2649,6 +2640,22 @@ MonoBehaviour:
   - {fileID: 573547098334549359, guid: b7f86a6bec370cf4097567311ca098d6, type: 3}
   - {fileID: 2481807847447787653, guid: 8750ee51a472adb4e9320e8c8aae856d, type: 3}
   stompPrefab: {fileID: 1576947433937734, guid: 3a1ab18e6861a8940aa332e72f024271, type: 3}
+--- !u!114 &7634536316788441536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4738444281627613139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4670d876b929477498ce72b009fd7645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  hitboxRoot: {fileID: 2649861102581350505}
+  healthSlider: {fileID: 8434600065888423702}
+  _IsDead: 0
 --- !u!1 &4757556806027637896
 GameObject:
   m_ObjectHideFlags: 0
