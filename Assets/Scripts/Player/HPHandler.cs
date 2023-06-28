@@ -12,6 +12,8 @@ public class HpHandler : NetworkBehaviour
     private bool isInitialized = false;
     private const byte startingHP = 100;
 
+    public bool IsActive { get; set; }
+
     [Networked(OnChanged = nameof(OnHPChanged))]
     float HP { get; set; }
 
@@ -32,6 +34,7 @@ public class HpHandler : NetworkBehaviour
 
     void Start()
     {
+        IsActive = false;
         HP = startingHP;
         IsDead = false;
         isInitialized = true;
@@ -41,18 +44,21 @@ public class HpHandler : NetworkBehaviour
     //Only called on the server
     public void OnTakeDamage(float damage)
     {
-        if (IsDead)
-            return;
-
-        HP -= damage;
-
-        Debug.Log($"{Time.time} {transform.name} took damage got {HP} left");
-
-        if (HP <= 0)
+        if (IsActive) 
         {
-            Debug.Log($"{Time.time} {transform.name} died");
-            IsDead = true;
-            StartCoroutine(LeaveGame());
+            if (IsDead)
+                return;
+
+            HP -= damage;
+
+            Debug.Log($"{Time.time} {transform.name} took damage got {HP} left");
+
+            if (HP <= 0)
+            {
+                Debug.Log($"{Time.time} {transform.name} died");
+                IsDead = true;
+                StartCoroutine(LeaveGame());
+            }
         }
     }
 
@@ -87,11 +93,6 @@ public class HpHandler : NetworkBehaviour
         Debug.Log($"{Time.time} OnDeath");
 
         CharacterControllerCustom.Freeze();
-        /*
-        InputHandler.UnsubscribeInputManager();
-        InputHandler.enabled = false;
-        CharacterControllerCustom.Controller.enabled = false;
-        */
         hitboxRoot.HitboxRootActive = false;
         Animator.SetTrigger(GameData.Animator.DeathTriger);
     }

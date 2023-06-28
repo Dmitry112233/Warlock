@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.HighDefinition;
 
 public class StartGameController : MonoBehaviour
 {
@@ -46,15 +45,6 @@ public class StartGameController : MonoBehaviour
                     timer.gameObject.SetActive(true);
                 }
 
-               /* foreach(GameObject player in players) 
-                {
-                    player.GetComponent<CharacterControllerCustom>().Freeze();
-                    player.transform.position = new Vector3(-0.05f, 0.11f, -15.37f);
-                    playersList.Add(player);
-                    StartCoroutine(UnfreezePlayers(timer.Duration));
-                    timer.gameObject.SetActive(true);
-                }*/
-
                 isGameStarted = true;
             }
         }
@@ -64,6 +54,7 @@ public class StartGameController : MonoBehaviour
     {
        yield return new WaitForSeconds(Duration);
         playersList.ForEach(x => x.GetComponent<CharacterControllerCustom>().Unfreeze());
+        playersList.ForEach(x => x.GetComponent<HpHandler>().IsActive = true);
 
     }
 }

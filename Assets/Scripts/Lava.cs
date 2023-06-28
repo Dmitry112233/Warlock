@@ -8,16 +8,24 @@ public class Lava : MonoBehaviour
     {
         if (other.tag == GameData.Tags.Player)
         {
-            other.GetComponent<HpHandler>().OnTakeDamage(damage);
-            other.GetComponent<CharacterControllerCustom>().SetSpeed(3f);
+            if (other.GetComponent<HpHandler>().IsActive)
+            {
+                other.GetComponent<HpHandler>().OnTakeDamage(damage);
+                other.GetComponent<CharacterControllerCustom>().SetSpeed(3f);
+
+            }
         }
+
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == GameData.Tags.Player)
+        if (other.GetComponent<HpHandler>().IsActive) 
         {
-            other.GetComponent<CharacterControllerCustom>().SetSpeed(4f);
+            if (other.tag == GameData.Tags.Player)
+            {
+                other.GetComponent<CharacterControllerCustom>().SetSpeed(4f);
+            }
         }
     }
 }
