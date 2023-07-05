@@ -5,8 +5,10 @@ public class InputManager : Singleton<InputManager>
 {
     private DynamicJoystick dynamicJoystick;
     private FixedJoystickCustom fireJoystick;
-    private Button stompButton;
+    private CoolDownMagic coolDownFireBall;
+    private CoolDownMagic coolDownStomp;
 
+    private Button stompButton;
 
     public delegate void HorizontalHandler(float horizontal, float vertical);
     public delegate void FireHandler(float horizontal, float vertical);
@@ -25,21 +27,23 @@ public class InputManager : Singleton<InputManager>
     public float HorizontalAimLine { get; private set; }
     public float VerticalAimLine { get; private set; }
 
-    private bool isStompButtonClicked;
-
     private void Start()
     {
         dynamicJoystick = GameObject.FindGameObjectWithTag(GameData.JoystickTags.DynamicJoystick).GetComponent<DynamicJoystick>();
         fireJoystick = GameObject.FindGameObjectWithTag(GameData.JoystickTags.FireJoystick).GetComponent<FixedJoystickCustom>();
+        coolDownFireBall = GameObject.FindGameObjectWithTag(GameData.JoystickTags.CoolFireBall).GetComponent<CoolDownMagic>();
+        coolDownStomp = GameObject.FindGameObjectWithTag(GameData.JoystickTags.CoolDownStomp).GetComponent<CoolDownMagic>();
         stompButton = GameObject.FindGameObjectWithTag(GameData.JoystickTags.StompButton).GetComponent<Button>();
-
-        isStompButtonClicked = false;
 
         if (stompButton != null)
         {
             stompButton.onClick.AddListener(() =>
             {
-                NotifyStomp?.Invoke();
+                if (coolDownStomp.isReady) 
+                {
+                    NotifyStomp?.Invoke();
+                    coolDownStomp.ActivateCooldown();
+                }
             });
         }
     }
@@ -56,9 +60,14 @@ public class InputManager : Singleton<InputManager>
 
         NotifyAim?.Invoke(HorizontalAimLine, VerticalAimLine);
 
-        if (fireJoystick.isFire == true)
+        if (fireJoystick.isFire == true && coolDownFireBall.isReady)
         {
             NotifyFire?.Invoke(fireJoystick.HorizontalOnUp, fireJoystick.VrticallOnUp);
+            fireJoystick.isFire = false;
+            coolDownFireBall.ActivateCooldown();
+        }
+        else 
+        {
             fireJoystick.isFire = false;
         }
 

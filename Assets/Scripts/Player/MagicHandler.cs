@@ -45,7 +45,6 @@ public class MagicHandler : NetworkBehaviour
     private Animator animator;
     public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
 
-
     private HpHandler hpHandler;
     public HpHandler HpHandler { get { return hpHandler = hpHandler ?? GetComponent<HpHandler>(); } }
 

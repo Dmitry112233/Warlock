@@ -9,7 +9,6 @@ public class HpHandler : NetworkBehaviour
     public HitboxRoot hitboxRoot;
     public Slider healthSlider;
 
-    private bool isInitialized = false;
     private const byte startingHP = 100;
 
     public bool IsActive { get; set; }
@@ -37,7 +36,6 @@ public class HpHandler : NetworkBehaviour
         IsActive = false;
         HP = startingHP;
         IsDead = false;
-        isInitialized = true;
         healthSlider.value = HP / startingHP;
     }
 

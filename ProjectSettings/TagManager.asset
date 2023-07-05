@@ -7,6 +7,8 @@ TagManager:
   - Dynamic Joystick
   - Fire Joystick
   - StompButton
+  - CoolDownFireBall
+  - CoolDownStomp
   layers:
   - Default
   - TransparentFX

@@ -12,6 +12,8 @@ public static class GameData
     {
         public const string DynamicJoystick = "Dynamic Joystick";
         public const string FireJoystick = "Fire Joystick";
+        public const string CoolFireBall = "CoolDownFireBall";
+        public const string CoolDownStomp = "CoolDownStomp";
         public const string StompButton = "StompButton";
     }
 
