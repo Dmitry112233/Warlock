@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GameData;
 
 public class MeteorMovement : MonoBehaviour
 {
@@ -25,7 +27,7 @@ public class MeteorMovement : MonoBehaviour
 
     void Update()
     {
-        if((endPosition - transform.position).magnitude > 0.5f) 
+        if((endPosition - transform.position).magnitude > 1f) 
         {
             var resultVector = endPosition - transform.position;
             transform.position += resultVector.normalized * speed * Time.deltaTime;
@@ -33,6 +35,7 @@ public class MeteorMovement : MonoBehaviour
         }
         else 
         {
+            AudioManager.Instance.PlayAudio(GameData.Sounds.Thunder);
             flashLight.DoFlashLight(time, minFlashIntension, maxFLashIntension);
             transform.position = startPositions[Random.Range(0, startPositions.Count)];
             endPosition = endPositions[Random.Range(0, endPositions.Count)];
