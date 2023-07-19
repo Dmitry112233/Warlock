@@ -6,7 +6,7 @@ public class AudioManager : Singleton<AudioManager>
     public AudioSource mainMenu;
     public AudioSource thunder;
 
-    public AudioSource shot;
+    public GameObject shot;
     public AudioSource stomp;
     public AudioSource rocketExplosion;
     public AudioSource hit;
@@ -30,11 +30,11 @@ public class AudioManager : Singleton<AudioManager>
         {
             for (int i = audioGameObjects.Count - 1; i >= 0; i--) 
             {
-                var go = audioGameObjects[i];
-                if (!go.GetComponent<AudioSource>().isPlaying)
+                var audio = audioGameObjects[i];
+                if (!audio.GetComponent<AudioSource>().isPlaying)
                 {
                     audioGameObjects.RemoveAt(i);
-                    Destroy(go);
+                    Destroy(audio);
                 }
             }
         }
@@ -46,17 +46,10 @@ public class AudioManager : Singleton<AudioManager>
         audioSource.Play();
     }
 
-    public void Play3DAudio(Transform transform, string initialAudioSourceName)
+    public void Play3DAudio(Vector3 position, string initialAudioSourceName)
     {
-        var go = new GameObject("Game Object for sound");
-        go.transform.position = transform.position;
-
-        go.transform.SetParent(this.transform);
-
-        var audioSource = go.AddComponent<AudioSource>();
-        //audioSource.GetCopyOf(audioMap[initialAudioSourceName]);
-        audioSource.Play();
-
-        audioGameObjects.Add(go);
+        var soundObject = Instantiate(shot, position, Quaternion.identity);
+        //soundObject.GetComponent<AudioSource>().Play();
+        audioGameObjects.Add(soundObject);
     }
 }

@@ -68,12 +68,12 @@ public class ToggleRunnerProvideInput : Fusion.Behaviour {
       runner.ProvideInput = enable;
       index++;
     }
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
     // If we have a RunnerVisiblityControlWindow open, it needs to know to refresh.
     if (RunnerVisibilityControlsWindow.Instance) {
       RunnerVisibilityControlsWindow.Instance.Repaint();
     }
-#endif
+#endif*/
   }
 }
 

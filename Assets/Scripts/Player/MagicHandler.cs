@@ -93,7 +93,7 @@ public class MagicHandler : NetworkBehaviour
                 {
                     spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, NetworkObject);
                 });
-
+            RpcHandler.OnShot();
             fireBallCooldownTimer = TickTimer.CreateFromSeconds(Runner, fireBallCooldown);
         }
     }

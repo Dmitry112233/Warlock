@@ -40,9 +40,9 @@ namespace Fusion.Assistants {
       AddPlayerSpawner(nr.gameObject);
       nr.gameObject.EnsureComponentExists<NetworkEvents>();
 
-      // Set our physics to 2D
+/*      // Set our physics to 2D
       NetworkProjectConfig.Global.PhysicsEngine = NetworkProjectConfig.PhysicsEngines.Physics3D;
-      NetworkProjectConfigUtilities.SaveGlobalConfig();
+      NetworkProjectConfigUtilities.SaveGlobalConfig();*/
 
       // Get scene and mark scene as dirty.
       DirtyAndSaveScene(nds.gameObject.scene);
@@ -79,9 +79,9 @@ namespace Fusion.Assistants {
       spawner.PlayerPrefab = FusionPrototypingPrefabs.BasicPlayerRB2D.GetComponent<NetworkObject>();
       nr.gameObject.EnsureComponentExists<NetworkEvents>();
      
-      // Set our physics to 2D
+/*      // Set our physics to 2D
       NetworkProjectConfig.Global.PhysicsEngine = NetworkProjectConfig.PhysicsEngines.Physics2D;
-      NetworkProjectConfigUtilities.SaveGlobalConfig();
+      NetworkProjectConfigUtilities.SaveGlobalConfig();*/
 
       // Get scene and mark scene as dirty.
       DirtyAndSaveScene(nds.gameObject.scene);

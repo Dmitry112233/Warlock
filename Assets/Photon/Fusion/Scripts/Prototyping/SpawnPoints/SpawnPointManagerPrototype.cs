@@ -57,7 +57,7 @@ public abstract class SpawnPointManagerPrototype<T> : Fusion.Behaviour, ISpawnPo
 #if UNITY_EDITOR
   [BehaviourAction]
   protected void DrawFoundSpawnPointCount() {
-    if (Application.isPlaying == false) {
+    /*if (Application.isPlaying == false) {
       GUILayout.BeginVertical(FusionGUIStyles.GroupBoxType.Info.GetStyle());
       GUILayout.Space(4);
       if (GUI.Button(EditorGUILayout.GetControlRect(), "Find Spawn Points")) {
@@ -75,7 +75,7 @@ public abstract class SpawnPointManagerPrototype<T> : Fusion.Behaviour, ISpawnPo
 
       EditorGUILayout.LabelField($"{typeof(T).Name}(s): {_spawnPoints.Count}");
       GUILayout.EndVertical();
-    }
+    }*/
   }
 #endif
 

@@ -7306,7 +7306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1203c564bc2bab4b921b2eb1f415f2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenu: {fileID: 0}
+  mainMenu: {fileID: 1033937329}
   thunder: {fileID: 1033937332}
   shot: {fileID: 0}
   stomp: {fileID: 0}

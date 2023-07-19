@@ -14,6 +14,8 @@ public class FireBallHandler : NetworkBehaviour
     public float damage = 10;
     public float OnDrawSpere = 0.5f;
 
+
+
     [Header("Prefab")]
     public List<GameObject> explosionsParticles;
 

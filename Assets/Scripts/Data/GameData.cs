@@ -25,5 +25,6 @@ public static class GameData
     public static class Sounds 
     {
         public const string Thunder = "Thunder";
+        public const string Shot = "Shot";
     }
 }

@@ -18,7 +18,18 @@ public class RpcHandler : NetworkBehaviour
         RPC_PlayStomp(transform.position);
     }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void OnShot()
+    {
+        RPC_PlayShotSound(transform.position);
+    }
+
+    [Rpc]
+    public void RPC_PlayShotSound(Vector3 playPosition)
+    {
+        AudioManager.Instance.Play3DAudio(playPosition, "zalupka");
+    }
+
+    [Rpc]
     public void RPC_PlayFireballParticles(Vector3 playPosition)
     {
         foreach (GameObject particle in explosionsParticles)
@@ -27,7 +38,7 @@ public class RpcHandler : NetworkBehaviour
         }
     }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    [Rpc]
     public void RPC_PlayStomp(Vector3 playPosition)
     {
         Debug.Log("STOMP EFFECT INSTATIATED");
