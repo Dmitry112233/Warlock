@@ -121,7 +121,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.46809343, y: -0.0008624373, z: 0.00045684175, w: 0.88367844}
+  m_LocalRotation: {x: 0.46809343, y: -0.00086239434, z: 0.000456819, w: 0.88367844}
   m_LocalPosition: {x: 0, y: 15, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -238,7 +238,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1662263479}
-  m_LocalRotation: {x: 0.46809343, y: -0.0008624373, z: 0.00045684175, w: 0.88367844}
+  m_LocalRotation: {x: 0.46809343, y: -0.00086239434, z: 0.000456819, w: 0.88367844}
   m_LocalPosition: {x: 0, y: 15, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2640,6 +2640,7 @@ MonoBehaviour:
   - {fileID: 573547098334549359, guid: b7f86a6bec370cf4097567311ca098d6, type: 3}
   - {fileID: 2481807847447787653, guid: 8750ee51a472adb4e9320e8c8aae856d, type: 3}
   stompPrefab: {fileID: 1576947433937734, guid: 3a1ab18e6861a8940aa332e72f024271, type: 3}
+  shotSound: {fileID: 5742494764797714602, guid: 913c4b19e4cdcae40b064b42f536152a, type: 3}
 --- !u!114 &7634536316788441536
 MonoBehaviour:
   m_ObjectHideFlags: 0

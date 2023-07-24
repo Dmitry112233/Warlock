@@ -12,7 +12,7 @@ namespace ParrelSync.Example
         void Start()
         {
             // Is this editor instance running a clone project?
-            if (ClonesManager.IsClone())
+            /*if (ClonesManager.IsClone())
             {
                 Debug.Log("This is a clone project.");
 
@@ -24,7 +24,7 @@ namespace ParrelSync.Example
             else
             {
                 Debug.Log("This is the original project.");
-            }
+            }*/
         }
     }
 }

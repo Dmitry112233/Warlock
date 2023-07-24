@@ -21,4 +21,13 @@ public static class GameData
     {
         public const string Player = "Player";
     }
+
+    public static class Sounds 
+    {
+        public const string Thunder = "Thunder";
+        public const string Shot = "Shot";
+        public const string Stomp = "Stomp";
+        public const string RocketExplosion = "RocketExplosion";
+        public const string Hit = "Hit";
+    }
 }

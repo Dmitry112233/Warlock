@@ -78,11 +78,11 @@ public class ToggleRunnerVisibility : Fusion.Behaviour {
       runner.IsVisible = enable; 
       index++;
     }
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
     // If we have a RunnerVisiblityControlWindow open, it needs to know to refresh.
     if (RunnerVisibilityControlsWindow.Instance) {
       RunnerVisibilityControlsWindow.Instance.Repaint();
     }
-#endif
+#endif*/
   }
 }

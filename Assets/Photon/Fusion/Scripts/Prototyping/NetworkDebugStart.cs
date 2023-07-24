@@ -587,7 +587,7 @@ public class NetworkDebugStart : Fusion.Behaviour {
     if (Application.isPlaying)
       return;
     var currentScene = SceneManager.GetActiveScene();
-    if (currentScene.TryGetSceneIndexInBuildSettings(out var _) == false) {
+    /*if (currentScene.TryGetSceneIndexInBuildSettings(out var _) == false) {
       GUILayout.Space(4);
       var clicked = BehaviourEditorUtils.DrawWarnButton(new GUIContent("Add Scene To Settings", "Will add current scene to Unity Build Settings list."), MessageType.Warning);
       if (clicked) {
@@ -599,7 +599,7 @@ public class NetworkDebugStart : Fusion.Behaviour {
           currentScene.AddSceneToBuildSettings();
         }
       }
-    }
+    }*/
   }
 
 #endif

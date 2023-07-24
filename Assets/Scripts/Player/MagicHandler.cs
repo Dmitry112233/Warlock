@@ -93,14 +93,14 @@ public class MagicHandler : NetworkBehaviour
                 {
                     spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, NetworkObject);
                 });
-
+            RpcHandler.OnShot();
             fireBallCooldownTimer = TickTimer.CreateFromSeconds(Runner, fireBallCooldown);
         }
     }
 
     private void Stomp()
     {
-        if (stompCooldownTimer.ExpiredOrNotRunning(Runner))
+        if (stompCooldownTimer.ExpiredOrNotRunning(Runner) && Object.HasInputAuthority)
         {
             int hitCounts = Runner.LagCompensation.OverlapSphere(transform.position, detectedColisionStompSphereRadius, Object.InputAuthority, hits, collisionLayers, HitOptions.IncludePhysX);
 
@@ -123,6 +123,7 @@ public class MagicHandler : NetworkBehaviour
                     if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != NetworkObject))
                     {
                         hPHandler.OnTakeDamage(stompDamage);
+                        RpcHandler.OnTakenHit();
                         Debug.Log("PUSH VECTOR MAGNITUDE: " + pushVector.magnitude);
 
 

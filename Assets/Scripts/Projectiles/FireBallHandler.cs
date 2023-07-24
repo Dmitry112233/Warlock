@@ -14,6 +14,8 @@ public class FireBallHandler : NetworkBehaviour
     public float damage = 10;
     public float OnDrawSpere = 0.5f;
 
+
+
     [Header("Prefab")]
     public List<GameObject> explosionsParticles;
 
@@ -69,7 +71,10 @@ public class FireBallHandler : NetworkBehaviour
                     if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != firedByNetworkObject)) 
                     {
                         hPHandler.OnTakeDamage(damage);
+
                         rpcHandler.OnTakeFireBall();
+                        rpcHandler.OnTakenHit();
+
                         characterController.SetPushDestinationAndTime(pushVector * pushBooster, pushDuration);
                     }
                 }
