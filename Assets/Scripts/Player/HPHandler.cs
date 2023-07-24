@@ -31,6 +31,9 @@ public class HpHandler : NetworkBehaviour
     private NetworkObject networkObject;
     public NetworkObject NetworkObject { get { return networkObject = networkObject ?? GetComponent<NetworkObject>(); } }
 
+    private RpcHandler rpcHandler;
+    public RpcHandler RpcHandler { get { return rpcHandler = rpcHandler ?? GetComponent<RpcHandler>(); } }
+
     void Start()
     {
         IsActive = false;
@@ -48,7 +51,7 @@ public class HpHandler : NetworkBehaviour
                 return;
 
             HP -= damage;
-
+            
             Debug.Log($"{Time.time} {transform.name} took damage got {HP} left");
 
             if (HP <= 0)

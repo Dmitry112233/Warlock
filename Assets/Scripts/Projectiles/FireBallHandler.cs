@@ -71,7 +71,10 @@ public class FireBallHandler : NetworkBehaviour
                     if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != firedByNetworkObject)) 
                     {
                         hPHandler.OnTakeDamage(damage);
+
                         rpcHandler.OnTakeFireBall();
+                        rpcHandler.OnTakenHit();
+
                         characterController.SetPushDestinationAndTime(pushVector * pushBooster, pushDuration);
                     }
                 }

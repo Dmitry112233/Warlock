@@ -26,5 +26,8 @@ public static class GameData
     {
         public const string Thunder = "Thunder";
         public const string Shot = "Shot";
+        public const string Stomp = "Stomp";
+        public const string RocketExplosion = "RocketExplosion";
+        public const string Hit = "Hit";
     }
 }
