@@ -2,29 +2,34 @@ using UnityEngine;
 
 public class Lava : MonoBehaviour
 {
+    public StartGameController startGameController;
+
     public float damage = 0.1f;
+    public float speed = 2.5f;
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == GameData.Tags.Player)
+        if (startGameController.isGameStarted && other.tag == GameData.Tags.Player)
         {
+
+            Debug.Log("STAY ON LAVA");
             if (other.GetComponent<HpHandler>().IsActive)
             {
                 other.GetComponent<HpHandler>().OnTakeDamage(damage);
-                other.GetComponent<CharacterControllerCustom>().SetSpeed(3f);
-
+                other.GetComponent<CharacterControllerCustom>().SetSpeed(speed);
             }
         }
-
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<HpHandler>().IsActive) 
+        if (startGameController.isGameStarted && other.tag == GameData.Tags.Player)
         {
-            if (other.tag == GameData.Tags.Player)
+
+            Debug.Log("EXIT ON LAVA");
+            if (other.GetComponent<HpHandler>().IsActive)
             {
-                other.GetComponent<CharacterControllerCustom>().SetSpeed(4f);
+                other.GetComponent<CharacterControllerCustom>().SetSpeed(other.GetComponent<CharacterControllerCustom>().maxSpeed);
             }
         }
     }

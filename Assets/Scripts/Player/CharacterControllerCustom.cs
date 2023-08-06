@@ -1,11 +1,11 @@
 using Fusion;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 public class CharacterControllerCustom : NetworkTransform
 {
     [Header("Character Controller Settings")]
+    public float speed = 4.0f;
     public float maxSpeed = 4.0f;
     public float rotationSpeed = 15.0f;
     public float rotationOnFireSpeed = 2000f;
@@ -78,7 +78,7 @@ public class CharacterControllerCustom : NetworkTransform
                 movementAnimationSpeed = 1.0f;
             }
 
-            Controller.Move(direction * maxSpeed * deltaTime);
+            Controller.Move(direction * speed * deltaTime);
             Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
         }
         else 
@@ -120,7 +120,7 @@ public class CharacterControllerCustom : NetworkTransform
 
     public void SetSpeed(float speed) 
     {
-        maxSpeed = speed;
+        this.speed = speed;
     }
 
     public void Freeze() 

@@ -54,7 +54,5 @@ public class StartGameController : MonoBehaviour
     {
        yield return new WaitForSeconds(Duration);
         playersList.ForEach(x => x.GetComponent<CharacterControllerCustom>().Unfreeze());
-        playersList.ForEach(x => x.GetComponent<HpHandler>().IsActive = true);
-
     }
 }
