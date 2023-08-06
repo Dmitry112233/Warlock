@@ -11,8 +11,6 @@ public class Lava : MonoBehaviour
     {
         if (startGameController.isGameStarted && other.tag == GameData.Tags.Player)
         {
-
-            Debug.Log("STAY ON LAVA");
             if (other.GetComponent<HpHandler>().IsActive)
             {
                 other.GetComponent<HpHandler>().OnTakeDamage(damage);
@@ -25,8 +23,6 @@ public class Lava : MonoBehaviour
     {
         if (startGameController.isGameStarted && other.tag == GameData.Tags.Player)
         {
-
-            Debug.Log("EXIT ON LAVA");
             if (other.GetComponent<HpHandler>().IsActive)
             {
                 other.GetComponent<CharacterControllerCustom>().SetSpeed(other.GetComponent<CharacterControllerCustom>().maxSpeed);
