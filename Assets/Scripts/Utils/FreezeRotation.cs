@@ -14,7 +14,7 @@ public class FreezeRotation : NetworkBehaviour
     {
         if (transform != null && _camera != null)
         {
-            Debug.Log("FREEEEEEEEZE");
+            Debug.Log("FREEEEEEEEZE SLIDER");
             transform.rotation = Quaternion.LookRotation(transform.position - _camera.transform.position);
         }
     }

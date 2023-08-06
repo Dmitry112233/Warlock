@@ -12,6 +12,7 @@ public class HpHandler : NetworkBehaviour
     private const byte startingHP = 100;
 
     public bool IsActive { get; set; }
+    public bool IsLavaInfluence { get; set; }
 
     [Networked(OnChanged = nameof(OnHPChanged))]
     float HP { get; set; }
@@ -36,7 +37,8 @@ public class HpHandler : NetworkBehaviour
 
     void Start()
     {
-        IsActive = false;
+        IsActive = true;
+        IsLavaInfluence = false;
         HP = startingHP;
         IsDead = false;
         healthSlider.value = HP / startingHP;

@@ -2037,7 +2037,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &8839622883459689415
 MonoBehaviour:
@@ -2359,7 +2359,7 @@ GameObject:
   - component: {fileID: -1444219190172477757}
   - component: {fileID: 8795231270427080161}
   - component: {fileID: -1952841308679044025}
-  - component: {fileID: 7634536316788441536}
+  - component: {fileID: 7934182405552070218}
   m_Layer: 0
   m_Name: WarlockPrefab
   m_TagString: Player
@@ -2455,7 +2455,7 @@ MonoBehaviour:
   - {fileID: 5470692003672487676}
   - {fileID: 61630028167718098}
   - {fileID: -1952841308679044025}
-  - {fileID: 7634536316788441536}
+  - {fileID: 7934182405552070218}
   - {fileID: 3235345097386347139}
   SimulationBehaviours: []
 --- !u!114 &543450653139475193
@@ -2547,6 +2547,7 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
+  speed: 4
   maxSpeed: 4
   rotationSpeed: 4
   rotationOnFireSpeed: 100
@@ -2640,8 +2641,7 @@ MonoBehaviour:
   - {fileID: 573547098334549359, guid: b7f86a6bec370cf4097567311ca098d6, type: 3}
   - {fileID: 2481807847447787653, guid: 8750ee51a472adb4e9320e8c8aae856d, type: 3}
   stompPrefab: {fileID: 1576947433937734, guid: 3a1ab18e6861a8940aa332e72f024271, type: 3}
-  shotSound: {fileID: 5742494764797714602, guid: 913c4b19e4cdcae40b064b42f536152a, type: 3}
---- !u!114 &7634536316788441536
+--- !u!114 &7934182405552070218
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
