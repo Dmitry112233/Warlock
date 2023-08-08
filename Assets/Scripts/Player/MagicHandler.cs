@@ -119,6 +119,7 @@ public class MagicHandler : NetworkBehaviour
                     HpHandler hPHandler = hits[i].Hitbox.transform.root.GetComponent<HpHandler>();
                     Transform playerTransform = hits[i].Hitbox.transform.root.GetComponent<Transform>();
                     CharacterControllerCustom characterController = hits[i].Hitbox.transform.root.GetComponent<CharacterControllerCustom>();
+                    RpcHandler rpcHandler = hits[i].Hitbox.transform.root.GetComponent<RpcHandler>();
 
                     Vector3 pushVector = playerTransform.position - transform.position;
                     pushVector.y = 0;
@@ -126,7 +127,7 @@ public class MagicHandler : NetworkBehaviour
                     if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != NetworkObject))
                     {
                         hPHandler.OnTakeDamage(stompDamage);
-                        RpcHandler.OnTakenHit();
+                        rpcHandler.OnTakenHit();
                         Debug.Log("PUSH VECTOR MAGNITUDE: " + pushVector.magnitude);
 
 
