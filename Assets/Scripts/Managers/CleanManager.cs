@@ -31,10 +31,4 @@ public class CleanManager : Singleton<CleanManager>
     {
         spawnedStompObjects.Add(obj);
     }
-
-    public void Init() 
-    {
-        //Get null reference exception in case of calling CleanManager.Instance.AddObjectToDestroy(obj) from RPCHandler after stomp.
-        //Need to get the instance in Start() somewhere -> RPCHandler for now. 
-    }
 }

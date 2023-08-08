@@ -8,11 +8,6 @@ public class RpcHandler : NetworkBehaviour
     public List<GameObject> explosionsParticles;
     public GameObject stompPrefab;
 
-    private void Awake()
-    {
-        CleanManager.Instance.Init();
-    }
-
     public void OnTakeFireBall()
     {
         RPC_PlayFireballParticles(transform.position);
@@ -73,6 +68,10 @@ public class RpcHandler : NetworkBehaviour
     {
         Debug.Log("STOMP EFFECT INSTATIATED");
         var obj = Instantiate(stompPrefab, playPosition, Quaternion.identity);
-        CleanManager.Instance.AddObjectToDestroy(obj);
+
+        if(CleanManager.Instance != null) 
+        {
+            CleanManager.Instance.AddObjectToDestroy(obj);
+        }
     }
 }
