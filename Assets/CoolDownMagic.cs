@@ -26,7 +26,12 @@ public class CoolDownMagic : MonoBehaviour
     {
         if (timeElapsed <= lerpDuration)
         {
-            Image.fillAmount = Mathf.Lerp(1, 0, timeElapsed / lerpDuration);
+            var fillAmount = Mathf.Lerp(1, 0, timeElapsed / lerpDuration);
+            if (fillAmount <= 0.01) 
+            {
+                fillAmount = 0;
+            }
+            Image.fillAmount = fillAmount;
             timeElapsed += Time.deltaTime; 
         }
         
