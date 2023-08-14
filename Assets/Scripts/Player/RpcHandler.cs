@@ -67,6 +67,11 @@ public class RpcHandler : NetworkBehaviour
     public void RPC_PlayStomp(Vector3 playPosition)
     {
         Debug.Log("STOMP EFFECT INSTATIATED");
-        Instantiate(stompPrefab, playPosition, Quaternion.identity);
+        var obj = Instantiate(stompPrefab, playPosition, Quaternion.identity);
+
+        if(CleanManager.Instance != null) 
+        {
+            CleanManager.Instance.AddObjectToDestroy(obj);
+        }
     }
 }
