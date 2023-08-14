@@ -15512,7 +15512,7 @@ GameObject:
   - component: {fileID: 1014125914}
   - component: {fileID: 1014125913}
   m_Layer: 5
-  m_Name: Button
+  m_Name: StompButton
   m_TagString: StompButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15673,8 +15673,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dc2865451600b94a97329ed25048ff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lerpDuration: 3
-  coolDownTime: 3
+  lerpDuration: 3.6
+  coolDownTime: 3.6
   isReady: 0
 --- !u!114 &1221555058
 MonoBehaviour:
