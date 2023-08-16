@@ -27,8 +27,11 @@ public class InputManager : Singleton<InputManager>
     public float HorizontalAimLine { get; private set; }
     public float VerticalAimLine { get; private set; }
 
+    public bool IsStomp { get; set; }
+
     private void Start()
     {
+        IsStomp = false;
         dynamicJoystick = GameObject.FindGameObjectWithTag(GameData.JoystickTags.DynamicJoystick).GetComponent<DynamicJoystick>();
         fireJoystick = GameObject.FindGameObjectWithTag(GameData.JoystickTags.FireJoystick).GetComponent<FixedJoystickCustom>();
         coolDownFireBall = GameObject.FindGameObjectWithTag(GameData.JoystickTags.CoolFireBall).GetComponent<CoolDownMagic>();
@@ -50,23 +53,30 @@ public class InputManager : Singleton<InputManager>
 
     void Update()
     {
-        Horizontal = dynamicJoystick.Horizontal;
-        Vertical = dynamicJoystick.Vertical;
-
-        NotifyMovement?.Invoke(Horizontal, Vertical);
-
-        HorizontalAimLine = fireJoystick.Horizontal;
-        VerticalAimLine = fireJoystick.Vertical;
-
-        NotifyAim?.Invoke(HorizontalAimLine, VerticalAimLine);
-
-        if (fireJoystick.isFire == true && coolDownFireBall.isReady)
+        if (!IsStomp)
         {
-            NotifyFire?.Invoke(fireJoystick.HorizontalOnUp, fireJoystick.VrticallOnUp);
-            fireJoystick.isFire = false;
-            coolDownFireBall.ActivateCooldown();
+            Horizontal = dynamicJoystick.Horizontal;
+            Vertical = dynamicJoystick.Vertical;
+
+            NotifyMovement?.Invoke(Horizontal, Vertical);
+
+            HorizontalAimLine = fireJoystick.Horizontal;
+            VerticalAimLine = fireJoystick.Vertical;
+
+            NotifyAim?.Invoke(HorizontalAimLine, VerticalAimLine);
+
+            if (fireJoystick.isFire == true && coolDownFireBall.isReady)
+            {
+                NotifyFire?.Invoke(fireJoystick.HorizontalOnUp, fireJoystick.VrticallOnUp);
+                fireJoystick.isFire = false;
+                coolDownFireBall.ActivateCooldown();
+            }
+            else
+            {
+                fireJoystick.isFire = false;
+            }
         }
-        else 
+        else
         {
             fireJoystick.isFire = false;
         }

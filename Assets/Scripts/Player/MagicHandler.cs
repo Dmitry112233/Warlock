@@ -33,6 +33,9 @@ public class MagicHandler : NetworkBehaviour
     private CharacterControllerCustom characterControllerCustom;
     public CharacterControllerCustom CharacterControllerCustom { get { return characterControllerCustom = characterControllerCustom ?? GetComponent<CharacterControllerCustom>(); } }
 
+    private InputHandler inputHandler;
+    public InputHandler InputHandler { get { return inputHandler = inputHandler ?? GetComponent<InputHandler>(); } }
+
     private RpcHandler rpcHandler;
     public RpcHandler RpcHandler { get { return rpcHandler = rpcHandler ?? GetComponent<RpcHandler>(); } }
 
@@ -154,6 +157,8 @@ public class MagicHandler : NetworkBehaviour
             {
                 Debug.Log("Inside is ANIMATION STOMP");
 
+                InputManager.Instance.IsStomp = true;
+
                 Animator.SetBool(GameData.Animator.StompBool, true);
 
                 //Stomp take too much time if run before animation and it starts with a big delay 
@@ -161,7 +166,7 @@ public class MagicHandler : NetworkBehaviour
             }
         }
 
-        if (IsFire == true && IsStomp != true)
+        if (IsFire == true)
         {
             if (fireBallCooldownTimer.ExpiredOrNotRunning(Runner))
             {
@@ -174,10 +179,6 @@ public class MagicHandler : NetworkBehaviour
                 FireBallShot();
             }
 
-            IsFire = false;
-        }
-        else if(IsFire == true && IsStomp == true) 
-        {
             IsFire = false;
         }
     }
@@ -196,7 +197,7 @@ public class MagicHandler : NetworkBehaviour
     public void StompAnimationEvent()
     {
         Animator.SetBool(GameData.Animator.StompBool, false);
-        Animator.SetBool(GameData.Animator.AttackBool, false);
+        InputManager.Instance.IsStomp = false;
         IsStomp = false;
     }
 
