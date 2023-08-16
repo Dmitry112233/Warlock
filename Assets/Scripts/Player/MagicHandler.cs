@@ -161,7 +161,7 @@ public class MagicHandler : NetworkBehaviour
             }
         }
 
-        if (IsFire == true)
+        if (IsFire == true && IsStomp != true)
         {
             if (fireBallCooldownTimer.ExpiredOrNotRunning(Runner))
             {
@@ -173,14 +173,13 @@ public class MagicHandler : NetworkBehaviour
 
                 FireBallShot();
             }
-            //StartCoroutine(FireCora());
-        }
-    }
 
-    IEnumerator FireCora()
-    {
-        yield return new WaitForSeconds(fireBallTimeBeforAppearence);
-        FireBallShot();
+            IsFire = false;
+        }
+        else if(IsFire == true && IsStomp == true) 
+        {
+            IsFire = false;
+        }
     }
 
     IEnumerator StompCora()
@@ -192,12 +191,12 @@ public class MagicHandler : NetworkBehaviour
     public void FireBallAnimationEvent()
     {
         Animator.SetBool(GameData.Animator.AttackBool, false);
-        IsFire = false;
     }
 
     public void StompAnimationEvent()
     {
         Animator.SetBool(GameData.Animator.StompBool, false);
+        Animator.SetBool(GameData.Animator.AttackBool, false);
         IsStomp = false;
     }
 

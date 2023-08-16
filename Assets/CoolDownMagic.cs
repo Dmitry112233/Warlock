@@ -18,7 +18,7 @@ public class CoolDownMagic : MonoBehaviour
     {
         Image.fillAmount = 0;
         isReady = false;
-        timeElapsed = 2f;
+        timeElapsed = lerpDuration;
         remainingTime = 0f;
     }
 
