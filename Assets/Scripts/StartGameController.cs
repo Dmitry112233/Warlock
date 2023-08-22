@@ -31,12 +31,12 @@ public class StartGameController : MonoBehaviour
 
                     if(i == 0) 
                     {
-                        players[i].transform.position = new Vector3(-15.79f, 0.11f, -13.25f);
+                        players[i].transform.position = new Vector3(-17.26f, 0f, 0f);
                         players[i].transform.rotation = Quaternion.LookRotation(Vector3.right);
                     }
                     else 
                     {
-                        players[i].transform.position = new Vector3(16.53f, 0.11f, -13.25f);
+                        players[i].transform.position = new Vector3(17.26f, 0f, 0f);
                         players[i].transform.rotation = Quaternion.LookRotation(Vector3.left);
                     }
 
@@ -53,6 +53,6 @@ public class StartGameController : MonoBehaviour
     private IEnumerator UnfreezePlayers(int Duration)
     {
        yield return new WaitForSeconds(Duration);
-        playersList.ForEach(x => x.GetComponent<CharacterControllerCustom>().Unfreeze());
+       playersList.ForEach(x => x.GetComponent<CharacterControllerCustom>().Unfreeze());
     }
 }
