@@ -99,7 +99,12 @@ public class MagicHandler : NetworkBehaviour
                 {
                     spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, NetworkObject);
                 });
-            RpcHandler.OnShot();
+
+            if (Object.HasInputAuthority)
+            {
+                RpcHandler.OnShot();
+            }
+
             fireBallCooldownTimer = TickTimer.CreateFromSeconds(Runner, fireBallCooldown);
         }
     }
@@ -112,6 +117,7 @@ public class MagicHandler : NetworkBehaviour
 
             if (Object.HasInputAuthority) 
             {
+                Debug.Log("PLAY RPC");
                 RpcHandler.OnStomp();
             }
 
@@ -162,6 +168,8 @@ public class MagicHandler : NetworkBehaviour
                 if (Object.HasInputAuthority) 
                 {
                     InputManager.Instance.IsStomp = true;
+
+                    Debug.Log("LOCK INPUT MANAGER");
                 }
 
                 Animator.SetBool(GameData.Animator.StompBool, true);
