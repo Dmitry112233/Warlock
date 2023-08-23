@@ -106,15 +106,17 @@ public class MagicHandler : NetworkBehaviour
 
     private void Stomp()
     {
-        if (stompCooldownTimer.ExpiredOrNotRunning(Runner) && Object.HasInputAuthority)
+        if (stompCooldownTimer.ExpiredOrNotRunning(Runner))
         {
             int hitCounts = Runner.LagCompensation.OverlapSphere(transform.position, detectedColisionStompSphereRadius, Object.InputAuthority, hits, collisionLayers, HitOptions.IncludePhysX);
 
-            RpcHandler.OnStomp();
+            if (Object.HasInputAuthority) 
+            {
+                RpcHandler.OnStomp();
+            }
 
             if (hitCounts > 0)
             {
-
                 Debug.Log("Inside is Stomp HITS");
 
                 for (int i = 0; i < hitCounts; i++)
