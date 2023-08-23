@@ -159,7 +159,10 @@ public class MagicHandler : NetworkBehaviour
             {
                 Debug.Log("Inside is ANIMATION STOMP");
 
-                InputManager.Instance.IsStomp = true;
+                if (Object.HasInputAuthority) 
+                {
+                    InputManager.Instance.IsStomp = true;
+                }
 
                 Animator.SetBool(GameData.Animator.StompBool, true);
 
@@ -199,7 +202,10 @@ public class MagicHandler : NetworkBehaviour
     public void StompAnimationEvent()
     {
         Animator.SetBool(GameData.Animator.StompBool, false);
-        InputManager.Instance.IsStomp = false;
+        if (Object.HasInputAuthority)
+        {
+            InputManager.Instance.IsStomp = false;
+        }
         IsStomp = false;
     }
 
