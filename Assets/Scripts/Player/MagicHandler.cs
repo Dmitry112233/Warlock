@@ -93,7 +93,7 @@ public class MagicHandler : NetworkBehaviour
             fireVector.Normalize();
 
             var initPosition = transform.position + fireVector;
-            initPosition.y = 1;
+            initPosition.y = 1.5f;
 
             Runner.Spawn(fireBallPrefab, initPosition, Quaternion.LookRotation(fireVector), Object.InputAuthority, (runner, spawnedFireBall) =>
                 {
