@@ -12,6 +12,9 @@ public class CharacterControllerCustom : NetworkTransform
     public float animationBlendSpeed = 0.05f;
     public float pushInterpolationSpeed = 3.0f;
 
+    public float gravity = -9.8f;
+    private float ySpeed;
+
     [Networked]
     public Vector3 Velocity { get; set; }
 
@@ -27,7 +30,7 @@ public class CharacterControllerCustom : NetworkTransform
     private InputHandler characterInputHandler;
     public InputHandler InputHandler { get { return characterInputHandler = characterInputHandler ?? GetComponent<InputHandler>(); } }
 
-    private MovementHandler movementHandler;    
+    private MovementHandler movementHandler;
     public MovementHandler MovementHandler { get { return movementHandler = movementHandler ?? GetComponent<MovementHandler>(); } }
 
     private Animator animator;
@@ -65,26 +68,53 @@ public class CharacterControllerCustom : NetworkTransform
 
     public void Move(Vector3 direction)
     {
-        if(direction != Vector3.zero) 
+        if (direction != Vector3.zero)
         {
             var deltaTime = Runner.DeltaTime;
             var previousPos = transform.position;
+
+           /* ySpeed += gravity * deltaTime;
+
+            if (Controller.isGrounded)
+            {
+                Debug.Log("IS GROUNDED");
+                ySpeed = -0.5f;
+            }*/
+
             direction = direction.normalized;
 
             if (direction != default && MagicHandler.IsFire != true)
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime);
-                
                 movementAnimationSpeed = 1.0f;
             }
 
+            //direction.y = ySpeed;
             Controller.Move(direction * speed * deltaTime);
             Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
         }
-        else 
+        else
         {
             movementAnimationSpeed = 0.0f;
         }
+    }
+
+    public void Gravity()
+    {
+        var deltaTime = Runner.DeltaTime;
+        var previousPos = transform.position;
+
+        ySpeed += gravity * deltaTime;
+
+        if (Controller.isGrounded)
+        {
+            Debug.Log("IS GROUNDED");
+            ySpeed = -0.5f;
+        }
+
+        var direction = new Vector3(0, ySpeed, 0);
+
+        Controller.Move(direction * speed * deltaTime);
     }
 
     public void PlayMoveAnimation()
@@ -94,36 +124,36 @@ public class CharacterControllerCustom : NetworkTransform
             animationBlendSpeed));
     }
 
-    public void RotateOnFire(Vector3 direction) 
+    public void RotateOnFire(Vector3 direction)
     {
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationOnFireSpeed * Runner.DeltaTime);
     }
 
-    public void Push() 
+    public void Push()
     {
         if (!pushTimer.Expired(Runner))
         {
             transform.position = Vector3.Lerp(transform.position, PushDestinationPoint, pushInterpolationSpeed * Runner.DeltaTime);
         }
-        else 
+        else
         {
             PushDestinationPoint = Vector3.zero;
         }
     }
 
-    public void SetPushDestinationAndTime(Vector3 pushDestinationPoint, float time) 
+    public void SetPushDestinationAndTime(Vector3 pushDestinationPoint, float time)
     {
         PushDestinationPoint += pushDestinationPoint;
         PushDestinationPoint = transform.position + PushDestinationPoint;
         pushTimer = TickTimer.CreateFromSeconds(Runner, time);
     }
 
-    public void SetSpeed(float speed) 
+    public void SetSpeed(float speed)
     {
         this.speed = speed;
     }
 
-    public void Freeze() 
+    public void Freeze()
     {
         InputHandler.UnsubscribeInputManager();
         InputHandler.enabled = false;

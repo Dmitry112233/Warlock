@@ -121,7 +121,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.46809343, y: -0.0008624373, z: 0.00045684175, w: 0.88367844}
+  m_LocalRotation: {x: 0.46809343, y: -0.00086239434, z: 0.000456819, w: 0.88367844}
   m_LocalPosition: {x: 0, y: 15, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -238,7 +238,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1662263479}
-  m_LocalRotation: {x: 0.46809343, y: -0.0008624373, z: 0.00045684175, w: 0.88367844}
+  m_LocalRotation: {x: 0.46809343, y: -0.00086239434, z: 0.000456819, w: 0.88367844}
   m_LocalPosition: {x: 0, y: 15, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2419,13 +2419,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2.25
+  m_Height: 2.5
   m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.07, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &543450653139475192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2553,6 +2553,7 @@ MonoBehaviour:
   rotationOnFireSpeed: 100
   animationBlendSpeed: 0.05
   pushInterpolationSpeed: 4
+  gravity: -9.8
   _Velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &5470692003672487676
 MonoBehaviour:

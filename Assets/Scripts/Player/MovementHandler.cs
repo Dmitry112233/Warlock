@@ -18,6 +18,8 @@ public class MovementHandler : NetworkBehaviour
         {
             CharacterControllerCustom.Push();
         }
+
+        CharacterControllerCustom.Gravity();
     }
 
     public override void Render()

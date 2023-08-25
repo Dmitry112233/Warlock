@@ -22,7 +22,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.IsServer) 
         {
             Debug.Log("OnPlayerJoined we are the server. Spawning Player");
-            runner.Spawn(playerPrefab, new Vector3(0, 0, 0), Quaternion.identity, player);
+            runner.Spawn(playerPrefab, new Vector3(0, 2f, 0), Quaternion.identity, player);
         }
         else 
         {

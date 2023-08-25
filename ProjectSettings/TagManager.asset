@@ -9,6 +9,8 @@ TagManager:
   - StompButton
   - CoolDownFireBall
   - CoolDownStomp
+  - CoolDownMagic
+  - Ground
   layers:
   - Default
   - TransparentFX
