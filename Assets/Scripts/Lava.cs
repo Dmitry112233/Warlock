@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Lava : MonoBehaviour
@@ -23,10 +24,7 @@ public class Lava : MonoBehaviour
     {
         if (startGameController.isGameStarted && other.tag == GameData.Tags.Player)
         {
-            if (other.GetComponent<HpHandler>().IsActive)
-            {
-                other.GetComponent<CharacterControllerCustom>().SetSpeed(other.GetComponent<CharacterControllerCustom>().maxSpeed);
-            }
+            other.GetComponent<CharacterControllerCustom>().SetSpeed(other.GetComponent<CharacterControllerCustom>().maxSpeed);
         }
     }
 }

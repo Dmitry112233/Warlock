@@ -8,7 +8,6 @@ public class MagicHandler : NetworkBehaviour
     [Header("Magic settings")]
     public float fireBallCooldown = 2.0f;
     public float stompCooldown = 3.0f;
-    public float fireBallTimeBeforAppearence = 0.5f;
     public float stompDelay = 0.5f;
     public float aimVectorBooster = 2f;
 
@@ -93,28 +92,36 @@ public class MagicHandler : NetworkBehaviour
             fireVector.Normalize();
 
             var initPosition = transform.position + fireVector;
-            initPosition.y = 1;
+            initPosition.y = 1.5f;
 
             Runner.Spawn(fireBallPrefab, initPosition, Quaternion.LookRotation(fireVector), Object.InputAuthority, (runner, spawnedFireBall) =>
                 {
                     spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, NetworkObject);
                 });
-            RpcHandler.OnShot();
+
+            if (Object.HasInputAuthority)
+            {
+                RpcHandler.OnShot();
+            }
+
             fireBallCooldownTimer = TickTimer.CreateFromSeconds(Runner, fireBallCooldown);
         }
     }
 
     private void Stomp()
     {
-        if (stompCooldownTimer.ExpiredOrNotRunning(Runner) && Object.HasInputAuthority)
+        if (stompCooldownTimer.ExpiredOrNotRunning(Runner))
         {
             int hitCounts = Runner.LagCompensation.OverlapSphere(transform.position, detectedColisionStompSphereRadius, Object.InputAuthority, hits, collisionLayers, HitOptions.IncludePhysX);
 
-            RpcHandler.OnStomp();
+            if (Object.HasInputAuthority) 
+            {
+                Debug.Log("PLAY RPC");
+                RpcHandler.OnStomp();
+            }
 
             if (hitCounts > 0)
             {
-
                 Debug.Log("Inside is Stomp HITS");
 
                 for (int i = 0; i < hitCounts; i++)
@@ -157,7 +164,12 @@ public class MagicHandler : NetworkBehaviour
             {
                 Debug.Log("Inside is ANIMATION STOMP");
 
-                InputManager.Instance.IsStomp = true;
+                if (Object.HasInputAuthority) 
+                {
+                    InputManager.Instance.IsStomp = true;
+
+                    Debug.Log("LOCK INPUT MANAGER");
+                }
 
                 Animator.SetBool(GameData.Animator.StompBool, true);
 
@@ -197,7 +209,10 @@ public class MagicHandler : NetworkBehaviour
     public void StompAnimationEvent()
     {
         Animator.SetBool(GameData.Animator.StompBool, false);
-        InputManager.Instance.IsStomp = false;
+        if (Object.HasInputAuthority)
+        {
+            InputManager.Instance.IsStomp = false;
+        }
         IsStomp = false;
     }
 
