@@ -277,13 +277,6 @@ MonoBehaviour:
     LensShift: {x: 0, y: 0}
     GateFit: 2
     m_SensorSize: {x: 1, y: 1}
-    Iso: 200
-    ShutterSpeed: 0.005
-    Aperture: 16
-    BladeCount: 5
-    Curvature: {x: 2, y: 11}
-    BarrelClipping: 0.25
-    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2640,7 +2633,7 @@ MonoBehaviour:
   - {fileID: 8078922257978301839, guid: 5b38a16cd1fcf12488b49512ccb6a5f6, type: 3}
   - {fileID: 573547098334549359, guid: b7f86a6bec370cf4097567311ca098d6, type: 3}
   - {fileID: 2481807847447787653, guid: 8750ee51a472adb4e9320e8c8aae856d, type: 3}
-  stompPrefab: {fileID: 1576947433937734, guid: 3a1ab18e6861a8940aa332e72f024271, type: 3}
+  stompPrefab: {fileID: 1284181884384144, guid: fe7c23778cfca0b4b8fe58b2ec78843b, type: 3}
 --- !u!114 &6320662753772804733
 MonoBehaviour:
   m_ObjectHideFlags: 0
