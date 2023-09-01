@@ -9,7 +9,7 @@ public class HpHandler : NetworkBehaviour
     public HitboxRoot hitboxRoot;
     public Slider healthSlider;
 
-    private const byte startingHP = 100;
+    public const byte startingHP = 100;
 
     public bool IsActive { get; set; }
     public bool IsLavaInfluence { get; set; }

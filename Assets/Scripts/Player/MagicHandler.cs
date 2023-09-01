@@ -8,7 +8,6 @@ public class MagicHandler : NetworkBehaviour
     [Header("Magic settings")]
     public float fireBallCooldown = 2.0f;
     public float stompCooldown = 3.0f;
-    public float fireBallTimeBeforAppearence = 0.5f;
     public float stompDelay = 0.5f;
     public float aimVectorBooster = 2f;
 

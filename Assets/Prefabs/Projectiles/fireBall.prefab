@@ -4926,7 +4926,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  liveTime: 10
+  liveTime: 7
   detectedColisionSphereRadius: 0.5
   explosionSphereRadius: 2
   rocketSpeed: 10
