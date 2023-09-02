@@ -53,11 +53,21 @@ public class MagicHandler : NetworkBehaviour
     private List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
 
 
+    private CoolDownMagic coolDownFireBall;
+    private CoolDownMagic coolDownStomp;
+
+
     private void Awake()
     {
         fireVector = Vector3.zero;
         IsFire = false;
         IsStomp = false;
+    }
+
+    private void Start()
+    {
+        coolDownFireBall = GameObject.FindGameObjectWithTag(GameData.JoystickTags.CoolFireBall).GetComponent<CoolDownMagic>();
+        coolDownStomp = GameObject.FindGameObjectWithTag(GameData.JoystickTags.CoolDownStomp).GetComponent<CoolDownMagic>();
     }
 
     public override void FixedUpdateNetwork()
@@ -75,12 +85,14 @@ public class MagicHandler : NetworkBehaviour
             if (networkInputData.isStompButtonPresed)
             {
                 IsStomp = true;
+                coolDownStomp.ActivateCooldown();
             }
 
-            if (networkInputData.isFireBallButtonPresed)
+            if (networkInputData.isFireBallButtonPresed && IsStomp != true)
             {
                 IsFire = true;
                 fireVector = networkInputData.fireInput;
+                coolDownFireBall.ActivateCooldown();
             }
         }
     }
@@ -114,7 +126,7 @@ public class MagicHandler : NetworkBehaviour
         {
             int hitCounts = Runner.LagCompensation.OverlapSphere(transform.position, detectedColisionStompSphereRadius, Object.InputAuthority, hits, collisionLayers, HitOptions.IncludePhysX);
 
-            if (Object.HasInputAuthority) 
+            if (Object.HasInputAuthority)
             {
                 Debug.Log("PLAY RPC");
                 RpcHandler.OnStomp();
@@ -144,7 +156,7 @@ public class MagicHandler : NetworkBehaviour
                         //customize final stomp vector depends on distance
                         var booster = CalculateBoosterDependsOnDistance(detectedColisionStompSphereRadius, pushVector);
                         Debug.Log("BOOSTER: " + booster);
-                        
+
                         characterController.SetPushDestinationAndTime(pushVector * booster, stompDuration);
                     }
                 }
@@ -163,14 +175,6 @@ public class MagicHandler : NetworkBehaviour
             if (stompCooldownTimer.ExpiredOrNotRunning(Runner))
             {
                 Debug.Log("Inside is ANIMATION STOMP");
-
-                if (Object.HasInputAuthority) 
-                {
-                    InputManager.Instance.IsStomp = true;
-
-                    Debug.Log("LOCK INPUT MANAGER");
-                }
-
                 Animator.SetBool(GameData.Animator.StompBool, true);
 
                 //Stomp take too much time if run before animation and it starts with a big delay 
@@ -209,10 +213,6 @@ public class MagicHandler : NetworkBehaviour
     public void StompAnimationEvent()
     {
         Animator.SetBool(GameData.Animator.StompBool, false);
-        if (Object.HasInputAuthority)
-        {
-            InputManager.Instance.IsStomp = false;
-        }
         IsStomp = false;
     }
 
