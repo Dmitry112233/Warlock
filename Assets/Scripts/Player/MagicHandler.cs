@@ -52,10 +52,8 @@ public class MagicHandler : NetworkBehaviour
 
     private List<LagCompensatedHit> hits = new List<LagCompensatedHit>();
 
-
     private CoolDownMagic coolDownFireBall;
     private CoolDownMagic coolDownStomp;
-
 
     private void Awake()
     {
@@ -85,14 +83,22 @@ public class MagicHandler : NetworkBehaviour
             if (networkInputData.isStompButtonPresed)
             {
                 IsStomp = true;
-                coolDownStomp.ActivateCooldown();
+
+                if (Object.HasInputAuthority) 
+                {
+                    coolDownStomp.ActivateCooldown();
+                }
             }
 
             if (networkInputData.isFireBallButtonPresed && IsStomp != true)
             {
                 IsFire = true;
                 fireVector = networkInputData.fireInput;
-                coolDownFireBall.ActivateCooldown();
+
+                if (Object.HasInputAuthority)
+                {
+                    coolDownFireBall.ActivateCooldown();
+                }
             }
         }
     }

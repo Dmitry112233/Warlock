@@ -18,14 +18,13 @@ public class MovementHandler : NetworkBehaviour
                 var movementDirection = new Vector3(networkInputData.movementInput.x, 0, networkInputData.movementInput.z);
                 movementDirection.Normalize();
                 CharacterControllerCustom.Move(movementDirection);
+                CharacterControllerCustom.Gravity();
             }  
         }
         if (CharacterControllerCustom.PushDestinationPoint != Vector3.zero) 
         {
             CharacterControllerCustom.Push();
         }
-
-        CharacterControllerCustom.Gravity();
     }
 
     public override void Render()

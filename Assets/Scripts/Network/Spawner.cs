@@ -32,7 +32,6 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         //Here call the method which check the count of players and respawn them with timer
     }
 
-
     public void OnInput(NetworkRunner runner, NetworkInput input) 
     {
         if(characterInputHandler == null && NetworkPlayer.Local != null) 
