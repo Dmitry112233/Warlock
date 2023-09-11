@@ -4929,7 +4929,7 @@ MonoBehaviour:
   liveTime: 7
   detectedColisionSphereRadius: 0.5
   explosionSphereRadius: 2
-  rocketSpeed: 10
+  rocketSpeed: 6.5
   pushBooster: 4
   pushDuration: 1.5
   damage: 10

@@ -802,6 +802,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Android: FUSION_WEAVER
     Standalone: FUSION_WEAVER
+    iPhone: FUSION_WEAVER
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

@@ -2540,8 +2540,8 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
-  speed: 4
-  maxSpeed: 4
+  speed: 3
+  maxSpeed: 3
   rotationSpeed: 4
   rotationOnFireSpeed: 100
   animationBlendSpeed: 0.05

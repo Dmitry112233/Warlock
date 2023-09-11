@@ -86,10 +86,13 @@ public class CharacterControllerCustom : NetworkTransform
             if (direction != default && MagicHandler.IsFire != true)
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime);
-                movementAnimationSpeed = 1.0f;
+                movementAnimationSpeed = 0.7f;
             }
 
             //direction.y = ySpeed;
+
+            Debug.Log("SPEED IS:" + speed);
+
             Controller.Move(direction * speed * deltaTime);
             Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
         }
@@ -143,7 +146,7 @@ public class CharacterControllerCustom : NetworkTransform
 
     public void SetPushDestinationAndTime(Vector3 pushDestinationPoint, float time)
     {
-        PushDestinationPoint += pushDestinationPoint;
+        PushDestinationPoint = pushDestinationPoint;
         PushDestinationPoint = transform.position + PushDestinationPoint;
         pushTimer = TickTimer.CreateFromSeconds(Runner, time);
     }

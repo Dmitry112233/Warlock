@@ -95,6 +95,9 @@ public class MagicHandler : NetworkBehaviour
                 IsFire = true;
                 fireVector = networkInputData.fireInput;
 
+                CharacterControllerCustom.RotateOnFire(fireVector);
+                FireBallShot();
+
                 if (Object.HasInputAuthority)
                 {
                     coolDownFireBall.ActivateCooldown();
@@ -190,17 +193,7 @@ public class MagicHandler : NetworkBehaviour
 
         if (IsFire == true)
         {
-            if (fireBallCooldownTimer.ExpiredOrNotRunning(Runner))
-            {
-                Debug.Log("Inside is Attack");
-
-                CharacterControllerCustom.RotateOnFire(fireVector);
-
-                Animator.SetBool(GameData.Animator.AttackBool, true);
-
-                FireBallShot();
-            }
-
+            Animator.SetBool(GameData.Animator.AttackBool, true);
             IsFire = false;
         }
     }

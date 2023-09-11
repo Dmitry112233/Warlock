@@ -74,10 +74,10 @@ public class FireBallHandler : NetworkBehaviour
                         rpcHandler.OnTakenHit();
 
                         characterController.SetPushDestinationAndTime(pushVector * pushBooster, pushDuration);
+
+                        Runner.Despawn(NetworkObject);
                     }
                 }
-
-                Runner.Despawn(NetworkObject);
             }
         }
     }

@@ -59,7 +59,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) 
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
         Debug.Log("________________________________PLAYER LEFT TO MAIN MENU");
     }
 
@@ -95,7 +95,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) 
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
         Debug.Log("__________________ON SHUTDOWN");
     }
 
