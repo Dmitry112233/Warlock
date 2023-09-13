@@ -73,7 +73,7 @@ public class FireBallHandler : NetworkBehaviour
                         rpcHandler.OnTakeFireBall();
                         rpcHandler.OnTakenHit();
 
-                        characterController.SetPushDestinationAndTime(pushVector * pushBooster, pushDuration);
+                        characterController.SetPushDestinationAndTime(pushVector * pushBooster, pushDuration, 0f);
 
                         Runner.Despawn(NetworkObject);
                     }

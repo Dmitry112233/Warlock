@@ -10,7 +10,7 @@ public class CharacterControllerCustom : NetworkTransform
     public float rotationSpeed = 15.0f;
     public float rotationOnFireSpeed = 2000f;
     public float animationBlendSpeed = 0.05f;
-    public float pushInterpolationSpeed = 3.0f;
+    public float pushInterpolationSpeed = 3.0f; 
 
     public float gravity = -9.8f;
     private float ySpeed;
@@ -35,7 +35,9 @@ public class CharacterControllerCustom : NetworkTransform
 
     private Animator animator;
     public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
+    
     private float movementAnimationSpeed;
+    private float maxMovementAnimationSpeed = 1f;
 
 
     /// <summary>
@@ -73,23 +75,13 @@ public class CharacterControllerCustom : NetworkTransform
             var deltaTime = Runner.DeltaTime;
             var previousPos = transform.position;
 
-           /* ySpeed += gravity * deltaTime;
-
-            if (Controller.isGrounded)
-            {
-                Debug.Log("IS GROUNDED");
-                ySpeed = -0.5f;
-            }*/
-
             direction = direction.normalized;
 
             if (direction != default && MagicHandler.IsFire != true)
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime);
-                movementAnimationSpeed = 0.7f;
+                movementAnimationSpeed = maxMovementAnimationSpeed;
             }
-
-            //direction.y = ySpeed;
 
             Debug.Log("SPEED IS:" + speed);
 
@@ -141,14 +133,18 @@ public class CharacterControllerCustom : NetworkTransform
         else
         {
             PushDestinationPoint = Vector3.zero;
+            SetSpeed(maxSpeed);
+            maxMovementAnimationSpeed = 1f;
         }
     }
 
-    public void SetPushDestinationAndTime(Vector3 pushDestinationPoint, float time)
+    public void SetPushDestinationAndTime(Vector3 pushDestinationPoint, float time, float speed)
     {
         PushDestinationPoint = pushDestinationPoint;
         PushDestinationPoint = transform.position + PushDestinationPoint;
         pushTimer = TickTimer.CreateFromSeconds(Runner, time);
+        SetSpeed(speed);
+        maxMovementAnimationSpeed = 0.6f;
     }
 
     public void SetSpeed(float speed)
