@@ -112,7 +112,7 @@ public class MagicHandler : NetworkBehaviour
         {
             fireVector.Normalize();
 
-            var initPosition = transform.position + fireVector;
+            var initPosition = transform.position;
             initPosition.y = 1.5f;
 
             Runner.Spawn(fireBallPrefab, initPosition, Quaternion.LookRotation(fireVector), Object.InputAuthority, (runner, spawnedFireBall) =>
@@ -166,7 +166,7 @@ public class MagicHandler : NetworkBehaviour
                         var booster = CalculateBoosterDependsOnDistance(detectedColisionStompSphereRadius, pushVector);
                         Debug.Log("BOOSTER: " + booster);
 
-                        characterController.SetPushDestinationAndTime(pushVector * booster, stompDuration);
+                        characterController.SetPushDestinationAndTime(pushVector * booster, stompDuration, 0f);
                     }
                 }
 
@@ -194,7 +194,6 @@ public class MagicHandler : NetworkBehaviour
         if (IsFire == true)
         {
             Animator.SetBool(GameData.Animator.AttackBool, true);
-            IsFire = false;
         }
     }
 
@@ -207,6 +206,7 @@ public class MagicHandler : NetworkBehaviour
     public void FireBallAnimationEvent()
     {
         Animator.SetBool(GameData.Animator.AttackBool, false);
+        IsFire = false;
     }
 
     public void StompAnimationEvent()

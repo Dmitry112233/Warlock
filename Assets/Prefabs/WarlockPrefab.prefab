@@ -2412,8 +2412,8 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2.5
-  m_Radius: 0.3
+  m_Height: 2.29
+  m_Radius: 0.65
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -2540,8 +2540,8 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
-  speed: 3
-  maxSpeed: 3
+  speed: 4
+  maxSpeed: 4
   rotationSpeed: 4
   rotationOnFireSpeed: 100
   animationBlendSpeed: 0.05
@@ -2579,7 +2579,7 @@ MonoBehaviour:
   stompDelay: 1
   aimVectorBooster: 2
   stompBooster: 3
-  stompDuration: 3
+  stompDuration: 1
   stompDamage: 10
   ownStompDamage: 6
   detectedColisionStompSphereRadius: 1.5
@@ -4070,7 +4070,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 1
   SphereRadius: 0
-  BoxExtents: {x: 0.35, y: 0.96, z: 0.35}
+  BoxExtents: {x: 0.5, y: 0.96, z: 0.5}
   Offset: {x: 0, y: -0.35, z: 0}
   Root: {fileID: 0}
   GizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}

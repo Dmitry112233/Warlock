@@ -13,13 +13,13 @@ public class MovementHandler : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData networkInputData))
         {
-            if(MagicHandler.IsStomp != true) 
+            if(MagicHandler.IsStomp != true && MagicHandler.IsFire != true) 
             {
                 var movementDirection = new Vector3(networkInputData.movementInput.x, 0, networkInputData.movementInput.z);
                 movementDirection.Normalize();
                 CharacterControllerCustom.Move(movementDirection);
-                CharacterControllerCustom.Gravity();
-            }  
+            }
+            CharacterControllerCustom.Gravity();
         }
         if (CharacterControllerCustom.PushDestinationPoint != Vector3.zero) 
         {
