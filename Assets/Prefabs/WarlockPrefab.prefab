@@ -920,6 +920,37 @@ Transform:
   m_Father: {fileID: 1675155435730681665}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1716731654038319256
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8225361499181027715}
+  m_Layer: 0
+  m_Name: InitProjectilePosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8225361499181027715
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716731654038319256}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5370970629003890025}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1735127405895581318
 GameObject:
   m_ObjectHideFlags: 0
@@ -1172,37 +1203,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5422720693241274277}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2309841461496714738
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1577627665681276635}
-  m_Layer: 0
-  m_Name: ProjectileInitPosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1577627665681276635
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2309841461496714738}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 1.5, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5370970629003890025}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2317491683914462518
 GameObject:
@@ -2166,7 +2166,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5370970629003890025}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &5064283484198293760
 LineRenderer:
@@ -2375,9 +2375,9 @@ Transform:
   - {fileID: 7202558521979165597}
   - {fileID: 963194228}
   - {fileID: 1662263481}
-  - {fileID: 1577627665681276635}
   - {fileID: 4327410316771831304}
   - {fileID: 8174964584038245838}
+  - {fileID: 8225361499181027715}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2449,7 +2449,6 @@ MonoBehaviour:
   - {fileID: 61630028167718098}
   - {fileID: -1952841308679044025}
   - {fileID: 6320662753772804733}
-  - {fileID: 3235345097386347139}
   SimulationBehaviours: []
 --- !u!114 &543450653139475193
 MonoBehaviour:
@@ -2582,12 +2581,12 @@ MonoBehaviour:
   stompDuration: 1
   stompDamage: 10
   ownStompDamage: 6
-  detectedColisionStompSphereRadius: 1.5
+  detectedColisionStompSphereRadius: 2.5
   collisionLayers:
     serializedVersion: 2
     m_Bits: 64
   fireBallPrefab: {fileID: 4304298449107023081, guid: a7ae7e4cb3e44134ca8506910a20434d, type: 3}
-  initProjectilePosition: {fileID: 1577627665681276635}
+  initProjectilePosition: {fileID: 8225361499181027715}
 --- !u!114 &-1444219190172477757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3221,8 +3220,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.121, y: 2.52}
-  m_SizeDelta: {x: 71.5876, y: 20}
+  m_AnchoredPosition: {x: 0, y: 2.52}
+  m_SizeDelta: {x: 72, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8434600065888423702
 MonoBehaviour:
@@ -3287,7 +3286,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f43e8ea3d85393d4db4f835396ed15ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
 --- !u!1 &6114308399988697325
 GameObject:
   m_ObjectHideFlags: 0
@@ -4054,7 +4052,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5370970629003890025}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2927799971178205071
 MonoBehaviour:
