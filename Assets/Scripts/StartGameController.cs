@@ -31,12 +31,12 @@ public class StartGameController : MonoBehaviour
 
                     if(i == 0) 
                     {
-                        players[i].transform.position = new Vector3(-17.26f, 0.5f, 0f);
+                        players[i].transform.position = new Vector3(-10.8f, 0.5f, 0f);
                         players[i].transform.rotation = Quaternion.LookRotation(Vector3.right);
                     }
                     else 
                     {
-                        players[i].transform.position = new Vector3(17.26f, 0.5f, 0f);
+                        players[i].transform.position = new Vector3(10.8f, 0.5f, 0f);
                         players[i].transform.rotation = Quaternion.LookRotation(Vector3.left);
                     }
 

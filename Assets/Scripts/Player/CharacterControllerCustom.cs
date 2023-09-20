@@ -97,7 +97,6 @@ public class CharacterControllerCustom : NetworkTransform
     public void Gravity()
     {
         var deltaTime = Runner.DeltaTime;
-        var previousPos = transform.position;
 
         ySpeed += gravity * deltaTime;
 

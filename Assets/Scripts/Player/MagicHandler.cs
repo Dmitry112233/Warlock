@@ -15,7 +15,7 @@ public class MagicHandler : NetworkBehaviour
     public float stompDuration = 3f;
     public float stompDamage = 10;
     public float ownStompDamage = 7;
-    public float detectedColisionStompSphereRadius = 1f;
+    public float detectedColisionStompSphereRadius = 2.5f;
     public LayerMask collisionLayers;
 
     [Header("Prefabs")]
@@ -112,10 +112,7 @@ public class MagicHandler : NetworkBehaviour
         {
             fireVector.Normalize();
 
-            var initPosition = transform.position;
-            initPosition.y = 1.5f;
-
-            Runner.Spawn(fireBallPrefab, initPosition, Quaternion.LookRotation(fireVector), Object.InputAuthority, (runner, spawnedFireBall) =>
+            Runner.Spawn(fireBallPrefab, initProjectilePosition.position, Quaternion.LookRotation(fireVector), Object.InputAuthority, (runner, spawnedFireBall) =>
                 {
                     spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, NetworkObject);
                 });
@@ -159,14 +156,16 @@ public class MagicHandler : NetworkBehaviour
                     {
                         hPHandler.OnTakeDamage(stompDamage);
                         rpcHandler.OnTakenHit();
-                        Debug.Log("PUSH VECTOR MAGNITUDE: " + pushVector.magnitude);
+                        Debug.Log("STOMP PUSH VECTOR MAGNITUDE: " + pushVector.magnitude);
 
 
                         //customize final stomp vector depends on distance
-                        var booster = CalculateBoosterDependsOnDistance(detectedColisionStompSphereRadius, pushVector);
-                        Debug.Log("BOOSTER: " + booster);
+                        var calculatedBoosterAndDuration = CalculateBoosterAndDurationDependsOnDistance(pushVector);
+                        Debug.Log("STOOMP BOOSTER: " + calculatedBoosterAndDuration.booster);
 
-                        characterController.SetPushDestinationAndTime(pushVector * booster, stompDuration, 0f);
+                        pushVector.Normalize();
+
+                        characterController.SetPushDestinationAndTime(pushVector * calculatedBoosterAndDuration.booster, calculatedBoosterAndDuration.duration, 0f);
                     }
                 }
 
@@ -221,21 +220,19 @@ public class MagicHandler : NetworkBehaviour
         Gizmos.DrawWireSphere(transform.position, detectedColisionStompSphereRadius);
     }
 
-    private float CalculateBoosterDependsOnDistance(float detectedColisionStompSphereRadius, Vector3 pushVector)
+    private (float booster, float duration) CalculateBoosterAndDurationDependsOnDistance(Vector3 pushVector)
     {
-        var step = detectedColisionStompSphereRadius / 3f;
-
-        if (pushVector.magnitude <= step + 0.2f)
+        if (pushVector.magnitude <= 1.5f)
         {
-            return stompBooster * 4f;
+            return (stompBooster * 3f, 1f);
         }
-        else if (pushVector.magnitude > step + 0.2f && pushVector.magnitude <= step * 2 + 0.2f)
+        else if (pushVector.magnitude <= 2.2f)
         {
-            return stompBooster * 2f;
+            return (stompBooster * 2f, 0.6f);
         }
         else
         {
-            return stompBooster * 1f;
+            return (stompBooster, 0.3f);
         }
     }
 }

@@ -1,7 +1,7 @@
 using Fusion;
 using UnityEngine;
 
-public class FreezeRotation : NetworkBehaviour
+public class FreezeRotation : MonoBehaviour
 {
     private Camera _camera;
 
@@ -10,11 +10,11 @@ public class FreezeRotation : NetworkBehaviour
         _camera = Camera.main;
     }
 
-    public override void FixedUpdateNetwork()
+    private void Update()
     {
         if (transform != null && _camera != null)
         {
-            transform.rotation = Quaternion.LookRotation(transform.position - _camera.transform.position);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.position - _camera.transform.position), 0.2f);
         }
     }
 }
