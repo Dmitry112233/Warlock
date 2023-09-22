@@ -132,12 +132,6 @@ public class MagicHandler : NetworkBehaviour
         {
             int hitCounts = Runner.LagCompensation.OverlapSphere(transform.position, detectedColisionStompSphereRadius, Object.InputAuthority, hits, collisionLayers, HitOptions.IncludePhysX);
 
-            if (Object.HasInputAuthority)
-            {
-                Debug.Log("PLAY RPC");
-                RpcHandler.OnStomp();
-            }
-
             if (hitCounts > 0)
             {
                 Debug.Log("Inside is Stomp HITS");
@@ -156,8 +150,6 @@ public class MagicHandler : NetworkBehaviour
                     {
                         hPHandler.OnTakeDamage(stompDamage);
                         rpcHandler.OnTakenHit();
-                        Debug.Log("STOMP PUSH VECTOR MAGNITUDE: " + pushVector.magnitude);
-
 
                         //customize final stomp vector depends on distance
                         var calculatedBoosterAndDuration = CalculateBoosterAndDurationDependsOnDistance(pushVector);
@@ -170,6 +162,12 @@ public class MagicHandler : NetworkBehaviour
                 }
 
                 stompCooldownTimer = TickTimer.CreateFromSeconds(Runner, stompCooldown);
+            }
+
+            if (Object.HasInputAuthority)
+            {
+                Debug.Log("PLAY RPC");
+                RpcHandler.OnStomp();
             }
 
             HpHandler.OnTakeDamage(ownStompDamage);
@@ -222,17 +220,17 @@ public class MagicHandler : NetworkBehaviour
 
     private (float booster, float duration) CalculateBoosterAndDurationDependsOnDistance(Vector3 pushVector)
     {
-        if (pushVector.magnitude <= 1.5f)
+        if (pushVector.magnitude <= 1.6f)
         {
             return (stompBooster * 3f, 1f);
         }
-        else if (pushVector.magnitude <= 2.2f)
+        else if (pushVector.magnitude <= 2.3f)
         {
             return (stompBooster * 2f, 0.6f);
         }
         else
         {
-            return (stompBooster, 0.3f);
+            return (stompBooster * 1.5f, 0.5f);
         }
     }
 }
