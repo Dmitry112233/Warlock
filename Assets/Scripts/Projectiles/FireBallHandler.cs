@@ -14,6 +14,8 @@ public class FireBallHandler : NetworkBehaviour
     public float damage = 10;
     public float OnDrawSpere = 0.5f;
 
+    private float rocketSpeedInterpolate = 0f;
+
     [Header("Prefab")]
     public List<GameObject> explosionsParticles;
 
@@ -39,7 +41,18 @@ public class FireBallHandler : NetworkBehaviour
 
     public override void FixedUpdateNetwork() 
     {
-        transform.position += transform.forward * Runner.DeltaTime * rocketSpeed;
+        if (rocketSpeedInterpolate < rocketSpeed)
+        {
+            rocketSpeedInterpolate += 100 * Runner.DeltaTime;
+        }
+        else
+        {
+            rocketSpeedInterpolate = rocketSpeed;
+        }
+
+        Debug.Log("ROCKET SPEED:" + rocketSpeedInterpolate);
+
+        transform.position += transform.forward * Runner.DeltaTime * rocketSpeedInterpolate;
 
         if (Object.HasStateAuthority) 
         {
