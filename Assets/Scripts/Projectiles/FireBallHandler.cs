@@ -89,7 +89,7 @@ public class FireBallHandler : NetworkBehaviour
 
                         Debug.Log("FIRE BALL PUSH VECTOR: " + pushVector);
 
-                        characterController.SetPushVectorTimeAndSpeed(pushVector, pushDuration, 8f);
+                        characterController.SetPushVectorTimeAndSpeed(pushVector, pushDuration, 12f);
 
                         Runner.Despawn(NetworkObject);
                     }

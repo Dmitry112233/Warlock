@@ -84,7 +84,7 @@ public class MagicHandler : NetworkBehaviour
             {
                 IsStomp = true;
 
-                if (Object.HasInputAuthority) 
+                if (Object.HasInputAuthority)
                 {
                     coolDownStomp.ActivateCooldown();
                 }
@@ -148,7 +148,7 @@ public class MagicHandler : NetworkBehaviour
                         RpcHandler rpcHandler = hits[i].Hitbox.transform.root.GetComponent<RpcHandler>();
 
                         Vector3 pushVector = playerTransform.position - transform.position;
-                        pushVector.Normalize();
+
                         pushVector.y = 0;
 
                         if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != NetworkObject))
@@ -159,8 +159,7 @@ public class MagicHandler : NetworkBehaviour
                             //customize final stomp vector depends on distance
                             var calculatedBoosterAndDuration = CalculateSpeedAndDurationDependsOnDistance(pushVector);
 
-                            Debug.Log("STOMP PUSH VECTOR: " + pushVector);
-
+                            pushVector.Normalize();
                             characterController.SetPushVectorTimeAndSpeed(pushVector, calculatedBoosterAndDuration.duration, calculatedBoosterAndDuration.speed);
                         }
                     }
@@ -219,6 +218,13 @@ public class MagicHandler : NetworkBehaviour
 
     private (float speed, float duration) CalculateSpeedAndDurationDependsOnDistance(Vector3 pushVector)
     {
-        return (10f, 0.7f);
+        if(pushVector.magnitude <= 1.5f)
+        {
+            return (15f, 1f);
+        }
+        else
+        {
+            return (10f, 1f);
+        }
     }
 }

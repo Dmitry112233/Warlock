@@ -4931,7 +4931,7 @@ MonoBehaviour:
   explosionSphereRadius: 1
   rocketSpeed: 7.9
   pushBooster: 5
-  pushDuration: 0.5
+  pushDuration: 1
   damage: 0.01
   OnDrawSpere: 0.23
   explosionsParticles:
@@ -29272,7 +29272,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2705166418258563894}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.12}
+  m_LocalPosition: {x: 0, y: 0, z: 1.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

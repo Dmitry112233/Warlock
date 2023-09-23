@@ -86,8 +86,11 @@ public class CharacterControllerCustom : NetworkTransform
                 movementAnimationSpeed = maxMovementAnimationSpeed;
             }
 
-            Controller.Move(direction * speed * deltaTime);
-            Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
+            if (!IsPushed) 
+            {
+                Controller.Move(direction * speed * deltaTime);
+                Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
+            }
         }
         else
         {
@@ -128,12 +131,16 @@ public class CharacterControllerCustom : NetworkTransform
         if (!PushTimer.Expired(Runner))
         {
             transform.position += PushDestinationPoint * Runner.DeltaTime * PushSpeed;
+
+            if(PushSpeed > 0f) 
+            {
+                PushSpeed -= 12 * Runner.DeltaTime;
+            }
         }
         else
         {
             IsPushed = false;
-            
-            SetSpeed(maxSpeed);
+            PushSpeed = 0f;
             maxMovementAnimationSpeed = 1f;
         }
     }
@@ -148,8 +155,6 @@ public class CharacterControllerCustom : NetworkTransform
         PushTimer = TickTimer.CreateFromSeconds(Runner, time);
         
         PushSpeed = speed;
-
-        SetSpeed(0f);
         maxMovementAnimationSpeed = 0.6f;
     }
 
