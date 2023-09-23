@@ -1,4 +1,5 @@
 using Fusion;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -18,8 +19,10 @@ public class CharacterControllerCustom : NetworkTransform
     [Networked]
     public Vector3 Velocity { get; set; }
 
+    public bool IsPushed { get; private set; }
     public Vector3 PushDestinationPoint { get; set; }
-    public TickTimer pushTimer = TickTimer.None;
+    public float PushSpeed { get; set; }
+    public TickTimer PushTimer = TickTimer.None;
 
     private MagicHandler magicHandler;
     private MagicHandler MagicHandler { get { return magicHandler = magicHandler ?? GetComponent<MagicHandler>(); } }
@@ -83,8 +86,6 @@ public class CharacterControllerCustom : NetworkTransform
                 movementAnimationSpeed = maxMovementAnimationSpeed;
             }
 
-            Debug.Log("SPEED IS:" + speed);
-
             Controller.Move(direction * speed * deltaTime);
             Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
         }
@@ -102,7 +103,6 @@ public class CharacterControllerCustom : NetworkTransform
 
         if (Controller.isGrounded)
         {
-            Debug.Log("IS GROUNDED");
             ySpeed = -0.5f;
         }
 
@@ -125,24 +125,31 @@ public class CharacterControllerCustom : NetworkTransform
 
     public void Push()
     {
-        if (!pushTimer.Expired(Runner))
+        if (!PushTimer.Expired(Runner))
         {
-            transform.position = Vector3.Lerp(transform.position, PushDestinationPoint, pushInterpolationSpeed * Runner.DeltaTime);
+            transform.position += PushDestinationPoint * Runner.DeltaTime * PushSpeed;
         }
         else
         {
-            PushDestinationPoint = Vector3.zero;
+            IsPushed = false;
+            
             SetSpeed(maxSpeed);
             maxMovementAnimationSpeed = 1f;
         }
     }
 
-    public void SetPushDestinationAndTime(Vector3 pushDestinationPoint, float time, float speed)
+    public void SetPushVectorTimeAndSpeed(Vector3 pushVector, float time, float speed)
     {
-        PushDestinationPoint = pushDestinationPoint;
-        PushDestinationPoint = transform.position + PushDestinationPoint;
-        pushTimer = TickTimer.CreateFromSeconds(Runner, time);
-        SetSpeed(speed);
+        IsPushed = true;
+
+        PushDestinationPoint = pushVector;
+        PushDestinationPoint.Normalize();
+        
+        PushTimer = TickTimer.CreateFromSeconds(Runner, time);
+        
+        PushSpeed = speed;
+
+        SetSpeed(0f);
         maxMovementAnimationSpeed = 0.6f;
     }
 

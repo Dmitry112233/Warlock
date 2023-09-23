@@ -21,7 +21,7 @@ public class MovementHandler : NetworkBehaviour
             }
             CharacterControllerCustom.Gravity();
         }
-        if (CharacterControllerCustom.PushDestinationPoint != Vector3.zero) 
+        if (CharacterControllerCustom.IsPushed) 
         {
             CharacterControllerCustom.Push();
         }

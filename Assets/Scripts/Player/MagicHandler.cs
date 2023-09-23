@@ -130,47 +130,46 @@ public class MagicHandler : NetworkBehaviour
     {
         if (stompCooldownTimer.ExpiredOrNotRunning(Runner))
         {
-            int hitCounts = Runner.LagCompensation.OverlapSphere(transform.position, detectedColisionStompSphereRadius, Object.InputAuthority, hits, collisionLayers, HitOptions.IncludePhysX);
-
-            if (hitCounts > 0)
+            if (Object.HasStateAuthority)
             {
-                Debug.Log("Inside is Stomp HITS");
+                RpcHandler.OnStomp();
 
-                for (int i = 0; i < hitCounts; i++)
+                int hitCounts = Runner.LagCompensation.OverlapSphere(transform.position, detectedColisionStompSphereRadius, Object.InputAuthority, hits, collisionLayers, HitOptions.IncludePhysX);
+
+                if (hitCounts > 0)
                 {
-                    HpHandler hPHandler = hits[i].Hitbox.transform.root.GetComponent<HpHandler>();
-                    Transform playerTransform = hits[i].Hitbox.transform.root.GetComponent<Transform>();
-                    CharacterControllerCustom characterController = hits[i].Hitbox.transform.root.GetComponent<CharacterControllerCustom>();
-                    RpcHandler rpcHandler = hits[i].Hitbox.transform.root.GetComponent<RpcHandler>();
+                    Debug.Log("Inside is Stomp HITS");
 
-                    Vector3 pushVector = playerTransform.position - transform.position;
-                    pushVector.y = 0;
-
-                    if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != NetworkObject))
+                    for (int i = 0; i < hitCounts; i++)
                     {
-                        hPHandler.OnTakeDamage(stompDamage);
-                        rpcHandler.OnTakenHit();
+                        HpHandler hPHandler = hits[i].Hitbox.transform.root.GetComponent<HpHandler>();
+                        Transform playerTransform = hits[i].Hitbox.transform.root.GetComponent<Transform>();
+                        CharacterControllerCustom characterController = hits[i].Hitbox.transform.root.GetComponent<CharacterControllerCustom>();
+                        RpcHandler rpcHandler = hits[i].Hitbox.transform.root.GetComponent<RpcHandler>();
 
-                        //customize final stomp vector depends on distance
-                        var calculatedBoosterAndDuration = CalculateBoosterAndDurationDependsOnDistance(pushVector);
-                        Debug.Log("STOOMP BOOSTER: " + calculatedBoosterAndDuration.booster);
-
+                        Vector3 pushVector = playerTransform.position - transform.position;
                         pushVector.Normalize();
+                        pushVector.y = 0;
 
-                        characterController.SetPushDestinationAndTime(pushVector * calculatedBoosterAndDuration.booster, calculatedBoosterAndDuration.duration, 0f);
+                        if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != NetworkObject))
+                        {
+                            hPHandler.OnTakeDamage(stompDamage);
+                            rpcHandler.OnTakenHit();
+
+                            //customize final stomp vector depends on distance
+                            var calculatedBoosterAndDuration = CalculateSpeedAndDurationDependsOnDistance(pushVector);
+
+                            Debug.Log("STOMP PUSH VECTOR: " + pushVector);
+
+                            characterController.SetPushVectorTimeAndSpeed(pushVector, calculatedBoosterAndDuration.duration, calculatedBoosterAndDuration.speed);
+                        }
                     }
+
+                    stompCooldownTimer = TickTimer.CreateFromSeconds(Runner, stompCooldown);
                 }
 
-                stompCooldownTimer = TickTimer.CreateFromSeconds(Runner, stompCooldown);
+                HpHandler.OnTakeDamage(ownStompDamage);
             }
-
-            if (Object.HasInputAuthority)
-            {
-                Debug.Log("PLAY RPC");
-                RpcHandler.OnStomp();
-            }
-
-            HpHandler.OnTakeDamage(ownStompDamage);
         }
     }
 
@@ -218,19 +217,8 @@ public class MagicHandler : NetworkBehaviour
         Gizmos.DrawWireSphere(transform.position, detectedColisionStompSphereRadius);
     }
 
-    private (float booster, float duration) CalculateBoosterAndDurationDependsOnDistance(Vector3 pushVector)
+    private (float speed, float duration) CalculateSpeedAndDurationDependsOnDistance(Vector3 pushVector)
     {
-        if (pushVector.magnitude <= 1.6f)
-        {
-            return (stompBooster * 3f, 1f);
-        }
-        else if (pushVector.magnitude <= 2.3f)
-        {
-            return (stompBooster * 2f, 0.6f);
-        }
-        else
-        {
-            return (stompBooster * 1.5f, 0.5f);
-        }
+        return (10f, 0.7f);
     }
 }

@@ -2544,7 +2544,7 @@ MonoBehaviour:
   rotationSpeed: 4
   rotationOnFireSpeed: 100
   animationBlendSpeed: 0.05
-  pushInterpolationSpeed: 4
+  pushInterpolationSpeed: 2
   gravity: -9.8
   _Velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &5470692003672487676
@@ -2579,8 +2579,8 @@ MonoBehaviour:
   aimVectorBooster: 2
   stompBooster: 3
   stompDuration: 1
-  stompDamage: 10
-  ownStompDamage: 6
+  stompDamage: 0.01
+  ownStompDamage: 0.01
   detectedColisionStompSphereRadius: 2.5
   collisionLayers:
     serializedVersion: 2

@@ -63,10 +63,9 @@ public class RpcHandler : NetworkBehaviour
         }
     }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    [Rpc]
     public void RPC_PlayStomp(Vector3 playPosition)
     {
-        Debug.Log("STOMP EFFECT INSTATIATED");
         var obj = Instantiate(stompPrefab, playPosition, Quaternion.identity);
 
         if(CleanManager.Instance != null) 

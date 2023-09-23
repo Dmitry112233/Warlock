@@ -4932,7 +4932,7 @@ MonoBehaviour:
   rocketSpeed: 7.9
   pushBooster: 5
   pushDuration: 0.5
-  damage: 10
+  damage: 0.01
   OnDrawSpere: 0.23
   explosionsParticles:
   - {fileID: 6372690730201300933, guid: f97ac8e030f7ad747b9445795a5ea849, type: 3}
