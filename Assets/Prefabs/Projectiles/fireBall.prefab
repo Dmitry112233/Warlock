@@ -4927,13 +4927,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   liveTime: 5
-  detectedColisionSphereRadius: 0.5
+  detectedColisionSphereRadius: 0.25
   explosionSphereRadius: 1
   rocketSpeed: 7.9
   pushBooster: 5
-  pushDuration: 0.5
+  pushDuration: 1
   damage: 10
-  OnDrawSpere: 0.3
+  OnDrawSpere: 0.25
   explosionsParticles:
   - {fileID: 6372690730201300933, guid: f97ac8e030f7ad747b9445795a5ea849, type: 3}
   - {fileID: 7487472719841995831, guid: 3c5d1b40030cac74696444dd07406390, type: 3}
@@ -29272,7 +29272,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2705166418258563894}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
