@@ -4927,13 +4927,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   liveTime: 5
-  detectedColisionSphereRadius: 0.23
+  detectedColisionSphereRadius: 0.25
   explosionSphereRadius: 1
   rocketSpeed: 7.9
   pushBooster: 5
   pushDuration: 1
-  damage: 0.01
-  OnDrawSpere: 0.23
+  damage: 10
+  OnDrawSpere: 0.25
   explosionsParticles:
   - {fileID: 6372690730201300933, guid: f97ac8e030f7ad747b9445795a5ea849, type: 3}
   - {fileID: 7487472719841995831, guid: 3c5d1b40030cac74696444dd07406390, type: 3}
