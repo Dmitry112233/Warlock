@@ -28,7 +28,6 @@ public class MainMenuUIHandler : MonoBehaviour
 
     public void OnCreateNewSessionClicked() 
     {
-        Debug.Log("Create new session clicked");
         HideAllPanels();
         createSessionPanel.SetActive(true);
     }
@@ -37,7 +36,7 @@ public class MainMenuUIHandler : MonoBehaviour
     {
         NetworkRunnerHandler networkRunnerHandler = FindObjectOfType<NetworkRunnerHandler>();
 
-        networkRunnerHandler.CreateGame(sessionNameInputField.text, "Battle");
+        networkRunnerHandler.CreateGame(sessionNameInputField.text, GameData.Scenes.Battle);
 
         HideAllPanels();
     }

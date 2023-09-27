@@ -6,23 +6,27 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
     public static NetworkPlayer Local { get; set; }
 
+    private RpcHandler rpcHandler;
+    public RpcHandler RpcHandler { get { return rpcHandler = rpcHandler ?? GetComponent<RpcHandler>(); } }
+
     public override void Spawned()
     {
-        if (Object.HasInputAuthority) 
+        if (Object.HasInputAuthority)
         {
             Local = this;
 
             Camera.main.gameObject.SetActive(false);
 
             Debug.Log("Spawned local player");
+
+            GameObject.FindGameObjectWithTag(GameData.Tags.StartGameController).GetComponent<StartGameController>()?.RPC_CheckIfGameStarted();
         }
-        else 
+        else
         {
             Camera localCamera = GetComponentInChildren<Camera>();
             CinemachineVirtualCamera cinemachineCamera = GetComponentInChildren<CinemachineVirtualCamera>();
-            
 
-            if (localCamera != null) 
+            if (localCamera != null)
             {
                 Debug.Log("Destroy another player camera");
 

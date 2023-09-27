@@ -24,7 +24,7 @@ public class SessionInfoListUIItem : MonoBehaviour
         if (sessionInfo.Name.Length > 9)
         {
             sessionName = sessionInfo.Name.Truncate(9);
-            Debug.Log("Session Info UPDATED");
+            Debug.Log("Session Info Udated");
         }
         else
         {

@@ -20,6 +20,7 @@ public static class GameData
     public static class Tags 
     {
         public const string Player = "Player";
+        public const string StartGameController = "StartGameController";
     }
 
     public static class Sounds 
@@ -29,5 +30,10 @@ public static class GameData
         public const string Stomp = "Stomp";
         public const string RocketExplosion = "RocketExplosion";
         public const string Hit = "Hit";
+    }
+
+    public static class Scenes 
+    {
+        public const string Battle = "Battle";
     }
 }
