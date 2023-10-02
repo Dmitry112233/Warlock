@@ -9,7 +9,7 @@ public class FireBallHandler : NetworkBehaviour
     public float detectedColisionSphereRadius = 0.5f;
     public float explosionSphereRadius = 2f;
     public float rocketSpeed = 20f;
-    public float pushBooster = 2.0f;
+    public float pushSpeed = 12.0f;
     public float pushDuration = 1.5f;
     public float damage = 10;
     public float OnDrawSpere = 0.5f;
@@ -41,16 +41,7 @@ public class FireBallHandler : NetworkBehaviour
 
     public override void FixedUpdateNetwork() 
     {
-        if (rocketSpeedInterpolate < rocketSpeed)
-        {
-            rocketSpeedInterpolate += 100 * Runner.DeltaTime;
-        }
-        else
-        {
-            rocketSpeedInterpolate = rocketSpeed;
-        }
-
-        Debug.Log("ROCKET SPEED:" + rocketSpeedInterpolate);
+        LerpRocketSpeed();
 
         transform.position += transform.forward * Runner.DeltaTime * rocketSpeedInterpolate;
 
@@ -83,18 +74,29 @@ public class FireBallHandler : NetworkBehaviour
                     {
                         hPHandler.OnTakeDamage(damage);
 
-                        rpcHandler.OnTakeFireBall();
-                        rpcHandler.OnTakenHit();
+                        //Fireball rpc is called from player becouse despawn is to fast to display effect on client. 
+                        rpcHandler.RPC_FireBallExplosion(transform.position);
+                        
+                        rpcHandler.RPC_PlayHitSound();
 
-
-                        Debug.Log("FIRE BALL PUSH VECTOR: " + pushVector);
-
-                        characterController.SetPushVectorTimeAndSpeed(pushVector, pushDuration, 12f);
+                        characterController.SetPushVectorTimeAndSpeed(pushVector, pushDuration, pushSpeed);
 
                         Runner.Despawn(NetworkObject);
                     }
                 }
             }
+        }
+    }
+
+    private void LerpRocketSpeed() 
+    {
+        if (rocketSpeedInterpolate < rocketSpeed)
+        {
+            rocketSpeedInterpolate += 100 * Runner.DeltaTime;
+        }
+        else
+        {
+            rocketSpeedInterpolate = rocketSpeed;
         }
     }
 

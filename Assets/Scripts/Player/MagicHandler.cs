@@ -6,11 +6,8 @@ using UnityEngine;
 public class MagicHandler : NetworkBehaviour
 {
     [Header("Magic settings")]
-    public float fireBallCooldown = 2.0f;
-    public float stompCooldown = 3.0f;
     public float stompDelay = 0.5f;
     public float aimVectorBooster = 2f;
-
     public float stompBooster = 3.0f;
     public float stompDuration = 3f;
     public float stompDamage = 10;
@@ -23,8 +20,6 @@ public class MagicHandler : NetworkBehaviour
     public Transform initProjectilePosition;
 
     private Vector3 fireVector;
-    private TickTimer fireBallCooldownTimer = TickTimer.None;
-    private TickTimer stompCooldownTimer = TickTimer.None;
 
     public bool IsFire { get; private set; }
     public bool IsStomp { get; private set; }
@@ -64,7 +59,7 @@ public class MagicHandler : NetworkBehaviour
 
     private void Start()
     {
-        coolDownFireBall = GameObject.FindGameObjectWithTag(GameData.JoystickTags.CoolFireBall).GetComponent<CoolDownMagic>();
+        coolDownFireBall = GameObject.FindGameObjectWithTag(GameData.JoystickTags.CoolDownFireBall).GetComponent<CoolDownMagic>();
         coolDownStomp = GameObject.FindGameObjectWithTag(GameData.JoystickTags.CoolDownStomp).GetComponent<CoolDownMagic>();
     }
 
@@ -83,6 +78,9 @@ public class MagicHandler : NetworkBehaviour
             if (networkInputData.isStompButtonPresed)
             {
                 IsStomp = true;
+
+                //Stomp take too much time if run before animation and it starts with a big delay 
+                StartCoroutine(StompCora());
 
                 if (Object.HasInputAuthority)
                 {
@@ -108,67 +106,55 @@ public class MagicHandler : NetworkBehaviour
 
     public void FireBallShot()
     {
-        if (fireBallCooldownTimer.ExpiredOrNotRunning(Runner))
-        {
-            fireVector.Normalize();
+        fireVector.Normalize();
 
-            Runner.Spawn(fireBallPrefab, initProjectilePosition.position, Quaternion.LookRotation(fireVector), Object.InputAuthority, (runner, spawnedFireBall) =>
-                {
-                    spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, NetworkObject);
-                });
-
-            if (Object.HasInputAuthority)
+        Runner.Spawn(fireBallPrefab, initProjectilePosition.position, Quaternion.LookRotation(fireVector), Object.InputAuthority, (runner, spawnedFireBall) =>
             {
-                RpcHandler.OnShot();
-            }
+                spawnedFireBall.GetComponent<FireBallHandler>().Fire(Object.InputAuthority, NetworkObject);
+            });
 
-            fireBallCooldownTimer = TickTimer.CreateFromSeconds(Runner, fireBallCooldown);
+        if (Object.HasInputAuthority)
+        {
+            RpcHandler.RPC_PlayShotSound();
         }
     }
 
     private void Stomp()
     {
-        if (stompCooldownTimer.ExpiredOrNotRunning(Runner))
+        if (Object.HasStateAuthority)
         {
-            if (Object.HasStateAuthority)
+            RpcHandler.RPC_OnStomp();
+
+            int hitCounts = Runner.LagCompensation.OverlapSphere(transform.position, detectedColisionStompSphereRadius, Object.InputAuthority, hits, collisionLayers, HitOptions.IncludePhysX);
+
+            if (hitCounts > 0)
             {
-                RpcHandler.OnStomp();
-
-                int hitCounts = Runner.LagCompensation.OverlapSphere(transform.position, detectedColisionStompSphereRadius, Object.InputAuthority, hits, collisionLayers, HitOptions.IncludePhysX);
-
-                if (hitCounts > 0)
+                for (int i = 0; i < hitCounts; i++)
                 {
-                    Debug.Log("Inside is Stomp HITS");
+                    HpHandler hPHandler = hits[i].Hitbox.transform.root.GetComponent<HpHandler>();
+                    Transform playerTransform = hits[i].Hitbox.transform.root.GetComponent<Transform>();
+                    CharacterControllerCustom characterController = hits[i].Hitbox.transform.root.GetComponent<CharacterControllerCustom>();
+                    RpcHandler rpcHandler = hits[i].Hitbox.transform.root.GetComponent<RpcHandler>();
 
-                    for (int i = 0; i < hitCounts; i++)
+                    Vector3 pushVector = playerTransform.position - transform.position;
+
+                    pushVector.y = 0;
+
+                    if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != NetworkObject))
                     {
-                        HpHandler hPHandler = hits[i].Hitbox.transform.root.GetComponent<HpHandler>();
-                        Transform playerTransform = hits[i].Hitbox.transform.root.GetComponent<Transform>();
-                        CharacterControllerCustom characterController = hits[i].Hitbox.transform.root.GetComponent<CharacterControllerCustom>();
-                        RpcHandler rpcHandler = hits[i].Hitbox.transform.root.GetComponent<RpcHandler>();
+                        hPHandler.OnTakeDamage(stompDamage);
+                        rpcHandler.RPC_PlayHitSound();
 
-                        Vector3 pushVector = playerTransform.position - transform.position;
+                        //customize final stomp vector depends on distance
+                        var calculatedBoosterAndDuration = CalculateSpeedAndDurationDependsOnDistance(pushVector);
 
-                        pushVector.y = 0;
-
-                        if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != NetworkObject))
-                        {
-                            hPHandler.OnTakeDamage(stompDamage);
-                            rpcHandler.OnTakenHit();
-
-                            //customize final stomp vector depends on distance
-                            var calculatedBoosterAndDuration = CalculateSpeedAndDurationDependsOnDistance(pushVector);
-
-                            pushVector.Normalize();
-                            characterController.SetPushVectorTimeAndSpeed(pushVector, calculatedBoosterAndDuration.duration, calculatedBoosterAndDuration.speed);
-                        }
+                        pushVector.Normalize();
+                        characterController.SetPushVectorTimeAndSpeed(pushVector, calculatedBoosterAndDuration.duration, calculatedBoosterAndDuration.speed);
                     }
-
-                    stompCooldownTimer = TickTimer.CreateFromSeconds(Runner, stompCooldown);
                 }
-
-                HpHandler.OnTakeDamage(ownStompDamage);
             }
+
+            HpHandler.OnTakeDamage(ownStompDamage);
         }
     }
 
@@ -176,14 +162,7 @@ public class MagicHandler : NetworkBehaviour
     {
         if (IsStomp == true)
         {
-            if (stompCooldownTimer.ExpiredOrNotRunning(Runner))
-            {
-                Debug.Log("Inside is ANIMATION STOMP");
-                Animator.SetBool(GameData.Animator.StompBool, true);
-
-                //Stomp take too much time if run before animation and it starts with a big delay 
-                StartCoroutine(StompCora());
-            }
+            Animator.SetBool(GameData.Animator.StompBool, true);
         }
 
         if (IsFire == true)
@@ -218,7 +197,7 @@ public class MagicHandler : NetworkBehaviour
 
     private (float speed, float duration) CalculateSpeedAndDurationDependsOnDistance(Vector3 pushVector)
     {
-        if(pushVector.magnitude <= 1.5f)
+        if (pushVector.magnitude <= 1.5f)
         {
             return (15f, 1f);
         }

@@ -31,7 +31,7 @@ public class InputManager : Singleton<InputManager>
     {
         dynamicJoystick = GameObject.FindGameObjectWithTag(GameData.JoystickTags.DynamicJoystick).GetComponent<DynamicJoystick>();
         fireJoystick = GameObject.FindGameObjectWithTag(GameData.JoystickTags.FireJoystick).GetComponent<FixedJoystickCustom>();
-        coolDownFireBall = GameObject.FindGameObjectWithTag(GameData.JoystickTags.CoolFireBall).GetComponent<CoolDownMagic>();
+        coolDownFireBall = GameObject.FindGameObjectWithTag(GameData.JoystickTags.CoolDownFireBall).GetComponent<CoolDownMagic>();
         coolDownStomp = GameObject.FindGameObjectWithTag(GameData.JoystickTags.CoolDownStomp).GetComponent<CoolDownMagic>();
         stompButton = GameObject.FindGameObjectWithTag(GameData.JoystickTags.StompButton).GetComponent<Button>();
 
