@@ -21,13 +21,13 @@ public class RpcHandler : NetworkBehaviour
     }
 
     [Rpc]
-    public void RPC_FireBallExplosion(Vector3 position)
+    public void RPC_FireBallExplosion()
     {
         foreach (GameObject particle in explosionsParticles)
         {
-            Instantiate(particle, position, Quaternion.identity);
+            Instantiate(particle, transform.position, Quaternion.identity);
         }
-        AudioManager.Instance.Play3DAudio(position, GameData.Sounds.RocketExplosion);
+        AudioManager.Instance.Play3DAudio(transform.position, GameData.Sounds.RocketExplosion);
     }
 
     [Rpc]

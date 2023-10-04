@@ -10,7 +10,7 @@ public class CharacterControllerCustom : NetworkTransform
     public float rotationSpeed = 15.0f;
     public float rotationOnFireSpeed = 2000f;
     public float animationBlendSpeed = 0.05f;
-    public float pushInterpolationSpeed = 3.0f; 
+    public float pushSlowDownBooster = 12f;
     public float gravity = -9.8f;
 
     private float ySpeed;
@@ -99,6 +99,7 @@ public class CharacterControllerCustom : NetworkTransform
     public void Gravity()
     {
         var deltaTime = Runner.DeltaTime;
+        var previousPos = transform.position;
 
         ySpeed += gravity * deltaTime;
 
@@ -110,6 +111,7 @@ public class CharacterControllerCustom : NetworkTransform
         var direction = new Vector3(0, ySpeed, 0);
 
         Controller.Move(direction * speed * deltaTime);
+        Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
     }
 
     public void PlayMoveAnimation()
@@ -128,11 +130,15 @@ public class CharacterControllerCustom : NetworkTransform
     {
         if (!PushTimer.ExpiredOrNotRunning(Runner))
         {
-            transform.position += PushDestinationPoint * Runner.DeltaTime * PushSpeed;
+            var previousPos = transform.position;
 
-            if(PushSpeed > 0f) 
+            Controller.Move(PushDestinationPoint * Runner.DeltaTime * PushSpeed);
+
+            Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
+
+            if (PushSpeed > 0f) 
             {
-                PushSpeed -= 12 * Runner.DeltaTime;
+                PushSpeed -= pushSlowDownBooster * Runner.DeltaTime;
             }
         }
         else
@@ -153,12 +159,19 @@ public class CharacterControllerCustom : NetworkTransform
         PushTimer = TickTimer.CreateFromSeconds(Runner, time);
         
         PushSpeed = speed;
-        maxMovementAnimationSpeed = 0.6f;
+        maxMovementAnimationSpeed = 0.5f;
     }
 
-    public void SetSpeed(float speed)
+    public void SetSpeed(float speed, float maxMovementAnimationSpeed)
     {
         this.speed = speed;
+        this.maxMovementAnimationSpeed = maxMovementAnimationSpeed;
+    }
+
+    public void ResetSpeed()
+    {
+        this.speed = maxSpeed;
+        this.maxMovementAnimationSpeed = 1f;
     }
 
     public void Freeze()
