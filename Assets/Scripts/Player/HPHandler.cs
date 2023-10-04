@@ -10,9 +10,7 @@ public class HpHandler : NetworkBehaviour
     public Slider healthSlider;
 
     public const byte startingHP = 100;
-
     public bool IsActive { get; set; }
-    public bool IsLavaInfluence { get; set; }
 
     [Networked(OnChanged = nameof(OnHPChanged))]
     float HP { get; set; }
@@ -38,7 +36,6 @@ public class HpHandler : NetworkBehaviour
     void Start()
     {
         IsActive = true;
-        IsLavaInfluence = false;
         HP = startingHP;
         IsDead = false;
         healthSlider.value = HP / startingHP;
@@ -106,12 +103,12 @@ public class HpHandler : NetworkBehaviour
         {
             Runner.Shutdown();
         }
-        Debug.Log("PLAYER LEAVE TO MAIN MENU");
+        Debug.Log("Player leave to main menu by escape");
     }
 
     public IEnumerator LeaveGame()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
 
         if (Object.HasStateAuthority) 
         {

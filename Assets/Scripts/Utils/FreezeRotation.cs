@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class FreezeRotation : MonoBehaviour
 {
+    public float lerpRotationBooster = 0.2f;
+
     private Camera _camera;
 
     private void Start()
@@ -14,7 +16,7 @@ public class FreezeRotation : MonoBehaviour
     {
         if (transform != null && _camera != null)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.position - _camera.transform.position), 0.2f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(transform.position - _camera.transform.position), lerpRotationBooster);
         }
     }
 }

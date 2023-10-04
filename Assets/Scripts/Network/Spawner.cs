@@ -17,35 +17,36 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         sessionListUIHandler = FindObjectOfType<SessionListUIHandler>(false);
     }
 
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) 
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        if (runner.IsServer) 
+        if (runner.IsServer)
         {
-            Debug.Log("OnPlayerJoined we are the server. Spawning Player");
-            runner.Spawn(playerPrefab, new Vector3(0, 2f, 0), Quaternion.identity, player);
+            Debug.Log("OnPlayerJoined. Server. Spawning Player");
+            runner.Spawn(playerPrefab, new Vector3(0, 1.5f, 0), Quaternion.identity, player);
         }
-        else 
+        else
         {
-            Debug.Log("OnPlayerJoined"); 
+            Debug.Log("OnPlayerJoined. Client.");
         }
-
-        //Here call the method which check the count of players and respawn them with timer
     }
 
-    public void OnInput(NetworkRunner runner, NetworkInput input) 
+    public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        if(characterInputHandler == null && NetworkPlayer.Local != null) 
+        if (characterInputHandler == null && NetworkPlayer.Local != null)
         {
             characterInputHandler = NetworkPlayer.Local.GetComponent<InputHandler>();
         }
 
-        if(characterInputHandler != null) 
+        if (characterInputHandler != null)
         {
             input.Set(characterInputHandler.GetNetworkInput());
         }
     }
 
-    public void OnConnectedToServer(NetworkRunner runner) { Debug.Log("OnConnectedToServer"); }
+    public void OnConnectedToServer(NetworkRunner runner)
+    {
+        Debug.Log("OnConnectedToServer");
+    }
 
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { Debug.Log("OnConnectFailed"); }
 
@@ -57,34 +58,34 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 
-    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) 
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
         SceneManager.LoadScene(0);
-        Debug.Log("________________________________PLAYER LEFT TO MAIN MENU");
+        Debug.Log("OnPlayerLeft");
     }
 
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
 
-    public void OnSceneLoadDone(NetworkRunner runner) { Debug.Log("________________________________SCENE LOOOAD DOOOOONE"); }
+    public void OnSceneLoadDone(NetworkRunner runner) { Debug.Log("OnSceneLoadDone"); }
 
     public void OnSceneLoadStart(NetworkRunner runner) { }
 
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) 
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
         if (sessionListUIHandler == null)
             return;
 
-        if(sessionList.Count == 0) 
+        if (sessionList.Count == 0)
         {
             Debug.Log("Joined lobby no session found");
 
             sessionListUIHandler.OnNoSessionFound();
         }
-        else 
+        else
         {
             sessionListUIHandler.ClearList();
 
-            foreach (SessionInfo sessionInfo in sessionList) 
+            foreach (SessionInfo sessionInfo in sessionList)
             {
                 sessionListUIHandler.AddToList(sessionInfo);
 
@@ -93,10 +94,10 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) 
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
         SceneManager.LoadScene(0);
-        Debug.Log("__________________ON SHUTDOWN");
+        Debug.Log("OnShutdown");
     }
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }

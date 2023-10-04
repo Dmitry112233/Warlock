@@ -121,7 +121,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.46809343, y: -0.0008624373, z: 0.00045684175, w: 0.88367844}
+  m_LocalRotation: {x: 0.46809343, y: -0.00086245016, z: 0.00045684856, w: 0.8836785}
   m_LocalPosition: {x: 0, y: 15, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -238,7 +238,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1662263479}
-  m_LocalRotation: {x: 0.46809343, y: -0.0008624373, z: 0.00045684175, w: 0.88367844}
+  m_LocalRotation: {x: 0.46809343, y: -0.00086245016, z: 0.00045684856, w: 0.8836785}
   m_LocalPosition: {x: 0, y: 15, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -944,7 +944,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1716731654038319256}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 1.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2368,7 +2368,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4738444281627613139}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.01, y: 0.049999952, z: 0.13}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2544,7 +2544,7 @@ MonoBehaviour:
   rotationSpeed: 4
   rotationOnFireSpeed: 100
   animationBlendSpeed: 0.05
-  pushInterpolationSpeed: 2
+  pushSlowDownBooster: 12
   gravity: -9.8
   _Velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &5470692003672487676
@@ -2573,8 +2573,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  fireBallCooldown: 2
-  stompCooldown: 3
   stompDelay: 0.5
   aimVectorBooster: 2
   stompBooster: 3
@@ -3286,6 +3284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f43e8ea3d85393d4db4f835396ed15ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpRotationBooster: 0.2
 --- !u!1 &6114308399988697325
 GameObject:
   m_ObjectHideFlags: 0
@@ -4068,7 +4067,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 1
   SphereRadius: 0
-  BoxExtents: {x: 0.45, y: 0.96, z: 0.45}
+  BoxExtents: {x: 0.55, y: 0.96, z: 0.55}
   Offset: {x: 0.08, y: -0.35, z: 0.08}
   Root: {fileID: 0}
   GizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}

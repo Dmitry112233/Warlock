@@ -9,10 +9,11 @@ public class FireBallHandler : NetworkBehaviour
     public float detectedColisionSphereRadius = 0.5f;
     public float explosionSphereRadius = 2f;
     public float rocketSpeed = 20f;
-    public float pushBooster = 2.0f;
+    public float pushSpeed = 12.0f;
     public float pushDuration = 1.5f;
     public float damage = 10;
-    public float OnDrawSpere = 0.5f;
+    public float onDrawSpere = 0.5f;
+    public float accelerateRocketSpeed = 100f;
 
     private float rocketSpeedInterpolate = 0f;
 
@@ -41,16 +42,7 @@ public class FireBallHandler : NetworkBehaviour
 
     public override void FixedUpdateNetwork() 
     {
-        if (rocketSpeedInterpolate < rocketSpeed)
-        {
-            rocketSpeedInterpolate += 100 * Runner.DeltaTime;
-        }
-        else
-        {
-            rocketSpeedInterpolate = rocketSpeed;
-        }
-
-        Debug.Log("ROCKET SPEED:" + rocketSpeedInterpolate);
+        LerpRocketSpeed();
 
         transform.position += transform.forward * Runner.DeltaTime * rocketSpeedInterpolate;
 
@@ -81,15 +73,13 @@ public class FireBallHandler : NetworkBehaviour
 
                     if (hPHandler != null && (hits[i].Hitbox.Root.GetBehaviour<NetworkObject>() != firedByNetworkObject)) 
                     {
+                        characterController.SetPushVectorTimeAndSpeed(pushVector, pushDuration, pushSpeed);
+
                         hPHandler.OnTakeDamage(damage);
 
-                        rpcHandler.OnTakeFireBall();
-                        rpcHandler.OnTakenHit();
-
-
-                        Debug.Log("FIRE BALL PUSH VECTOR: " + pushVector);
-
-                        characterController.SetPushVectorTimeAndSpeed(pushVector, pushDuration, 12f);
+                        //Fireball rpc is called from player becouse despawn is to fast to display effect on client. 
+                        rpcHandler.RPC_FireBallExplosion();
+                        rpcHandler.RPC_PlayHitSound();
 
                         Runner.Despawn(NetworkObject);
                     }
@@ -98,10 +88,22 @@ public class FireBallHandler : NetworkBehaviour
         }
     }
 
+    private void LerpRocketSpeed() 
+    {
+        if (rocketSpeedInterpolate < rocketSpeed)
+        {
+            rocketSpeedInterpolate += accelerateRocketSpeed * Runner.DeltaTime;
+        }
+        else
+        {
+            rocketSpeedInterpolate = rocketSpeed;
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(checkForImpactPoint.position, OnDrawSpere);
+        Gizmos.DrawWireSphere(checkForImpactPoint.position, onDrawSpere);
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)

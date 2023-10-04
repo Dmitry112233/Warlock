@@ -12,7 +12,7 @@ public static class GameData
     {
         public const string DynamicJoystick = "Dynamic Joystick";
         public const string FireJoystick = "Fire Joystick";
-        public const string CoolFireBall = "CoolDownFireBall";
+        public const string CoolDownFireBall = "CoolDownFireBall";
         public const string CoolDownStomp = "CoolDownStomp";
         public const string StompButton = "StompButton";
     }
@@ -20,6 +20,7 @@ public static class GameData
     public static class Tags 
     {
         public const string Player = "Player";
+        public const string StartGameController = "StartGameController";
     }
 
     public static class Sounds 
@@ -29,5 +30,10 @@ public static class GameData
         public const string Stomp = "Stomp";
         public const string RocketExplosion = "RocketExplosion";
         public const string Hit = "Hit";
+    }
+
+    public static class Scenes 
+    {
+        public const string Battle = "Battle";
     }
 }

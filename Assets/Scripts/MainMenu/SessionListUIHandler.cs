@@ -39,7 +39,7 @@ public class SessionListUIHandler : MonoBehaviour
     {
         ClearList();
 
-        statusText.text = "No game session found";
+        statusText.text = "No game sessions found";
         statusText.gameObject.SetActive(true);
     }
 }

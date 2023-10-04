@@ -19,34 +19,28 @@ public class NetworkRunnerHandler : MonoBehaviour
         if(networkRunnerInScene != null && !networkRunnerInScene.IsShutdown) 
         {
             networkRunner = networkRunnerInScene;
-            Debug.Log("_________________Network runner is assigned and not null");
+            Debug.Log("Network runner is assigned and not null");
         }
         
-        //This code below moved to awake to not updated lobby after end of the game before network runner init again.
-        Debug.Log("STTTTTTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAART");
-
+        //Code below moved to awake to not update lobby after end of the game before network runner initialization.
         if (networkRunner == null)
         {
-            Debug.Log("NETWORK RUNNER IS NUUUL");
+            Debug.Log("Network runner is null");
 
             networkRunner = Instantiate(networkRunnerPrefab);
             networkRunner.name = "Network runner";
 
-            Debug.Log("INSTATIATED NETWORK RUNNER");
+            Debug.Log("Network runner instatiated");
 
-            //THIS BLOCK PROBABLY SHOULD BE DELETED
+            //This block needed for debug to run directly Battle scene. 
             if (SceneManager.GetActiveScene().name != "MainMenu")
             {
-                Debug.Log("_____________SCENE IS NOT MAIN MENU");
+                Debug.Log("Scene is not main menu");
                 var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, "TestSession", NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
             }
 
-            Debug.Log($"Server NetworkRunner started");
+            Debug.Log($"Network runner started");
         }
-    }
-
-    void Start()
-    {
     }
 
     public virtual Task InitializeNetworkRunner(NetworkRunner runner, GameMode gameMode, string sessionName, NetAddress address, SceneRef scene, Action<NetworkRunner> initialized) 
@@ -56,7 +50,7 @@ public class NetworkRunnerHandler : MonoBehaviour
         if (sceneManager == null) 
         {
             sceneManager = runner.gameObject.AddComponent<NetworkSceneManagerDefault>();
-            Debug.Log("SETED DEFAULT");
+            Debug.Log("Default scene manager set");
         }
 
         runner.ProvideInput = true;
@@ -82,7 +76,7 @@ public class NetworkRunnerHandler : MonoBehaviour
 
     private async Task JoinLobby()
     {
-        Debug.Log("JoinLobby started");
+        Debug.Log("Join lobby started");
 
         string lobbyID = "OurLobbyID";
 
@@ -94,7 +88,7 @@ public class NetworkRunnerHandler : MonoBehaviour
         }
         else 
         {
-            Debug.Log("JoinLobby ok");
+            Debug.Log("Join lobby ok");
         }
     }
 

@@ -16,9 +16,6 @@ public class InputHandler : MonoBehaviour
 
     void Start()
     {
-        MovementHandler = GetComponent<MovementHandler>();
-        HpHandler = GetComponent<HpHandler>();
-
         InputManager.Instance.NotifyMovement += Read;
         InputManager.Instance.NotifyAim += ReadAim;
         InputManager.Instance.NotifyFire += Fire;

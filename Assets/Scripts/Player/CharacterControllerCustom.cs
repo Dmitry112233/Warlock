@@ -1,5 +1,4 @@
 using Fusion;
-using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -11,18 +10,20 @@ public class CharacterControllerCustom : NetworkTransform
     public float rotationSpeed = 15.0f;
     public float rotationOnFireSpeed = 2000f;
     public float animationBlendSpeed = 0.05f;
-    public float pushInterpolationSpeed = 3.0f; 
-
+    public float pushSlowDownBooster = 12f;
     public float gravity = -9.8f;
+
     private float ySpeed;
+    private float movementAnimationSpeed;
+    private float maxMovementAnimationSpeed = 1f;
 
     [Networked]
     public Vector3 Velocity { get; set; }
 
-    public bool IsPushed { get; private set; }
-    public Vector3 PushDestinationPoint { get; set; }
-    public float PushSpeed { get; set; }
-    public TickTimer PushTimer = TickTimer.None;
+    public bool IsPushed { get; set; }
+    private Vector3 PushDestinationPoint { get; set; }
+    private float PushSpeed { get; set; }
+    private TickTimer PushTimer = TickTimer.None;
 
     private MagicHandler magicHandler;
     private MagicHandler MagicHandler { get { return magicHandler = magicHandler ?? GetComponent<MagicHandler>(); } }
@@ -38,9 +39,6 @@ public class CharacterControllerCustom : NetworkTransform
 
     private Animator animator;
     public Animator Animator { get { return animator = animator ?? GetComponent<Animator>(); } }
-    
-    private float movementAnimationSpeed;
-    private float maxMovementAnimationSpeed = 1f;
 
 
     /// <summary>
@@ -101,6 +99,7 @@ public class CharacterControllerCustom : NetworkTransform
     public void Gravity()
     {
         var deltaTime = Runner.DeltaTime;
+        var previousPos = transform.position;
 
         ySpeed += gravity * deltaTime;
 
@@ -112,6 +111,7 @@ public class CharacterControllerCustom : NetworkTransform
         var direction = new Vector3(0, ySpeed, 0);
 
         Controller.Move(direction * speed * deltaTime);
+        Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
     }
 
     public void PlayMoveAnimation()
@@ -128,13 +128,17 @@ public class CharacterControllerCustom : NetworkTransform
 
     public void Push()
     {
-        if (!PushTimer.Expired(Runner))
+        if (!PushTimer.ExpiredOrNotRunning(Runner))
         {
-            transform.position += PushDestinationPoint * Runner.DeltaTime * PushSpeed;
+            var previousPos = transform.position;
 
-            if(PushSpeed > 0f) 
+            Controller.Move(PushDestinationPoint * Runner.DeltaTime * PushSpeed);
+
+            Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
+
+            if (PushSpeed > 0f) 
             {
-                PushSpeed -= 12 * Runner.DeltaTime;
+                PushSpeed -= pushSlowDownBooster * Runner.DeltaTime;
             }
         }
         else
@@ -155,16 +159,25 @@ public class CharacterControllerCustom : NetworkTransform
         PushTimer = TickTimer.CreateFromSeconds(Runner, time);
         
         PushSpeed = speed;
-        maxMovementAnimationSpeed = 0.6f;
+        maxMovementAnimationSpeed = 0.5f;
     }
 
-    public void SetSpeed(float speed)
+    public void SetSpeed(float speed, float maxMovementAnimationSpeed)
     {
         this.speed = speed;
+        this.maxMovementAnimationSpeed = maxMovementAnimationSpeed;
+    }
+
+    public void ResetSpeed()
+    {
+        this.speed = maxSpeed;
+        this.maxMovementAnimationSpeed = 1f;
     }
 
     public void Freeze()
     {
+        Animator.SetFloat(GameData.Animator.Speed, 0);
+
         InputHandler.UnsubscribeInputManager();
         InputHandler.enabled = false;
         Controller.enabled = false;
