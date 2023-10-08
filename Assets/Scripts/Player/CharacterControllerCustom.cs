@@ -55,6 +55,7 @@ public class CharacterControllerCustom : NetworkTransform
     protected override void Awake()
     {
         PushDestinationPoint = Vector3.zero;
+        IsPushed = false;
     }
 
     protected override void CopyFromBufferToEngine()
@@ -71,35 +72,29 @@ public class CharacterControllerCustom : NetworkTransform
 
     public void Move(Vector3 direction)
     {
+        var deltaTime = Runner.DeltaTime;
+        var previousPos = transform.position;
+
         if (direction != Vector3.zero)
         {
-            var deltaTime = Runner.DeltaTime;
-            var previousPos = transform.position;
-
-            direction = direction.normalized;
-
-            if (direction != default && MagicHandler.IsFire != true)
+            if (MagicHandler.IsFire != true && MagicHandler.IsStomp != true)
             {
+                direction.Normalize();
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * deltaTime);
                 movementAnimationSpeed = maxMovementAnimationSpeed;
-            }
 
-            if (!IsPushed) 
-            {
-                Controller.Move(direction * speed * deltaTime);
-                Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
+                if (!IsPushed)
+                {
+                    Controller.Move(direction * speed * deltaTime);
+                }
             }
         }
-        else
+        else if (!IsPushed)
         {
             movementAnimationSpeed = 0.0f;
         }
-    }
 
-    public void Gravity()
-    {
-        var deltaTime = Runner.DeltaTime;
-        var previousPos = transform.position;
+        Push();
 
         ySpeed += gravity * deltaTime;
 
@@ -108,10 +103,12 @@ public class CharacterControllerCustom : NetworkTransform
             ySpeed = -0.5f;
         }
 
-        var direction = new Vector3(0, ySpeed, 0);
+        var directionGravity = new Vector3(0, ySpeed, 0);
 
-        Controller.Move(direction * speed * deltaTime);
+        Controller.Move(directionGravity * speed * deltaTime);
+
         Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
+
     }
 
     public void PlayMoveAnimation()
@@ -128,15 +125,11 @@ public class CharacterControllerCustom : NetworkTransform
 
     public void Push()
     {
-        if (!PushTimer.ExpiredOrNotRunning(Runner))
+        if (IsPushed && !PushTimer.ExpiredOrNotRunning(Runner))
         {
-            var previousPos = transform.position;
-
             Controller.Move(PushDestinationPoint * Runner.DeltaTime * PushSpeed);
 
-            Velocity = (transform.position - previousPos) * Runner.Simulation.Config.TickRate;
-
-            if (PushSpeed > 0f) 
+            if (PushSpeed > 0f)
             {
                 PushSpeed -= pushSlowDownBooster * Runner.DeltaTime;
             }
@@ -155,9 +148,9 @@ public class CharacterControllerCustom : NetworkTransform
 
         PushDestinationPoint = pushVector;
         PushDestinationPoint.Normalize();
-        
+
         PushTimer = TickTimer.CreateFromSeconds(Runner, time);
-        
+
         PushSpeed = speed;
         maxMovementAnimationSpeed = 0.5f;
     }
